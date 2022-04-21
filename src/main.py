@@ -1,12 +1,12 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
+import routes.login as LoginRoute
+from services.JWTChecker import JWTChecker
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 load_dotenv()
 app = FastAPI()
-
-# Port 3000 front
 
 origins = [
     "http://localhost",
@@ -21,10 +21,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(LoginRoute.router)
 
-@app.get("/")
+@app.get("/", dependencies=[Depends(JWTChecker())], tags=['root'])
 def read_root():
-    return {"Hello": "World"}
+    return {"hello": 'world'}
 
 if __name__ == '__main__':
     uvicorn.run(app, host="0.0.0.0", port=8080, reload=True)
