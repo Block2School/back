@@ -1,29 +1,29 @@
-import uuid
 from fastapi import APIRouter
-from services.JWT import JWT
-from services.WalletHash import WalletHash
+from models.response.ErrorResponseModel import ErrorResponseModel
+from models.response.LoginResponseModel import LoginResponseModel
+from services.login import LoginService
 from starlette.responses import JSONResponse
-from models.LoginModel import LoginModel
-from database.Account import accountDb
-from database.AccountToken import accountTokenDb
+from models.input.LoginModel import LoginModel
 
 router = APIRouter()
 
-@router.post("/login", tags=['user'])
+login_responses = {
+    200: {"model": LoginResponseModel},
+    201: {"model": LoginResponseModel},
+    400: {"model": ErrorResponseModel}
+}
+
+@router.post("/login", tags=['user'], responses=login_responses)
 async def login(login_model: LoginModel):
     if login_model.wallet_address != None and login_model.encrypted_wallet != None:
-        wallet_hash = WalletHash.wallet_hash(login_model.encrypted_wallet)
-        user_uuid = accountDb.fetch(wallet_hash)
-        if len(user_uuid) == 0:
-            new_uuid = uuid.uuid4()
-            if accountDb.insert(str(new_uuid), wallet_hash):
-                jwt = JWT.signJWT(str(new_uuid))
-                accountTokenDb.insert(str(new_uuid), jwt)
-                return JSONResponse({"access_token": jwt}, status_code=201)
+        response = LoginService.check_account(login_model.encrypted_wallet)
+        if len(response) == 1:
+            register = LoginService.register(response[0], login_model.wallet_address)
+            if register != None:
+                return JSONResponse({"access_token": register})
+            else:
+                return JSONResponse({"error": "An error occured on account creation"}, status_code=400)
         else:
-            user_uuid = user_uuid[0][0]
-            jwt = JWT.signJWT(user_uuid)
-            accountTokenDb.update(user_uuid, jwt)
-            return JSONResponse({"access_token": jwt})
+            return JSONResponse({"access_token": LoginService.login(response[1])})
     else:
-        return JSONResponse({"error": "Wallet ID not found"}, status_code=400)
+        return JSONResponse({"error": "Invalid body"}, status_code=400)
