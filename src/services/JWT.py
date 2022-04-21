@@ -11,13 +11,13 @@ class JWT():
       "expires": time() + 7200
     }
     token = jwt.encode(payload, os.getenv('JWT_SECRET'), algorithm=os.getenv('JWT_ALGORITHM'))
-    return token
+    return token.decode('utf-8')
 
   @staticmethod
   def decodeJWT(token: str) -> dict:
     try:
       decoded_token = jwt.decode(token, os.getenv('JWT_SECRET'), algorithms=os.getenv('JWT_ALGORITHM'))
-      if decoded_token.get('expires') >= time.time():
+      if decoded_token.get('expires') >= time():
         return decoded_token
       else:
         return None

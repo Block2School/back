@@ -13,7 +13,7 @@ class AccountDatabase():
     def fetch(self, wallet_address: str) -> list:
         prepare = self.db.prepare("SELECT uuid FROM account WHERE wallet_address = $1")
         result = prepare(wallet_address)
-        return result[0]
+        return result
 
     def update(self, uuid: str, is_banned: bool) -> list:
         prepare = self.db.prepare("UPDATE account SET is_banned = $1 WHERE uuid = $2")
