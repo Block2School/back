@@ -1,3 +1,4 @@
+from urllib import response
 from database.AccountDetails import accountDetailDb
 
 class UserService():
@@ -9,3 +10,8 @@ class UserService():
             "username": response[1],
             "email": response[2]
         }
+
+    @staticmethod
+    def update_profile(uuid: str, username: str, email: str) -> bool:
+        response = accountDetailDb.update(uuid, username, email)
+        return len(response) > 0
