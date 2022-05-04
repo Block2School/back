@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends
 import routes.login as LoginRoute
-from services.JWTChecker import JWTChecker
+import routes.user as UserRoute
+from services.utils.JWTChecker import JWTChecker
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -22,6 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(LoginRoute.router)
+app.include_router(UserRoute.router)
 
 @app.get("/", dependencies=[Depends(JWTChecker())], tags=['root'])
 def read_root():

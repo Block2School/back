@@ -1,6 +1,6 @@
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from services.JWT import JWT
+from services.utils.JWT import JWT
 
 class JWTChecker(HTTPBearer):
     def __init__(self, auto_error: bool = True):
