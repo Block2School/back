@@ -2,7 +2,6 @@ import uuid
 from database.Account import accountDb
 from services.utils.JWT import JWT
 from services.utils.WalletHash import WalletHash
-from database.AccountToken import accountTokenDb
 from database.AccountDetails import accountDetailDb
 
 class LoginService():
@@ -21,12 +20,10 @@ class LoginService():
         if accountDb.insert(str(user_uuid), wallet_hash):
             accountDetailDb.insert(str(user_uuid), wallet)
             jwt = JWT.signJWT(str(user_uuid))
-            accountTokenDb.insert(str(user_uuid), jwt)
             return jwt
         return None
 
     @staticmethod
     def login(user_uuid: str) -> str:
         jwt = JWT.signJWT(user_uuid)
-        accountTokenDb.update(user_uuid, jwt)
         return jwt
