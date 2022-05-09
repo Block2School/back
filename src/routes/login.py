@@ -20,10 +20,10 @@ async def login(login_model: LoginModel):
         if len(response) == 1:
             register = LoginService.register(response[0], login_model.wallet_address)
             if register != None:
-                return JSONResponse({"access_token": register, "token_type": 'Bearer'})
+                return JSONResponse({"access_token": register, "token_type": 'Bearer'}, status_code=201)
             else:
                 return JSONResponse({"error": "An error occured on account creation"}, status_code=400)
         else:
-            return JSONResponse({"access_token": LoginService.login(response[1])})
+            return JSONResponse({"access_token": LoginService.login(response[1]), "token_type": 'Bearer'})
     else:
         return JSONResponse({"error": "Invalid body"}, status_code=400)
