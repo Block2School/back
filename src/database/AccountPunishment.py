@@ -6,13 +6,13 @@ class AccountPunishment():
         self.db = db
 
     def fetch(self, uuid: str) -> list:
-        prepare = self.db.prepare('SELECT reason, expires, is_revoked, revoked_by, revoke_reason FROM account_punishment WHERE uuid = $1')
+        prepare = self.db.prepare('SELECT reason, banned_by, expires, is_revoked, revoked_by, revoke_reason FROM account_punishment WHERE uuid = $1 ORDER BY created_at ASC')
         result = prepare(uuid)
         return result
 
-    def insert(self, uuid: str, reason: str, expires: datetime) -> list:
-        prepare = self.db.prepare('INSERT INTO account_punishment (uuid, reason, expires) VALUES ($1, $2, $3)')
-        result = prepare(uuid, reason, expires)
+    def insert(self, uuid: str, banned_by: str, reason: str, expires: datetime) -> list:
+        prepare = self.db.prepare('INSERT INTO account_punishment (uuid, banned_by, reason, expires) VALUES ($1, $2, $3, $4)')
+        result = prepare(uuid, banned_by, reason, expires)
         return result
 
     def update(self, uuid: str, revoked_by: str, revoke_reason: str) -> list:

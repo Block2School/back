@@ -10,9 +10,14 @@ class AccountDatabase():
         result = prepare(uuid, wallet_address)
         return len(result) == 2 and result[1] > 0
 
-    def fetch(self, wallet_address: str) -> list:
+    def login(self, wallet_address: str) -> list:
         prepare = self.db.prepare("SELECT uuid FROM account WHERE wallet_address = $1")
         result = prepare(wallet_address)
+        return result
+
+    def fetch(self, uuid: str) -> list:
+        prepare = self.db.prepare("SELECT wallet_address, is_banned FROM account WHERE uuid = $1")
+        result = prepare(uuid)
         return result
 
     def update(self, uuid: str, is_banned: bool) -> list:

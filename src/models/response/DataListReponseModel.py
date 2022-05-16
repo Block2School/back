@@ -1,4 +1,4 @@
 from pydantic import BaseModel
 
 class DataListResponseModel(BaseModel):
-    data: list
+    data: list[dict]

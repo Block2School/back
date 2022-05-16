@@ -27,9 +27,9 @@ app.include_router(LoginRoute.router)
 app.include_router(UserRoute.router)
 app.include_router(ModerationRoute.router)
 
-@app.get("/", dependencies=[Depends(JWTChecker())], tags=['root'])
-def read_root():
-    return {"hello": 'world'}
+# @app.get("/", dependencies=[Depends(JWTChecker())], tags=['root'])
+# def read_root():
+#     return {"hello": 'world'}
 
 if __name__ == '__main__':
     uvicorn.run(app, host="0.0.0.0", port=8080, reload=True)
