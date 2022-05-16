@@ -34,8 +34,6 @@ set_mod_responses = {
 @router.get('/banlist/{uuid}', dependencies=[Depends(AdminChecker(1))], tags=['moderation'], responses=banlist_responses)
 async def get_banlist(uuid: str):
     datas = ModerationService.get_banlist(uuid)
-    if len(datas) == 0:
-        return JSONResponse({"data": datas}, status_code=200)
     return JSONResponse({"data": datas})
 
 @router.post('/ban', dependencies=[Depends(AdminChecker(1))], tags=['moderation'], responses=ban_responses)
