@@ -1,6 +1,7 @@
 import postgresql
 from database.Database import db
 
+@DeprecationWarning
 class AccountToken():
     def __init__(self, db):
         self.db = db
