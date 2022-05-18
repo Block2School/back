@@ -11,6 +11,7 @@ class JWT():
       "expires": time() + 7200
     }
     token = jwt.encode(payload, os.getenv('JWT_SECRET'), algorithm=os.getenv('JWT_ALGORITHM'))
+    if (type(token) == str) : return token
     return token.decode('utf-8')
 
   @staticmethod
