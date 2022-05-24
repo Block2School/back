@@ -8,6 +8,8 @@
 > - Execute `start.sh` script to run the project
 
 ## Do a migration of the database  
+
+>**To do this part, you need to add this into your .env: `DB_VERSION=0`**
 > - Launch from root path `bash scripts/create_db_update.sh`
 > - Enter a file name
 > - Open created python file
