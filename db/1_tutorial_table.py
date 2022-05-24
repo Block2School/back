@@ -4,7 +4,7 @@ import postgresql
 db = get_database()
 
 prepare = db.prepare('CREATE TABLE tutorials(\
-    id int NOT NULL,\
+    id serial NOT NULL,\
     title character varying NOT NULL,\
     markdown_url character varying NOT NULL,\
     category character varying NOT NULL,\
