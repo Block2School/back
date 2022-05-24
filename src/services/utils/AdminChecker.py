@@ -12,14 +12,14 @@ class AdminChecker(HTTPBearer):
         credentials: HTTPAuthorizationCredentials = await super(AdminChecker, self).__call__(request)
         if credentials:
             if credentials.scheme != "Bearer":
-                raise HTTPException(status_code=403, detail="Invalid token scheme")
+                raise HTTPException(status_code=401, detail="Invalid token scheme")
             if not self.jwt_is_correct(credentials.credentials):
-                raise HTTPException(status_code=403, detail="Invalid token")
+                raise HTTPException(status_code=401, detail="Invalid token")
             if not self.user_has_permission(credentials.credentials):
                 raise HTTPException(status_code=401, detail="Permission denied")
             return credentials.credentials
         else:
-            raise HTTPException(status_code=403, detail="Invalid authorization code")
+            raise HTTPException(status_code=401, detail="Invalid authorization code")
 
     def user_has_permission(self, token: str) -> bool:
         payload = JWT.decodeJWT(token)
