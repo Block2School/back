@@ -11,8 +11,8 @@ prepare = db.prepare('CREATE TABLE tutorials(\
     answer text NOT NULL,\
     start_code text NOT NULL,\
     should_be_check boolean NOT NULL,\
-    created_at timestamp NOT NULL,\
-    updated_at timestamp NOT NULL,\
+    created_at timestamp NOT NULL DEFAULT NOW(),\
+    updated_at timestamp NOT NULL DEFAULT NOW(),\
     PRIMARY KEY(id));')
 prepare()
 prepare = db.prepare('CREATE TRIGGER set_timestamp\
