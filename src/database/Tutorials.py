@@ -33,6 +33,11 @@ class Tutorials():
         result = prepare(title, markdown_url, category, answer, start_code, should_be_check, id)
         return len(result) > 0
 
+    def update_enabled(self, id: int, enabled: bool) -> bool:
+        prepare = self.db.prepare('UPDATE tutorials SET enabled = $1 WHERE id = $2')
+        result = prepare(enabled, id)
+        return len(result) > 0
+
     def remove(self, id: int) -> bool:
         prepare = self.db.prepare('DELETE FROM tutorials WHERE id = $1')
         result = prepare(id)
