@@ -23,6 +23,8 @@ for f in files:
             if ver > high_version:
                 high_version = ver
 
+if version > high_version:
+    high_version = version
 print("Finished database migration, now version " + str(high_version))
 
 set_key(dotenv_file, "DB_VERSION", str(high_version))

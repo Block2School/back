@@ -1,12 +1,15 @@
 from fastapi import APIRouter, Depends
 from models.input.BanModel import BanModel
 from models.input.ModModel import ModModel
+from models.input.TutorialModel import TutorialModel
 from models.input.UnbanModel import UnbanModel
 from models.response.BanResponseModel import BanResponseModel
 from models.response.DataListReponseModel import DataListResponseModel
 from models.response.ErrorResponseModel import ErrorResponseModel
+from models.response.SuccessResponseModel import SuccessResponseModel
 from models.response.UnbanResponseModel import UnbanResponseModel
 from services.moderation import ModerationService
+from services.tutorial import TutorialService
 from starlette.responses import JSONResponse
 from services.utils.AdminChecker import AdminChecker
 from services.utils.JWT import JWT
@@ -28,6 +31,10 @@ unban_responses = {
 }
 set_mod_responses = {
     200: {'model': ModModel},
+    400: {'model': ErrorResponseModel}
+}
+create_tutorial_responses = {
+    200: {'model': SuccessResponseModel},
     400: {'model': ErrorResponseModel}
 }
 
@@ -70,3 +77,23 @@ async def set_mod(mod_model: ModModel):
             return JSONResponse({"uuid": mod_model.uuid, "role": mod_model.role})
         else:
             return JSONResponse({"error": "Cannot change mod role of this user"}, status_code=400)
+
+@router.post('/tuto/create', dependencies=[Depends(AdminChecker(2))], tags=['admin'], responses=create_tutorial_responses)
+async def create_tutorial(tutorial_model: TutorialModel):
+    if tutorial_model.answer == None:
+        return JSONResponse({'error': 'Unknown answer'}, status_code=400)
+    elif tutorial_model.category == None:
+        return JSONResponse({'error': 'Unknown category'}, status_code=400)
+    elif tutorial_model.markdownUrl == None:
+        return JSONResponse({'error': 'Unknown markdown URL'}, status_code=400)
+    elif tutorial_model.title == None:
+        return JSONResponse({'error': 'Unknown title'}, status_code=400)
+    elif tutorial_model.startCode == None:
+        return JSONResponse({'error': 'Unknown start code'}, status_code=400)
+    elif tutorial_model.shouldBeCheck == None:
+        return JSONResponse({'error': 'Unknown should be check boolean'}, status_code=400)
+    result = TutorialService.create_tutorial(tutorial_model.title, tutorial_model.markdownUrl, tutorial_model.startCode, tutorial_model.category, tutorial_model.answer, tutorial_model.shouldBeCheck)
+    if result:
+        return JSONResponse({"success": "Tutorial created !"})
+    else:
+        return JSONResponse({"error": "This tutorial already exists"}, status_code=400)
