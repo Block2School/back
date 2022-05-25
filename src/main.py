@@ -2,13 +2,40 @@ from fastapi import FastAPI, Depends
 import routes.login as LoginRoute
 import routes.user as UserRoute
 import routes.moderation as ModerationRoute
+import routes.tutorial as TutorialRoute
 from services.utils.JWTChecker import JWTChecker
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 load_dotenv()
-app = FastAPI()
+
+description = open('../docs/swaggerDescription.md', 'r', encoding='utf-8').read()
+tags_metadata = [
+    {
+        'name': 'user',
+        'description': 'User interaction with the website'
+    },
+    {
+        'name': 'tutorial',
+        'description': 'Tutorial user interaction only'
+    },
+    {
+        'name': 'moderation',
+        'description': 'Moderation route for moderators and administrators'
+    },
+    {
+        'name': 'admin',
+        'description': 'Admin management only'
+    }
+]
+
+app = FastAPI(
+    title="Block2School",
+    description=description,
+    version="1.0.0",
+    openapi_tags=tags_metadata,
+)
 
 origins = [
     "http://localhost",
@@ -26,6 +53,7 @@ app.add_middleware(
 app.include_router(LoginRoute.router)
 app.include_router(UserRoute.router)
 app.include_router(ModerationRoute.router)
+app.include_router(TutorialRoute.router)
 
 # @app.get("/", dependencies=[Depends(JWTChecker())], tags=['root'])
 # def read_root():
