@@ -1,13 +1,17 @@
 from fastapi import APIRouter, Depends
 from models.input.BanModel import BanModel
 from models.input.ModModel import ModModel
+from models.input.TutorialEditModel import TutorialEditModel
 from models.input.TutorialModel import TutorialModel
 from models.input.UnbanModel import UnbanModel
 from models.response.BanResponseModel import BanResponseModel
-from models.response.DataListReponseModel import DataListResponseModel
 from models.response.ErrorResponseModel import ErrorResponseModel
 from models.response.SuccessResponseModel import SuccessResponseModel
+from models.response.ToggleTutorialResponseModel import ToggleTutorialResponseModel
+from models.response.TutorialResponseModel import TutorialResponseModel
 from models.response.UnbanResponseModel import UnbanResponseModel
+from models.response.BanListResponseModel import BanListResponseModel
+from models.input.IdModel import IdModel
 from services.moderation import ModerationService
 from services.tutorial import TutorialService
 from starlette.responses import JSONResponse
@@ -18,7 +22,7 @@ from services.utils.JWTChecker import JWTChecker
 router = APIRouter(prefix='/admin')
 
 banlist_responses = {
-    200: {'model': DataListResponseModel},
+    200: {'model': BanListResponseModel},
     400: {'model': ErrorResponseModel}
 }
 ban_responses = {
@@ -35,6 +39,14 @@ set_mod_responses = {
 }
 create_tutorial_responses = {
     200: {'model': SuccessResponseModel},
+    400: {'model': ErrorResponseModel}
+}
+update_tutorial_responses = {
+    200: {'model': SuccessResponseModel},
+    400: {'model': ErrorResponseModel}
+}
+toggle_tutorial_responses = {
+    200: {'model': ToggleTutorialResponseModel},
     400: {'model': ErrorResponseModel}
 }
 
@@ -97,3 +109,37 @@ async def create_tutorial(tutorial_model: TutorialModel):
         return JSONResponse({"success": "Tutorial created !"})
     else:
         return JSONResponse({"error": "This tutorial already exists"}, status_code=400)
+
+@router.patch('/tuto/update', dependencies=[Depends(AdminChecker(2))], tags=['admin'], responses=update_tutorial_responses)
+async def edit_tutorial(tutorial_model: TutorialEditModel):
+    if tutorial_model.id == None:
+        return JSONResponse({'error': 'Unknown id'}, status_code=400)
+    elif tutorial_model.title == None:
+        return JSONResponse({'error': 'Unknown title'}, status_code=400)
+    elif tutorial_model.markdownUrl == None:
+        return JSONResponse({'error': 'Unknown markdown URL'}, status_code=400)
+    elif tutorial_model.category == None:
+        return JSONResponse({'error': 'Unknown category'}, status_code=400)
+    elif tutorial_model.answer == None:
+        return JSONResponse({'error': 'Unknown answer'}, status_code=400)
+    elif tutorial_model.startCode == None:
+        return JSONResponse({'error': 'Unknown start code'}, status_code=400)
+    elif tutorial_model.shouldBeCheck == None:
+        return JSONResponse({'error': 'Unknown should be check'}, status_code=400)
+    result = TutorialService.update_tutorial(tutorial_model.id, tutorial_model.title, tutorial_model.markdownUrl, tutorial_model.category, tutorial_model.answer, tutorial_model.startCode, tutorial_model.shouldBeCheck)
+    if result:
+        return JSONResponse({'success': 'Updated tutorial !'})
+    else:
+        return JSONResponse({'error': 'Can\'t update tutorial'}, status_code=400)
+
+@router.patch('/tuto/toggle', dependencies=[Depends(AdminChecker(2))], tags=['admin'], responses=toggle_tutorial_responses)
+async def enable_disable_tutorial(id_model: IdModel):
+    if id_model.id == None:
+        return JSONResponse({'error': 'Tutorial ID not provided'}, status_code=400)
+    tutorial = TutorialService.get_tutorial(id_model.id)
+    enabled = tutorial.get('enabled')
+    enabled = not enabled
+    result = TutorialService.toggle_tutorial(id_model.id, enabled)
+    if result:
+        return JSONResponse(result)
+    return JSONResponse({'error': 'Can\'t toggle this tutorial'}, status_code=400)
