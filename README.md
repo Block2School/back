@@ -24,3 +24,4 @@ _Replace `localhost` with the good url if you are not in local mode_
 ## For more informations
 
 _Read the wiki to see more informations on this project_
+
