@@ -21,4 +21,6 @@ _Replace `localhost` with the good url if you are not in local mode_
 - Push your python file **AND** the [`version`](/db/version) file
 - Your database will be updated when you will use the script `start.sh`
 
+## For more informations
+
 _Read the wiki to see more informations on this project_
