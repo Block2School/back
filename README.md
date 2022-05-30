@@ -20,3 +20,5 @@ _Replace `localhost` with the good url if you are not in local mode_
 - Create your migration inside (you can see an [example here](/db/1_tutorial_table.py))
 - Push your python file **AND** the [`version`](/db/version) file
 - Your database will be updated when you will use the script `start.sh`
+
+_Read the wiki to see more informations on this project_
