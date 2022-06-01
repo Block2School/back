@@ -1,4 +1,5 @@
 from database.Tutorials import tutorialDb
+from database.Category import categoryDb
 
 class TutorialService():
     @staticmethod
@@ -50,14 +51,23 @@ class TutorialService():
 
     @staticmethod
     def get_all_categories() -> list:
-        result = tutorialDb.fetch_only_category()
-        cats_list = {}
+        result = categoryDb.fetch_all_categories()
         returning = []
         for cat_list in result:
-            if cat_list[0] not in cats_list.keys():
-                cats_list[cat_list[0]] = 1
-            else:
-                cats_list[cat_list[0]] += 1
-        for name in cats_list.keys():
-            returning.append({'name': name, 'tutorials_number': cats_list.get(name)})
+            returning.append({'name': cat_list[0], 'description': cat_list[1], 'image': cat_list[2]})
         return returning
+
+    @staticmethod
+    def create_category(name: str, description: str, image_url: str) -> bool:
+        result = categoryDb.create_category(name, description, image_url)
+        return result
+
+    @staticmethod
+    def update_category(name: str, description: str, image_url: str) -> bool:
+        result = categoryDb.update_category(name, description, image_url)
+        return result
+
+    @staticmethod
+    def delete_category(name: str) -> bool:
+        result = categoryDb.delete_category(name)
+        return result
