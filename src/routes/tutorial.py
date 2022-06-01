@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from models.response.CategoryResponseListModel import CategoryResponseListModel
 from models.response.ErrorResponseModel import ErrorResponseModel
 from models.response.TutorialResponseListModel import TutorialResponseListModel
 from models.response.TutorialResponseModel import TutorialResponseModel
@@ -18,6 +19,10 @@ get_all_tutorials_by_category_response = {
     200: {'model': TutorialResponseListModel}
 }
 
+get_category_list_response = {
+    200: {'model': CategoryResponseListModel}
+}
+
 router = APIRouter(prefix='/tuto')
 
 @router.get('/all', tags=['tutorial'], responses=get_all_tutorials_response)
@@ -32,6 +37,11 @@ async def get_tutorial(id: int):
         return JSONResponse({'error': 'Tutorial not found'}, status_code=400)
     else:
         return JSONResponse(tutorial)
+
+@router.get('/category/all', tags=['tutorial'], responses=get_category_list_response)
+async def get_all_categories():
+    categories = TutorialService.get_all_categories()
+    return JSONResponse({'data': categories})
 
 @router.get('/category/{category}', tags=['tutorial'], responses=get_all_tutorials_by_category_response)
 async def get_all_tutorials_by_category(category: str):

@@ -47,3 +47,17 @@ class TutorialService():
         if result:
             return {'id': id, 'enabled': updated}
         return None
+
+    @staticmethod
+    def get_all_categories() -> list:
+        result = tutorialDb.fetch_only_category()
+        cats_list = {}
+        returning = []
+        for cat_list in result:
+            if cat_list[0] not in cats_list.keys():
+                cats_list[cat_list[0]] = 1
+            else:
+                cats_list[cat_list[0]] += 1
+        for name in cats_list.keys():
+            returning.append({'name': name, 'tutorials_number': cats_list.get(name)})
+        return returning
