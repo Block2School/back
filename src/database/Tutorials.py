@@ -28,6 +28,11 @@ class Tutorials():
         result = prepare(category)
         return result
 
+    def fetch_only_category(self) -> list:
+        prepare = self.db.prepare('SELECT category FROM tutorials')
+        result = prepare()
+        return result
+
     def update(self, id: int, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool) -> bool:
         prepare = self.db.prepare('UPDATE tutorials SET title = $1, markdown_url = $2, category = $3, answer = $4, start_code = $5, should_be_check = $6 WHERE id = $7')
         result = prepare(title, markdown_url, category, answer, start_code, should_be_check, id)
