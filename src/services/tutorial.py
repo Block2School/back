@@ -47,3 +47,13 @@ class TutorialService():
         if result:
             return {'id': id, 'enabled': updated}
         return None
+
+    @staticmethod
+    def get_categories() -> list:
+        category_list = []
+        category_list.append({'description': 'Tutorials that are used for testing purposes.', 'image': 'https://www.lacase.mu/wp-content/uploads/2018/01/test1.jpg', 'name': 'Test'})
+        category_list.append({'description': 'Tutorials that are the same as the ones in Test.', 'image': 'https://static-s.aa-cdn.net/img/ios/963076130/21feeed22ff00e4069eb1bb5df72fcd4?v=1', 'name': 'Tfou'})
+        category_list.append({'description': 'Heho this is a description my friend.', 'image': 'https://scontent-cdt1-1.xx.fbcdn.net/v/t1.6435-9/37783620_247079442787852_7190952877701988352_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=cdDkMY70DMwAX9r-zW0&_nc_ht=scontent-cdt1-1.xx&oh=00_AT_tHX-x-72egZ0o4CfxwUz_wUA4-P8Ljvv0ugS5G4npZg&oe=62BA006E', 'name': 'Lol'})
+        category_list.append({'description': 'Hi my name is John this is a description', 'image': 'https://i1.sndcdn.com/avatars-F0kzYliaHG2y9QMz-tCkkzw-t500x500.jpg', 'name': 'Zebi'})
+        print(category_list, flush=True)
+        return category_list

@@ -33,10 +33,16 @@ async def get_tutorial(id: int):
     else:
         return JSONResponse(tutorial)
 
+@router.get('/category/', tags=['tutorial'])
+async def get_zebi_list():
+    category_list = TutorialService.get_categories()
+    return JSONResponse({'data': category_list})
+
 @router.get('/category/{category}', tags=['tutorial'], responses=get_all_tutorials_by_category_response)
 async def get_all_tutorials_by_category(category: str):
     tutorial_list = TutorialService.get_all_tutorials_by_category(category)
     return JSONResponse({'data': tutorial_list})
+
 
 @router.get('/scoreboard/{id}', tags=['tutorial'])
 async def get_scoreboard_tutorial(id: int):
