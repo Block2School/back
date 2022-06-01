@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends
 from models.input.BanModel import BanModel
+from models.input.CategoryModel import CategoryModel
+from models.input.CategoryNameModel import CategoryNameModel
 from models.input.ModModel import ModModel
 from models.input.TutorialEditModel import TutorialEditModel
 from models.input.TutorialModel import TutorialModel
@@ -47,6 +49,18 @@ update_tutorial_responses = {
 }
 toggle_tutorial_responses = {
     200: {'model': ToggleTutorialResponseModel},
+    400: {'model': ErrorResponseModel}
+}
+create_category_responses = {
+    200: {'model': SuccessResponseModel},
+    400: {'model': ErrorResponseModel}
+}
+update_category_responses = {
+    200: {'model': SuccessResponseModel},
+    400: {'model': ErrorResponseModel}
+}
+delete_category_responses = {
+    200: {'model': SuccessResponseModel},
     400: {'model': ErrorResponseModel}
 }
 
@@ -143,3 +157,24 @@ async def enable_disable_tutorial(id_model: IdModel):
     if result:
         return JSONResponse(result)
     return JSONResponse({'error': 'Can\'t toggle this tutorial'}, status_code=400)
+
+@router.post('/category/create', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=create_category_responses)
+async def create_category(category: CategoryModel):
+    result = TutorialService.create_category(category.name, category.description, category.image)
+    if result:
+        return JSONResponse({'success': 'Created category ' + category.name})
+    return JSONResponse({'error': 'Could not create the category'}, status_code=400)
+
+@router.patch('/category/update', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=update_category_responses)
+async def update_category(category: CategoryModel):
+    result = TutorialService.update_category(category.name, category.description, category.image)
+    if result:
+        return JSONResponse({'success': 'Updated category ' + category.name})
+    return JSONResponse({'error': 'Could not update the category'}, status_code=400)
+
+@router.delete('/category/delete', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=delete_category_responses)
+async def delete_category(name: CategoryNameModel):
+    result = TutorialService.delete_category(name.name)
+    if result:
+        return JSONResponse({'success': 'Category deleted'})
+    return JSONResponse({'error': 'Could not delete the category'}, status_code=400)
