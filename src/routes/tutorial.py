@@ -1,10 +1,13 @@
 from fastapi import APIRouter, Depends
+from models.input.SubmitTutorialModel import SubmitTutorialModel
 from models.response.CategoryResponseListModel import CategoryResponseListModel
+from models.response.CompleteTutorialResponseModel import CompleteTutorialResponseModel
 from models.response.ErrorResponseModel import ErrorResponseModel
 from models.response.TutorialResponseListModel import TutorialResponseListModel
 from models.response.TutorialResponseModel import TutorialResponseModel
 from services.tutorial import TutorialService
 from starlette.responses import JSONResponse
+from services.utils.JWT import JWT
 
 from services.utils.JWTChecker import JWTChecker
 
@@ -21,6 +24,11 @@ get_all_tutorials_by_category_response = {
 
 get_category_list_response = {
     200: {'model': CategoryResponseListModel}
+}
+
+submit_tutorial_responses = {
+    200: {'model': CompleteTutorialResponseModel},
+    400: {'model': ErrorResponseModel}
 }
 
 router = APIRouter(prefix='/tuto')
@@ -68,6 +76,16 @@ async def get_user_score_tutorial(id: int, credentials: str = Depends(JWTChecker
 async def get_user_success_tutorials(credentials: str = Depends(JWTChecker())):
     pass
 
-@router.post('/complete', tags=['tutorial'], dependencies=[Depends(JWTChecker())])
-async def complete_tutorial(credentials: str = Depends(JWTChecker())):
-    pass
+@router.post('/complete', tags=['tutorial'], dependencies=[Depends(JWTChecker())], responses=submit_tutorial_responses)
+async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = Depends(JWTChecker())):
+    jwt = JWT.decodeJWT(credentials)
+
+    if tutorial.is_already_checked:
+        result = TutorialService.validate_tutorial(jwt['uuid'], tutorial.tutorial_id)
+        return JSONResponse({'is_correct': True, 'total_completions': result, 'error_description': None})
+    else:
+        if tutorial.source_code != None and tutorial.language != None:
+            pass # TO DO
+            return JSONResponse({'is_correct': False, 'total_completions': 0, 'error_description': 'Not implemented'})
+        else:
+            return JSONResponse({'error': 'Missing source code or language'}, status_code=400)

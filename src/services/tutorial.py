@@ -1,5 +1,6 @@
 from database.Tutorials import tutorialDb
 from database.Category import categoryDb
+from database.AccountTutorialCompletion import accountTutorialCompletionDb
 
 class TutorialService():
     @staticmethod
@@ -71,3 +72,19 @@ class TutorialService():
     def delete_category(name: str) -> bool:
         result = categoryDb.delete_category(name)
         return result
+
+    @staticmethod
+    def validate_tutorial(uuid: str, tutorial_id: int) -> int:
+        total_completions = accountTutorialCompletionDb.fetch_tutorial(uuid, tutorial_id)
+        if len(total_completions) == 0:
+            total_completions = 1
+        else:
+            total_completions = total_completions[0][2]
+            total_completions += 1
+
+        if total_completions == 1:
+            result = accountTutorialCompletionDb.insert(uuid, tutorial_id)
+            return result
+        else:
+            result = accountTutorialCompletionDb.update(uuid, tutorial_id, total_completions)
+            return result
