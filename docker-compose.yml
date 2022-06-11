@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:14.1-alpine
+    restart: always
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env # configure postgres
+    volumes:
+      - database-data:/var/lib/postgresql/data # persist data
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql # create tables
+      - ./sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql # fill tables
+  
+  b2c-server:
+    image: b2c-server
+    restart: always
+    depends_on:
+      - postgres
+    ports: 
+      - '8080:8080'
+    command: 'uvicorn main:app --reload --port=8080'
+
+volumes:
+  database-data:
