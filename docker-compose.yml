@@ -12,15 +12,27 @@ services:
       - database-data:/var/lib/postgresql/data # persist data
       - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql # create tables
       - ./sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql # fill tables
-  
+
   b2c-server:
+    build: .
     image: b2c-server
-    restart: always
     depends_on:
       - postgres
     ports: 
       - '8080:8080'
-    command: 'uvicorn main:app --reload --port=8080'
+  
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - '5050:80'
+
 
 volumes:
   database-data:
