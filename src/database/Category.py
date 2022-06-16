@@ -1,27 +1,48 @@
 from database.Database import db
+import pymysql
 
 class Category():
-    def __init__(self, db):
+    def __init__(self, db: pymysql.connect):
         self.db = db
 
     def fetch_all_categories(self) -> list:
-        prepare = self.db.prepare('SELECT * FROM category')
-        result = prepare()
+        prepare = "SELECT * FROM `category`"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare)
+                result = cursor.fetchall()
+        except:
+            return None
         return result
 
     def create_category(self, name: str, description: str, image_url: str) -> bool:
-        prepare = self.db.prepare('INSERT INTO category (name, description, image_url) VALUES ($1, $2, $3)')
-        result = prepare(name, description, image_url)
-        return len(result) > 0
+        prepare = "INSERT INTO `category` (`name`, `description`, `image_url`) VALUES (%s, %s, %s)"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (name, description, image_url))
+            self.db.commit()
+        except:
+            return False
+        return True
 
-    def update_category(self, name: str, description: str, image_url: str) -> bool:
-        prepare = self.db.prepare('UPDATE category SET description = $1, image_url = $2 WHERE name = $3')
-        result = prepare(description, image_url, name)
-        return len(result) > 0
+    def update_category(self, name: str, description: str, image_url: str) -> dict:
+        prepare = "UPDATE `category` SET `description` = %s, `image_url` = %s WHERE `name` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (description, image_url, name))
+            self.db.commit()
+        except:
+            return None
+        return {"name": name, "description": description, "image_url": image_url}
 
     def delete_category(self, name: str) -> bool:
-        prepare = self.db.prepare('DELETE FROM category WHERE name = $1')
-        result = prepare(name)
-        return len(result) > 0
+        prepare = "DELETE FROM `category` WHERE `name` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (name))
+            self.db.commit()
+        except:
+            return False
+        return True
 
 categoryDb = Category(db)

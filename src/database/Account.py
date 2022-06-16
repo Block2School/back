@@ -1,28 +1,48 @@
-import postgresql
+import pymysql
 from database.Database import db
 
 class AccountDatabase():
-    def __init__(self, db) -> None:
+    def __init__(self, db: pymysql.connect) -> None:
         self.db = db
 
     def insert(self, uuid: str, wallet_address: str) -> bool:
-        prepare = self.db.prepare('INSERT INTO account (uuid, wallet_address) VALUES ($1, $2)')
-        result = prepare(uuid, wallet_address)
-        return len(result) == 2 and result[1] > 0
+        prepare = "INSERT INTO `account` (`uuid`, `wallet_address`) VALUES (%s, %s)"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (uuid, wallet_address))
+            self.db.commit()
+        except:
+            return False
+        return True
 
-    def login(self, wallet_address: str) -> list:
-        prepare = self.db.prepare("SELECT uuid FROM account WHERE wallet_address = $1")
-        result = prepare(wallet_address)
-        return result
+    def login(self, wallet_address: str) -> dict:
+        prepare = "SELECT `uuid` FROM `account` WHERE `wallet_address` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (wallet_address))
+                result = cursor.fetchone()
+            return result
+        except:
+            return None
 
-    def fetch(self, uuid: str) -> list:
-        prepare = self.db.prepare("SELECT wallet_address, is_banned FROM account WHERE uuid = $1")
-        result = prepare(uuid)
-        return result
+    def fetch(self, uuid: str) -> dict:
+        prepare = "SELECT `wallet_address`, `is_banned` FROM `account` WHERE `uuid` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (uuid))
+                result = cursor.fetchone()
+            return result
+        except:
+            return None
 
-    def update(self, uuid: str, is_banned: bool) -> list:
-        prepare = self.db.prepare("UPDATE account SET is_banned = $1 WHERE uuid = $2")
-        result = prepare(is_banned, uuid)
-        return result
+    def update(self, uuid: str, is_banned: bool) -> dict:
+        prepare = "UPDATE `account` SET `is_banned` = %r WHERE `uuid` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (is_banned, uuid))
+            self.db.commit()
+            return {'uuid': uuid, 'is_banned': is_banned}
+        except:
+            return None
 
 accountDb = AccountDatabase(db)

@@ -1,11 +1,14 @@
-import postgresql
+import pymysql
+import pymysql.cursors
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
 def get_database():
-    return postgresql.open('pq://%s:%s@%s:%d/%s' %
-        (os.getenv('PG_USER'), os.getenv('PG_PASSWORD'),
-        os.getenv('PG_HOST'), int(os.getenv('PG_PORT')),
-        os.getenv('PG_DATABASE')))
+    return pymysql.connect(host=os.getenv('MYSQL_HOST'),
+                           port=int(os.getenv('MYSQL_PORT')),
+                           user=os.getenv('MYSQL_USER'),
+                           password=os.getenv('MYSQL_PASSWORD'),
+                           database=os.getenv('MYSQL_DATABASE'),
+                           cursorclass=pymysql.cursors.DictCursor)

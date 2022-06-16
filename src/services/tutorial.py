@@ -9,7 +9,7 @@ class TutorialService():
         tutorial_list = []
         if len(tutorials) > 0:
             for tutorial in tutorials:
-                tutorial_list.append({'id': tutorial[0], 'title': tutorial[1], 'markdownUrl': tutorial[2], 'category': tutorial[3], 'answer': tutorial[4] if tutorial[6] else None, 'startCode': tutorial[5], 'shouldBeCheck': tutorial[6], 'enabled': tutorial[9]})
+                tutorial_list.append({'id': tutorial['id'], 'title': tutorial['title'], 'markdownUrl': tutorial['markdown_url'], 'category': tutorial['category'], 'answer': tutorial['answer'] if tutorial['should_be_check'] else None, 'startCode': tutorial['start_code'], 'shouldBeCheck': tutorial['should_be_check'], 'enabled': tutorial['enabled']})
         else:
             return []
         return tutorial_list
@@ -17,9 +17,9 @@ class TutorialService():
     @staticmethod
     def get_tutorial(id: int) -> dict:
         tutorial = tutorialDb.fetch(id)
-        if len(tutorial) > 0:
-            data = tutorial[0]
-            return {'id': data[0], 'title': data[1], 'markdownUrl': data[2], 'category': data[3], 'answer': data[4] if data[6] else None, 'startCode': data[5], 'shouldBeCheck': data[6], 'enabled': data[9]}
+        if tutorial != None:
+            data = tutorial
+            return {'id': data['id'], 'title': data['title'], 'markdownUrl': data['markdown_url'], 'category': data['category'], 'answer': data['answer'] if data['should_be_check'] else None, 'startCode': data['start_code'], 'shouldBeCheck': data['should_be_check'], 'enabled': data['enabled']}
         return None
 
     @staticmethod
@@ -33,7 +33,7 @@ class TutorialService():
         tutorial_list = []
         if len(tutorials) > 0:
             for tutorial in tutorials:
-                tutorial_list.append({'id': tutorial[0], 'title': tutorial[1], 'markdownUrl': tutorial[2], 'category': tutorial[3], 'answer': tutorial[4] if tutorial[6] else None, 'startCode': tutorial[5], 'shouldBeCheck': tutorial[6], 'enabled': tutorial[9]})
+                tutorial_list.append({'id': tutorial['id'], 'title': tutorial['title'], 'markdownUrl': tutorial['markdown_url'], 'category': tutorial['category'], 'answer': tutorial['answer'] if tutorial['should_be_check'] else None, 'startCode': tutorial['start_code'], 'shouldBeCheck': tutorial['should_be_check'], 'enabled': tutorial['enabled']})
         else:
             return []
         return tutorial_list
@@ -55,7 +55,7 @@ class TutorialService():
         result = categoryDb.fetch_all_categories()
         returning = []
         for cat_list in result:
-            returning.append({'name': cat_list[0], 'description': cat_list[1], 'image': cat_list[2]})
+            returning.append({'name': cat_list['name'], 'description': cat_list['description'], 'image': cat_list['image_url']})
         return returning
 
     @staticmethod
@@ -76,15 +76,17 @@ class TutorialService():
     @staticmethod
     def validate_tutorial(uuid: str, tutorial_id: int) -> int:
         total_completions = accountTutorialCompletionDb.fetch_tutorial(uuid, tutorial_id)
-        if len(total_completions) == 0:
+        if total_completions == None:
             total_completions = 1
         else:
-            total_completions = total_completions[0][2]
+            total_completions = total_completions['total_completions']
             total_completions += 1
 
         if total_completions == 1:
             result = accountTutorialCompletionDb.insert(uuid, tutorial_id)
-            return result
+            if result:
+                return 1
+            return 0
         else:
             result = accountTutorialCompletionDb.update(uuid, tutorial_id, total_completions)
-            return result
+            return result['total_completions']

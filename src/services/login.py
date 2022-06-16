@@ -10,9 +10,9 @@ class LoginService():
     @staticmethod
     def check_account(encrypted_wallet: str) -> list:
         wallet_hash = WalletHash.wallet_hash(encrypted_wallet)
-        user_uuid = accountDb.login(wallet_hash)
-        if len(user_uuid) != 0:
-            return [wallet_hash, user_uuid[0][0]]
+        result = accountDb.login(wallet_hash)
+        if result != None:
+            return [wallet_hash, result['uuid']]
         else:
             return [wallet_hash]
 
@@ -33,16 +33,18 @@ class LoginService():
     @staticmethod
     def is_banned(user_uuid: str) -> dict:
         account = accountDb.fetch(user_uuid)
-        if account[0][1]:
+        if account == None:
+            return None
+        if account['is_banned']:
             bans = accountPunishmentDb.fetch(user_uuid)
             if len(bans) > 0:
                 ban = bans[-1]
-                if ban[2] != None:
-                    if datetime.now() > ban[2]:
+                if ban['expires'] != None:
+                    if datetime.now() > ban['expires']:
                         accountDb.update(user_uuid, False)
                         return None
-                if not ban[3]:
-                    return {"reason": ban[0], "expires": datetime.timestamp(ban[2]) if ban[2] else -1}
+                if not ban['is_revoked']:
+                    return {"reason": ban['reason'], "expires": datetime.timestamp(ban['expires']) if ban['expires'] else -1}
                 else:
                     accountDb.update(user_uuid, False)
                     return None

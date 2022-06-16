@@ -4,11 +4,11 @@ from database.AccountDetails import accountDetailDb
 class UserService():
     @staticmethod
     def get_profile(uuid: str) -> dict:
-        response = accountDetailDb.fetch(uuid)[0]
+        response = accountDetailDb.fetch(uuid)
         return {
-            "wallet": response[0],
-            "username": response[1],
-            "email": response[2]
+            "wallet": response['wallet_address'],
+            "username": response['username'],
+            "email": response['email']
         }
 
     @staticmethod

@@ -1,5 +1,5 @@
 fastapi>=0.68.0,<0.69.0
 python-dotenv
-py-postgresql==1.2.2
+PyMySQL==1.0.2
 PyJWT==2.4.0
 uvicorn==0.17.6
