@@ -1,46 +1,78 @@
-import postgresql
+import pymysql
 from database.Database import db
 
 class Tutorials():
-    def __init__(self, db):
+    def __init__(self, db: pymysql.connect):
         self.db = db
 
     def insert(self, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool) -> bool:
-        prepare = self.db.prepare('INSERT INTO tutorials (title, markdown_url, category, answer, start_code, should_be_check) VALUES ($1, $2, $3, $4, $5, $6)')
+        prepare = "INSERT INTO `tutorials` (`title`, `markdown_url`, `category`, `answer`, `start_code`, `should_be_check`) VALUES (%s, %s, %s, %s, %s, %r)"
         try:
-            result = prepare(title, markdown_url, category, answer, start_code, should_be_check)
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (title, markdown_url, category, answer, start_code, should_be_check))
+            self.db.commit()
         except:
             return False
-        return len(result) > 0
+        return True
 
-    def fetch(self, id: int) -> list:
-        prepare = self.db.prepare('SELECT * FROM tutorials WHERE id = $1')
-        result = prepare(id)
+    def fetch(self, id: int) -> dict:
+        prepare = "SELECT * FROM `tutorials` WHERE `id` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (id))
+                result = cursor.fetchone()
+        except:
+            return None
         return result
 
     def fetch_all(self) -> list:
-        prepare = self.db.prepare('SELECT * from tutorials')
-        result = prepare()
+        prepare = "SELECT * FROM `tutorials`"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare)
+                result = cursor.fetchall()
+        except:
+            return None
         return result
 
     def fetch_by_category(self, category: str) -> list:
-        prepare = self.db.prepare('SELECT * from tutorials WHERE category = $1')
-        result = prepare(category)
+        prepare = "SELECT * FROM `tutorials` WHERE `category` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (category))
+                result = cursor.fetchall()
+        except:
+            return None
         return result
 
-    def update(self, id: int, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool) -> bool:
-        prepare = self.db.prepare('UPDATE tutorials SET title = $1, markdown_url = $2, category = $3, answer = $4, start_code = $5, should_be_check = $6 WHERE id = $7')
-        result = prepare(title, markdown_url, category, answer, start_code, should_be_check, id)
-        return len(result) > 0
+    def update(self, id: int, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool) -> dict:
+        prepare = "UPDATE `tutorials` SET `title` = %s, `markdown_url` = %s, `category` = %s, `answer` = %s, `start_code` = %s, `should_be_check` = %r WHERE `id` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (title, markdown_url, category, answer, start_code, should_be_check, id))
+            self.db.commit()
+        except:
+            return None
+        return {"id": id, "title": title, "markdown_url": markdown_url, "category": category, "answer": answer, "start_code": start_code, "should_be_check": should_be_check}
 
-    def update_enabled(self, id: int, enabled: bool) -> bool:
-        prepare = self.db.prepare('UPDATE tutorials SET enabled = $1 WHERE id = $2')
-        result = prepare(enabled, id)
-        return len(result) > 0
+    def update_enabled(self, id: int, enabled: bool) -> dict:
+        prepare = "UPDATE `tutorials` SET `enabled` = %r WHERE `id` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (enabled, id))
+            self.db.commit()
+        except:
+            return None
+        return {"id": id, "enabled": enabled}
 
     def remove(self, id: int) -> bool:
-        prepare = self.db.prepare('DELETE FROM tutorials WHERE id = $1')
-        result = prepare(id)
-        return len(result) > 0
+        prepare = "DELETE FROM `tutorials` WHERE `id` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (id))
+            self.db.commit()
+        except:
+            return False
+        return True
 
 tutorialDb = Tutorials(db)

@@ -26,9 +26,9 @@ class AdminChecker(HTTPBearer):
         user_uuid = payload.get('uuid')
         permission = accountModerationDb.fetch(user_uuid)
 
-        if len(permission) == 0:
+        if permission == None:
             return False
-        if permission[0][0] >= self.needed_permission:
+        if permission['role'] >= self.needed_permission:
             return True
         return False
 

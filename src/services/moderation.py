@@ -13,25 +13,25 @@ class ModerationService():
         if len(result_bans) == 0:
             return []
         for ban in result_bans:
-            banned_mod = accountDetailDb.fetch(ban[1])[0][1]
-            banlist.append({"reason": ban[0], "banned_by": banned_mod, "expires": datetime.timestamp(ban[2]) if ban[2] != None else -1, "is_revoked": ban[3]})
-            if ban[3]:
-                banlist[-1]['revoked_by'] = accountDetailDb.fetch(ban[4])[0][1]
-                banlist[-1]['revoke_reason'] = ban[5]
+            banned_mod = accountDetailDb.fetch(ban['banned_by'])['username']
+            banlist.append({"reason": ban['reason'], "banned_by": banned_mod, "expires": datetime.timestamp(ban['expires']) if ban['expires'] != None else -1, "is_revoked": ban['is_revoked']})
+            if ban['is_revoked']:
+                banlist[-1]['revoked_by'] = accountDetailDb.fetch(ban['revoked_by'])['username']
+                banlist[-1]['revoke_reason'] = ban['revoke_reason']
         return banlist
 
     @staticmethod
     def ban(uuid: str, banned_by: str, reason: str, expires: int) -> bool:
         role = accountModerationDb.fetch(uuid)
-        if len(role) > 0:
+        if role != None:
             return False
         user_account = accountDb.fetch(uuid)
         if len(user_account) == 0:
             return False
-        if user_account[0][1]:
+        if user_account['is_banned']:
             return False
-        accountPunishmentDb.insert(uuid, banned_by, reason, datetime.fromtimestamp(expires) if expires != -1 else None)
-        accountDb.update(uuid, True)
+        t = accountPunishmentDb.insert(uuid, banned_by, reason, datetime.fromtimestamp(expires) if expires != -1 else None)
+        d = accountDb.update(uuid, True)
         return True
 
     @staticmethod
@@ -39,7 +39,7 @@ class ModerationService():
         user_account = accountDb.fetch(uuid)
         if len(user_account) == 0:
             return False
-        if not user_account[0][1]:
+        if not user_account['is_banned']:
             return False
         accountPunishmentDb.update(uuid, revoked_by, reason)
         accountDb.update(uuid, False)
@@ -51,8 +51,8 @@ class ModerationService():
         if len(user_account) == 0:
             return False
         user_mod = accountModerationDb.fetch(uuid)
-        if len(user_mod) > 0:
-            if user_mod[0][0] == type:
+        if user_mod != None:
+            if user_mod['role'] == type:
                 return False
             else:
                 if type == -1:

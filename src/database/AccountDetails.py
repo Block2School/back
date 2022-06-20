@@ -1,33 +1,58 @@
 from database.Database import db
+import pymysql
 
 class AccountDetails():
-    def __init__(self, db):
+    def __init__(self, db: pymysql.connect):
         self.db = db
 
     def insert(self, uuid: str, wallet: str) -> bool:
-        prepare = self.db.prepare('INSERT INTO account_details (uuid, wallet_address, username) VALUES ($1, $2, $3)')
-        result = prepare(uuid, wallet, wallet)
-        print(result)
-        return len(result) == 2 and result[1] > 0
+        prepare = "INSERT INTO `account_details` (`uuid`, `wallet_address`, `username`) VALUES (%s, %s, %s)"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (uuid, wallet, wallet))
+            self.db.commit()
+        except:
+            return False
+        return True
 
-    def fetch(self, uuid: str) -> list:
-        prepare = self.db.prepare('SELECT wallet_address, username, email FROM account_details WHERE uuid = $1')
-        result = prepare(uuid)
-        return result
+    def fetch(self, uuid: str) -> dict:
+        prepare = "SELECT `wallet_address`, `username`, `email` FROM `account_details` WHERE `uuid` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (uuid))
+                result = cursor.fetchone()
+                return result
+        except:
+            return None
 
-    def update(self, uuid: str, username: str = None, email: str = None) -> list:
+    def update(self, uuid: str, username: str = None, email: str = None) -> dict:
         if username != None and email != None:
-            prepare = self.db.prepare('UPDATE account_details SET username = $1, email = $2 WHERE uuid = $3')
-            result = prepare(username, email, uuid)
-            return result
+            prepare = "UPDATE `account_details` SET `username` = %s, `email` = %s WHERE `uuid` = %s"
+            try:
+                with self.db.cursor() as cursor:
+                    cursor.execute(prepare, (username, email, uuid))
+                self.db.commit()
+            except:
+                return None
+            return {"username": username, "email": email, "uuid": uuid}
         elif username != None:
-            prepare = self.db.prepare('UPDATE account_details SET username = $1 WHERE uuid = $2')
-            result = prepare(username, uuid)
-            return result
+            prepare = "UPDATE `account_details` SET `username` = %s WHERE `uuid` = %s"
+            try:
+                with self.db.cursor() as cursor:
+                    cursor.execute(prepare, (username, uuid))
+                self.db.commit()
+            except:
+                return None
+            return {"username": username, "uuid": uuid}
         elif email != None:
-            prepare = self.db.prepare('UPDATE account_details SET email = $1 WHERE uuid = $2')
-            prepare(email, uuid)
-            return result
+            prepare = "UPDATE `account_details` SET `email` = %s WHERE `uuid` = %s"
+            try:
+                with self.db.cursor() as cursor:
+                    cursor.execute(prepare, (email, uuid))
+                self.db.commit()
+            except:
+                return None
+            return {"email": email, "uuid": uuid}
         else:
             return None
 

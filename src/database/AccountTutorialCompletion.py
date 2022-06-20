@@ -1,31 +1,48 @@
-import postgresql
+import pymysql
 from database.Database import db
 
 class AccountTutorialCompletion():
-    def __init__(self, db):
+    def __init__(self, db: pymysql.connect):
         self.db = db
 
-    def insert(self, uuid: str, tutorial_id: int) -> int:
-        prepare = self.db.prepare('INSERT INTO account_tutorial_completion (uuid, tutorial_id) VALUES ($1, $2)')
+    def insert(self, uuid: str, tutorial_id: int) -> bool:
+        prepare = "INSERT INTO `account_tutorial_completion` (`uuid`, `tutorial_id`) VALUES (%s, %s)"
         try:
-            result = prepare(uuid, tutorial_id)
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (uuid, tutorial_id))
+            self.db.commit()
         except:
-            return -1
-        return result[0][2]
+            return False
+        return True
 
-    def fetch_tutorial(self, uuid: str, tutorial_id: int) -> list:
-        prepare = self.db.prepare('SELECT uuid, tutorial_id, total_completions, updated_at AS last_completion FROM account_tutorial_completion WHERE uuid = $1 AND tutorial_id = $2')
-        result = prepare(uuid, tutorial_id)
+    def fetch_tutorial(self, uuid: str, tutorial_id: int) -> dict:
+        prepare = "SELECT `uuid`, `tutorial_id`, `total_completions`, `updated_at` AS `last_completion` FROM `account_tutorial_completion` WHERE `uuid` = %s AND `tutorial_id` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (uuid, tutorial_id))
+                result = cursor.fetchone()
+        except:
+            return None
         return result
 
     def fetch_all_tutorials(self, uuid: str) -> list:
-        prepare = self.db.prepare('SELECT uuid, tutorial_id, total_completions, updated_at AS last_completion FROM account_tutorial_completion WHERE uuid = $1')
-        result = prepare(uuid)
+        prepare = "SELECT `uuid`, `tutorial_id`, `total_completions`, `updated_at` AS `last_completion` FROM `account_tutorial_completion` WHERE `uuid` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (uuid))
+                result = cursor.fetchall()
+        except:
+            return None
         return result
 
-    def update(self, uuid: str, tutorial_id: int, total_completions: int) -> int:
-        prepare = self.db.prepare('UPDATE account_tutorial_completion SET total_completions = $1 WHERE uuid = $2 AND tutorial_id = $3')
-        result = prepare(total_completions, uuid, tutorial_id)
-        return result[0][2]
+    def update(self, uuid: str, tutorial_id: int, total_completions: int) -> dict:
+        prepare = "UPDATE `account_tutorial_completion` SET `total_completions` = %s WHERE `uuid` = %s AND `tutorial_id` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (total_completions, uuid, tutorial_id))
+            self.db.commit()
+        except:
+            return None
+        return {"uuid": uuid, "tutorial_id": tutorial_id, "total_completions": total_completions}
 
 accountTutorialCompletionDb = AccountTutorialCompletion(db)
