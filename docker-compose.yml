@@ -2,16 +2,18 @@ version: '3'
 
 services:
   mysql:
+    platform: linux/x86_64
     image: "mysql:5.7"
     container_name: mysql
     restart: always
     volumes:
       - ./mysql:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=your_password
       - MYSQL_USER=root
-      - MYSQL_PASSWORD=your_password
-      - MYSQL_DATABASE=wordpress
+      - MYSQL_PASSWORD=
+      - MYSQL_HOST=localhost
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=Block2School
     ports:
       - "3306:3306"
     expose:
@@ -24,7 +26,3 @@ services:
       - mysql
     ports: 
       - '8080:8080'
-  
-
-volumes:
-  database-data:
