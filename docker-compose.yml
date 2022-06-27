@@ -9,10 +9,11 @@ services:
     volumes:
       - ./mysql:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_HOST=127.0.0.1
+      - MYSQL_PASSWORD=
+      - MYSQL_HOST=localhost
       - MYSQL_PORT=3306
       - MYSQL_DATABASE=Block2School
+      - MYSQL_USER=
     ports:
       - "3306:3306"
     expose:
@@ -26,6 +27,11 @@ services:
   b2c-server:
     build: .
     image: b2c-server
+    environment:
+      - MYSQL_HOST=localhost
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=Motdepasse21
+      - MYSQL_DATABASE=Block2School
     depends_on:
       - mysql
         # condition: service_healthy
