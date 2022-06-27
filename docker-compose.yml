@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  mysql:
+    platform: linux/x86_64
+    image: "mysql:5.7"
+    container_name: mysql
+    restart: always
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_PASSWORD=
+      - MYSQL_HOST=localhost
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=Block2School
+      - MYSQL_USER=
+    ports:
+      - "3306:3306"
+    expose:
+      - 3306
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:3306"]
+    #   interval: 10s
+    #   timeout: 1m
+    #   retries: 10
+
+  b2c-server:
+    build: .
+    image: b2c-server
+    environment:
+      - MYSQL_HOST=localhost
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=Motdepasse21
+      - MYSQL_DATABASE=Block2School
+    depends_on:
+      - mysql
+        # condition: service_healthy
+    ports: 
+      - '8080:8080'
+    links:
+      - mysql
