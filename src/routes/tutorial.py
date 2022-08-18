@@ -3,6 +3,7 @@ from models.input.SubmitTutorialModel import SubmitTutorialModel
 from models.response.CategoryResponseListModel import CategoryResponseListModel
 from models.response.CompleteTutorialResponseModel import CompleteTutorialResponseModel
 from models.response.ErrorResponseModel import ErrorResponseModel
+from models.response.ScoreboardTutorialIDListModel import ScoreboardTutorialIDListModel
 from models.response.TutorialResponseListModel import TutorialResponseListModel
 from models.response.TutorialResponseModel import TutorialResponseModel
 from services.tutorial import TutorialService
@@ -31,6 +32,10 @@ submit_tutorial_responses = {
     400: {'model': ErrorResponseModel}
 }
 
+get_scoreboard_tutorial_response = {
+    200: {'model': ScoreboardTutorialIDListModel}
+}
+
 router = APIRouter(prefix='/tuto')
 
 @router.get('/all', tags=['tutorial'], responses=get_all_tutorials_response)
@@ -56,9 +61,10 @@ async def get_all_tutorials_by_category(category: str):
     tutorial_list = TutorialService.get_all_tutorials_by_category(category)
     return JSONResponse({'data': tutorial_list})
 
-@router.get('/scoreboard/{id}', tags=['tutorial'])
+@router.get('/scoreboard/{id}', tags=['tutorial'], responses=get_scoreboard_tutorial_response)
 async def get_scoreboard_tutorial(id: int):
-    pass
+    scoreboard_tutorial = TutorialService.get_scoreboard_tutorial_id(id)
+    return JSONResponse({'data': scoreboard_tutorial})
 
 @router.get('/success/{id}', tags=['tutorial'])
 async def get_success_percentage_tutorial(id: int):

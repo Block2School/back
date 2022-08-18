@@ -1,6 +1,7 @@
 from database.Tutorials import tutorialDb
 from database.Category import categoryDb
 from database.AccountTutorialCompletion import accountTutorialCompletionDb
+from database.UserTutorialScore import userTutorialScoreDb
 
 class TutorialService():
     @staticmethod
@@ -90,3 +91,14 @@ class TutorialService():
         else:
             result = accountTutorialCompletionDb.update(uuid, tutorial_id, total_completions)
             return result['total_completions']
+
+    @staticmethod
+    def get_scoreboard_tutorial_id(tutorial_id: int) -> list:
+        scoreboard_tutorial_list = userTutorialScoreDb.fetch_all_score_of_tutorial(tutorial_id)
+        scoreboard_tutorial_list.sort(key=lambda obj: obj['characters'], reverse=True)
+
+        for i in range(0, len(scoreboard_tutorial_list)):
+            uuid = scoreboard_tutorial_list[i].get('uuid')
+            tmp = accountTutorialCompletionDb.fetch_tutorial(uuid, tutorial_id)
+            scoreboard_tutorial_list[i]['total_completions'] = tmp.get('total_completions')
+        return scoreboard_tutorial_list
