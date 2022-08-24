@@ -1,7 +1,9 @@
+from datetime import datetime
 from database.Tutorials import tutorialDb
 from database.Category import categoryDb
 from database.AccountTutorialCompletion import accountTutorialCompletionDb
 from database.UserTutorialScore import userTutorialScoreDb
+from database.Account import accountDb
 
 class TutorialService():
     @staticmethod
@@ -102,3 +104,26 @@ class TutorialService():
             tmp = accountTutorialCompletionDb.fetch_tutorial(uuid, tutorial_id)
             scoreboard_tutorial_list[i]['total_completions'] = tmp.get('total_completions')
         return scoreboard_tutorial_list
+
+    @staticmethod
+    def get_percentage_tutorial_id(tutorial_id: int) -> float:
+        total_completions = len(accountTutorialCompletionDb.fetch_by_tutorial_id(tutorial_id))
+        total_users = len(accountDb.fetchall())
+        return (total_completions / total_users) * 100
+
+    @staticmethod
+    def get_user_scoreboard(uuid: str) -> list:
+        scores = userTutorialScoreDb.fetch_all_score_of_user(uuid)
+        return scores
+
+    @staticmethod
+    def get_user_success(uuid: str) -> list:
+        success = accountTutorialCompletionDb.fetch_all_tutorials(uuid)
+        for i in range(0, len(success)):
+            success[i]['last_completion'] = datetime.timestamp(success[i]['last_completion'])
+        return success
+
+    @staticmethod
+    def get_total_number_tutorials() -> int:
+        tutorials = tutorialDb.fetch_all()
+        return len(tutorials)

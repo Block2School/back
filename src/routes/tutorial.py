@@ -6,6 +6,9 @@ from models.response.ErrorResponseModel import ErrorResponseModel
 from models.response.ScoreboardTutorialIDListModel import ScoreboardTutorialIDListModel
 from models.response.TutorialResponseListModel import TutorialResponseListModel
 from models.response.TutorialResponseModel import TutorialResponseModel
+from models.response.ScoreboardTutorialMeListModel import ScoreboardTutorialMeListModel
+from models.response.SuccessByIDModel import SuccessByIDModel
+from models.response.SuccessMeModel import SuccessMeModel
 from services.tutorial import TutorialService
 from starlette.responses import JSONResponse
 from services.utils.JWT import JWT
@@ -36,6 +39,18 @@ get_scoreboard_tutorial_response = {
     200: {'model': ScoreboardTutorialIDListModel}
 }
 
+get_scoreboard_me_tutorial_response = {
+    200: {'model': ScoreboardTutorialMeListModel}
+}
+
+get_success_by_id = {
+    200: {'model': SuccessByIDModel}
+}
+
+get_success_me_response = {
+    200: {'model': SuccessMeModel}
+}
+
 router = APIRouter(prefix='/tuto')
 
 @router.get('/all', tags=['tutorial'], responses=get_all_tutorials_response)
@@ -61,26 +76,31 @@ async def get_all_tutorials_by_category(category: str):
     tutorial_list = TutorialService.get_all_tutorials_by_category(category)
     return JSONResponse({'data': tutorial_list})
 
-@router.get('/scoreboard/{id}', tags=['tutorial'], responses=get_scoreboard_tutorial_response)
+@router.get('/scoreboard/id/{id}', tags=['tutorial'], responses=get_scoreboard_tutorial_response)
 async def get_scoreboard_tutorial(id: int):
     scoreboard_tutorial = TutorialService.get_scoreboard_tutorial_id(id)
     return JSONResponse({'data': scoreboard_tutorial})
 
-@router.get('/success/{id}', tags=['tutorial'])
+@router.get('/success/id/{id}', tags=['tutorial'], responses=get_success_by_id)
 async def get_success_percentage_tutorial(id: int):
-    pass
+    percentage = TutorialService.get_percentage_tutorial_id(id)
 
-@router.get('/scoreboard/me', tags=['tutorial'], dependencies=[Depends(JWTChecker())])
+    return JSONResponse({'percentage': percentage})
+
+@router.get('/scoreboard/me', tags=['tutorial'], dependencies=[Depends(JWTChecker())], responses=get_scoreboard_me_tutorial_response)
 async def get_user_all_score(credentials: str = Depends(JWTChecker())):
-    pass
+    jwt = JWT.decodeJWT(credentials)
+    scoreboard = TutorialService.get_user_scoreboard(jwt['uuid'])
 
-@router.get('/scoreboard/me/{id}', tags=['tutorial'], dependencies=[Depends(JWTChecker())])
-async def get_user_score_tutorial(id: int, credentials: str = Depends(JWTChecker())):
-    pass
+    return JSONResponse({'data': scoreboard})
 
-@router.get('/success/me', tags=['tutorial'], dependencies=[Depends(JWTChecker())])
+@router.get('/success/me', tags=['tutorial'], dependencies=[Depends(JWTChecker())], responses=get_success_me_response)
 async def get_user_success_tutorials(credentials: str = Depends(JWTChecker())):
-    pass
+    jwt = JWT.decodeJWT(credentials)
+    success = TutorialService.get_user_success(jwt['uuid'])
+    nb_tutorials = TutorialService.get_total_number_tutorials()
+
+    return JSONResponse({'data': success, 'total_completion': (len(success) / nb_tutorials) * 100})
 
 @router.post('/complete', tags=['tutorial'], dependencies=[Depends(JWTChecker())], responses=submit_tutorial_responses)
 async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = Depends(JWTChecker())):
