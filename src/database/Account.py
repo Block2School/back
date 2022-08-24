@@ -35,6 +35,16 @@ class AccountDatabase():
         except:
             return None
 
+    def fetchall(self) -> list:
+        prepare = "SELECT `wallet_address`, `is_banned` FROM `account`"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare)
+                result = cursor.fetchall()
+            return result
+        except:
+            return None
+
     def update(self, uuid: str, is_banned: bool) -> dict:
         prepare = "UPDATE `account` SET `is_banned` = %r WHERE `uuid` = %s"
         try:

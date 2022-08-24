@@ -35,6 +35,16 @@ class AccountTutorialCompletion():
             return None
         return result
 
+    def fetch_by_tutorial_id(self, tutorial_id: int) -> list:
+        prepare = "SELECT `uuid`, `tutorial_id`, `total_completions` FROM `account_tutorial_completion` WHERE `tutorial_id` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (tutorial_id))
+                result = cursor.fetchall()
+        except:
+            return None
+        return result
+
     def update(self, uuid: str, tutorial_id: int, total_completions: int) -> dict:
         prepare = "UPDATE `account_tutorial_completion` SET `total_completions` = %s WHERE `uuid` = %s AND `tutorial_id` = %s"
         try:
