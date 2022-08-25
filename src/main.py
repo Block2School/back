@@ -3,6 +3,7 @@ import routes.login as LoginRoute
 import routes.user as UserRoute
 import routes.moderation as ModerationRoute
 import routes.tutorial as TutorialRoute
+import routes.article as ArticleRoute
 from services.utils.JWTChecker import JWTChecker
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,6 +20,10 @@ tags_metadata = [
     {
         'name': 'tutorial',
         'description': 'Tutorial user interaction only'
+    },
+    {
+        'name': 'article',
+        'description': 'Article routes for the blog'
     },
     {
         'name': 'moderation',
@@ -54,6 +59,7 @@ app.include_router(LoginRoute.router)
 app.include_router(UserRoute.router)
 app.include_router(ModerationRoute.router)
 app.include_router(TutorialRoute.router)
+app.include_router(ArticleRoute.router)
 
 # @app.get("/", dependencies=[Depends(JWTChecker())], tags=['root'])
 # def read_root():
