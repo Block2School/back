@@ -1,14 +1,20 @@
 from database.Articles import articlesDb
+from datetime import datetime
 
 class ArticleService():
     @staticmethod
     def get_all_articles() -> list:
         articles = articlesDb.fetchall()
+        for i in range(0, len(articles)):
+            articles[i]['publicationDate'] = datetime.timestamp(articles[i]['publicationDate'])
+            articles[i]['editDate'] = datetime.timestamp(articles[i]['editDate'])
         return articles
 
     @staticmethod
     def get_article(id: int) -> dict:
         article = articlesDb.fetch(id)
+        article['publicationDate'] = datetime.timestamp(article['publicationDate'])
+        article['editDate'] = datetime.timestamp(article['editDate'])
         return article
 
     @staticmethod
