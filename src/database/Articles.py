@@ -16,7 +16,7 @@ class Articles():
             return False
 
     def fetch(self, id: int) -> dict:
-        prepare = "SELECT `id`, `title`, `markdown_url`, `short_description`, `author`, `created_at` AS `publication_date`, `updated_at` AS `edit_date` FROM `articles` WHERE `id` = %s"
+        prepare = "SELECT `id`, `title`, `markdown_url` AS `markdownUrl`, `short_description` AS `shortDescription`, `author`, `created_at` AS `publicationDate`, `updated_at` AS `editDate` FROM `articles` WHERE `id` = %s"
         try:
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (id))
@@ -26,7 +26,7 @@ class Articles():
         return result
 
     def fetchall(self) -> list:
-        prepare = "SELECT `id`, `title`, `markdown_url`, `short_description`, `author`, `created_at` AS `publication_date`, `updated_at` AS `edit_date` FROM `articles`"
+        prepare = "SELECT `id`, `title`, `markdown_url` AS `markdownUrl`, `short_description` AS `shortDescription`, `author`, `created_at` AS `publicationDate`, `updated_at` AS `editDate` FROM `articles`"
         try:
             with self.db.cursor() as cursor:
                 cursor.execute(prepare)
