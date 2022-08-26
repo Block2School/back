@@ -6,7 +6,9 @@ from models.input.ModModel import ModModel
 from models.input.TutorialEditModel import TutorialEditModel
 from models.input.TutorialModel import TutorialModel
 from models.input.UnbanModel import UnbanModel
+from models.input.CreateMarkdownModel import CreateMarkdownModel
 from models.response.BanResponseModel import BanResponseModel
+from models.response.CreateMarkdownResponseModel import CreateMarkdownResponseModel
 from models.response.ErrorResponseModel import ErrorResponseModel
 from models.response.SuccessResponseModel import SuccessResponseModel
 from models.response.ToggleTutorialResponseModel import ToggleTutorialResponseModel
@@ -14,6 +16,7 @@ from models.response.TutorialResponseModel import TutorialResponseModel
 from models.response.UnbanResponseModel import UnbanResponseModel
 from models.response.BanListResponseModel import BanListResponseModel
 from models.input.IdModel import IdModel
+from services.article import ArticleService
 from services.moderation import ModerationService
 from services.tutorial import TutorialService
 from starlette.responses import JSONResponse
@@ -62,6 +65,10 @@ update_category_responses = {
 delete_category_responses = {
     200: {'model': SuccessResponseModel},
     400: {'model': ErrorResponseModel}
+}
+create_markdown_responses = {
+    201: {'model': CreateMarkdownResponseModel},
+    401: {'model': ErrorResponseModel}
 }
 
 @router.get('/banlist/{uuid}', dependencies=[Depends(AdminChecker(1))], tags=['moderation'], responses=banlist_responses)
@@ -178,3 +185,11 @@ async def delete_category(name: CategoryNameModel):
     if result:
         return JSONResponse({'success': 'Category deleted'})
     return JSONResponse({'error': 'Could not delete the category'}, status_code=400)
+
+@router.put('/article/create_markdown', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=create_markdown_responses)
+async def create_markdown(markdown: CreateMarkdownModel):
+    print(f'markdown: {markdown}', flush=True)
+    result = ArticleService.create_markdown(markdown.name, markdown.content)
+    if result and result['success'] == True:
+        return JSONResponse({'success': f'Markdown "{markdown.name}" created', 'markdown_url': result})
+    return JSONResponse({'error': 'Could not create the markdown'}, status_code=400)

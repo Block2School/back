@@ -1,5 +1,10 @@
+import json
+from typing import Dict
 from database.Articles import articlesDb
 from datetime import datetime
+import requests
+import os
+import base64
 
 class ArticleService():
     @staticmethod
@@ -31,3 +36,22 @@ class ArticleService():
     def delete_article(id: int) -> bool:
         result = articlesDb.remove(id)
         return result
+
+    @staticmethod
+    def create_markdown(filename: str, content: str) -> Dict[bool, str]:
+        headers = {
+            "Authorization": f"Bearer {os.getenv('GITHUB_API_TOKEN')}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "message": f"Adding {filename}.md to the repository",
+            "content": str(base64.b64encode(content.encode('ascii')).decode("ascii"))
+        }
+        try:
+            r = requests.put(f'https://api.github.com/repos/Block2School/Blog/contents/{filename}.md', data=json.dumps(data), headers=headers)
+            r = r.json()
+            print(f'Github response: {r}')
+            return {'success': True, 'url': r['content']['download_url']}
+        except Exception as e:
+            print(f'error: {e}')
+            return {'success': False}
