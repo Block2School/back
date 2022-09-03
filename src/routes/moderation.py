@@ -13,6 +13,8 @@ from models.response.ToggleTutorialResponseModel import ToggleTutorialResponseMo
 from models.response.TutorialResponseModel import TutorialResponseModel
 from models.response.UnbanResponseModel import UnbanResponseModel
 from models.response.BanListResponseModel import BanListResponseModel
+from models.response.AccountResponseModelList import AccountResponseModelList
+from models.response.IsAdminResponseModel import IsAdminResponseModel
 from models.input.IdModel import IdModel
 from services.moderation import ModerationService
 from services.tutorial import TutorialService
@@ -63,6 +65,25 @@ delete_category_responses = {
     200: {'model': SuccessResponseModel},
     400: {'model': ErrorResponseModel}
 }
+
+get_all_users_responses = {
+    200: {'model': AccountResponseModelList}
+}
+
+is_admin_responses = {
+    200: {'model': IsAdminResponseModel}
+}
+
+@router.get('/is_admin', tags=['admin'], dependencies=[Depends(JWTChecker())], responses=is_admin_responses)
+async def is_admin(credentials: str = Depends(JWTChecker())):
+    jwt = JWT.decodeJWT(credentials)
+    is_admin = ModerationService.is_admin(jwt['uuid'])
+    return JSONResponse({'is_admin': is_admin})
+
+@router.get('/users', dependencies=[Depends(AdminChecker(2))], tags=['admin'], responses=get_all_users_responses)
+async def get_all_users():
+    users = ModerationService.get_all_users()
+    return JSONResponse({'data': users})
 
 @router.get('/banlist/{uuid}', dependencies=[Depends(AdminChecker(1))], tags=['moderation'], responses=banlist_responses)
 async def get_banlist(uuid: str):

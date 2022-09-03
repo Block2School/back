@@ -17,7 +17,6 @@ class AccountModeration():
 
     def fetch(self, uuid: str) -> dict:
         prepare = "SELECT `role` FROM `account_moderation` WHERE `uuid` = %s"
-        print(uuid)
         try:
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (uuid))
