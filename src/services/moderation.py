@@ -65,3 +65,18 @@ class ModerationService():
                 return False
             accountModerationDb.insert(uuid, type)
             return True
+
+    @staticmethod
+    def get_all_users() -> list:
+        users = accountDb.fetchall()
+        return users
+
+    @staticmethod
+    def is_admin(uuid: str) -> bool:
+        user = accountModerationDb.fetch(uuid)
+        try:
+            if user['role'] == 2:
+                return True
+        except:
+            pass
+        return False

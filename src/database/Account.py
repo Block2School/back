@@ -36,7 +36,7 @@ class AccountDatabase():
             return None
 
     def fetchall(self) -> list:
-        prepare = "SELECT `wallet_address`, `is_banned` FROM `account`"
+        prepare = "SELECT `uuid`, `wallet_address`, `is_banned` FROM `account`"
         try:
             with self.db.cursor() as cursor:
                 cursor.execute(prepare)
