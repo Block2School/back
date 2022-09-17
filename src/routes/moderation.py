@@ -191,7 +191,7 @@ async def delete_category(name: CategoryNameModel):
         return JSONResponse({'success': 'Category deleted'})
     return JSONResponse({'error': 'Could not delete the category'}, status_code=400)
 
-@router.put('/article/create_markdown', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=create_markdown_responses)
+@router.post('/article/create_markdown', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=create_markdown_responses)
 async def create_markdown(markdown: CreateMarkdownModel):
     print(f'markdown: {markdown}', flush=True)
     result = ArticleService.create_markdown(markdown.name, markdown.content)
