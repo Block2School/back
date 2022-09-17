@@ -7,6 +7,7 @@ from models.input.TutorialEditModel import TutorialEditModel
 from models.input.TutorialModel import TutorialModel
 from models.input.UnbanModel import UnbanModel
 from models.input.CreateMarkdownModel import CreateMarkdownModel
+from models.response.AvailableMarkdownResponseModel import AvailableMarkdownResponseModel
 from models.response.BanResponseModel import BanResponseModel
 from models.response.CreateMarkdownResponseModel import CreateMarkdownResponseModel
 from models.response.ErrorResponseModel import ErrorResponseModel
@@ -68,7 +69,11 @@ delete_category_responses = {
 }
 create_markdown_responses = {
     201: {'model': CreateMarkdownResponseModel},
-    401: {'model': ErrorResponseModel}
+    400: {'model': ErrorResponseModel}
+}
+available_markdown_responses = {
+    200: {'model': AvailableMarkdownResponseModel},
+    400: {'model': ErrorResponseModel}
 }
 
 @router.get('/banlist/{uuid}', dependencies=[Depends(AdminChecker(1))], tags=['moderation'], responses=banlist_responses)
@@ -193,3 +198,10 @@ async def create_markdown(markdown: CreateMarkdownModel):
     if result and result['success'] == True:
         return JSONResponse({'success': f'Markdown "{markdown.name}" created', 'markdown_url': result})
     return JSONResponse({'error': 'Could not create the markdown'}, status_code=400)
+
+@router.get('/article/available_markdown', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=available_markdown_responses)
+async def get_available_markdown():
+    result = ArticleService.get_markdown_list()
+    if result and result['success'] == True:
+        return JSONResponse({'success': 'Markdown list', 'markdown_list': result['markdowns']})
+    return JSONResponse({'error': 'Could not get the markdown list'}, status_code=400)

@@ -55,3 +55,21 @@ class ArticleService():
         except Exception as e:
             print(f'error: {e}')
             return {'success': False}
+
+    @staticmethod
+    def get_markdown_list() -> Dict[bool, list]:
+        headers = {
+            "Authorization": f"Bearer {os.getenv('GITHUB_API_TOKEN')}",
+            "Content-Type": "application/json"
+        }
+        try:
+            r = requests.get('https://api.github.com/repos/Block2School/Blog/contents', headers=headers)
+            r = r.json()
+            markdowns = []
+            for i in range(0, len(r)):
+                if r[i]['name'].endswith('.md'):
+                    markdowns.append({'title': r[i]['name'].replace('.md', ''), 'markdown_url': r[i]['download_url']})
+            return {'success': True, 'markdowns': markdowns}
+        except Exception as e:
+            print(f'error: {e}')
+            return {'success': False, 'markdowns': []}
