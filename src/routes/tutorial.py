@@ -12,6 +12,7 @@ from models.response.SuccessMeModel import SuccessMeModel
 from services.tutorial import TutorialService
 from starlette.responses import JSONResponse
 from services.utils.JWT import JWT
+import requests, os, json
 
 from services.utils.JWTChecker import JWTChecker
 
@@ -106,12 +107,41 @@ async def get_user_success_tutorials(credentials: str = Depends(JWTChecker())):
 async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = Depends(JWTChecker())):
     jwt = JWT.decodeJWT(credentials)
 
+    available_language = ['js']
+    if (tutorial.language not in available_language):
+        return JSONResponse({'error': 'Unsupported language'}, status_code=400)
+
     if tutorial.is_already_checked:
+        print('is_already_checked')
         result = TutorialService.validate_tutorial(jwt['uuid'], tutorial.tutorial_id)
         return JSONResponse({'is_correct': True, 'total_completions': result, 'error_description': None})
     else:
         if tutorial.source_code != None and tutorial.language != None:
-            pass # TO DO
-            return JSONResponse({'is_correct': False, 'total_completions': 0, 'error_description': 'Not implemented'})
+            # pass # TO DO
+            print(os.getenv('CODE_EXEC_URL') + '/execute')
+            data = {
+                "code": tutorial.source_code,
+                "language": tutorial.language
+            }
+            data = json.dumps(data)
+            print(data) 
+            # {'code': "const helloWorld = () => {\n    console.log('hello world');\n};", 'language': 'js'}
+            r = requests.post(os.getenv('CODE_EXEC_URL') + '/execute', data=data,
+                headers={
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                })
+            r.raise_for_status()  # raises exception when not a 2xx r
+            if r.status_code == 200:
+                r = r.json()
+                print('r => ', r['output'])
+            # return JSONResponse({'is_correct': False, 'total_completions': 0, 'error_description': 'Not implemented'})
+            tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
+            if (tuto != None and tuto['answer'] == r['output']):
+                result = TutorialService.validate_tutorial(jwt['uuid'], tutorial.tutorial_id)
+                return JSONResponse({'is_correct': True, 'total_completions': result, 'error_description': None})
+            else:
+                return JSONResponse({'is_correct': False, 'total_completions': 0, 'error_description': None})
+
         else:
             return JSONResponse({'error': 'Missing source code or language'}, status_code=400)
