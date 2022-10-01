@@ -15,4 +15,6 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           port: 22
-          script: ls
+          script: |
+            cd ~/back/
+            git pull origin production
