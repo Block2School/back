@@ -1,20 +1,20 @@
-name: DEPLOY
+name: Deployment
 on:
   push:
     branches:
       - production
 
 jobs:
-  deploy:
+  job_one:
+    name: Deploy
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: rsync deployments
-        uses: burnett01/rsync-deployments@5.2.1
-        with:
-          switches: -avzr --delete
-          remote_path: ~/back/
-          remote_host: ${{ secrets.SERVER_IP }}
-          remote_port: 22
-          remote_user: ${{ secrets.SERVER_USERNAME }}
-          remote_key: ${{ secrets.SERVER_PASSWORD }}
+    uses: appleboy/ssh-action@master
+    with:
+      host: ${{ secrets.SERVER_IP }}
+      key: ${{ secrets.SSH_KEY }}
+      username: ${{ secrets.SERVER_USERNAME }}
+      password: ${{ secrets.SERVER_PASSWORD }}
+      port: 22
+      script: |
+        cd ~/back/
+        git pull origin production
