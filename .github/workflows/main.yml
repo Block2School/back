@@ -15,4 +15,4 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           port: 22
-          script: whoami
+          script: ls
