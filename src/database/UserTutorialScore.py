@@ -11,7 +11,8 @@ class UserTutorialScore():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (uuid, tutorial_id, language, characters, lines))
             self.db.commit()
-        except:
+        except Exception as e:
+            print("e => ",e)
             return False
         return
 
