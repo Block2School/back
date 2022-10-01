@@ -15,6 +15,7 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@4.3.2
         with:
           server: ${{ secrets.SERVER_IP }}
+          port: 22
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           server-dir: ~/back/
