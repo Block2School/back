@@ -18,3 +18,4 @@ jobs:
           script: |
             cd ~/back/
             git pull origin production
+            pm2 restart 0
