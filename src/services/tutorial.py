@@ -12,7 +12,8 @@ class TutorialService():
         tutorial_list = []
         if len(tutorials) > 0:
             for tutorial in tutorials:
-                tutorial_list.append({'id': tutorial['id'], 'title': tutorial['title'], 'markdownUrl': tutorial['markdown_url'], 'category': tutorial['category'], 'answer': tutorial['answer'] if tutorial['should_be_check'] else None, 'startCode': tutorial['start_code'], 'shouldBeCheck': tutorial['should_be_check'], 'enabled': tutorial['enabled']})
+                tutorial_list.append({'id': tutorial['id'], 'title': tutorial['title'], 'markdownUrl': tutorial['markdown_url'], 'category': tutorial['category'], 'answer': tutorial['answer'] #if tutorial['should_be_check'] else None
+                , 'startCode': tutorial['start_code'], 'shouldBeCheck': tutorial['should_be_check'], 'enabled': tutorial['enabled']})
         else:
             return []
         return tutorial_list
@@ -22,7 +23,8 @@ class TutorialService():
         tutorial = tutorialDb.fetch(id)
         if tutorial != None:
             data = tutorial
-            return {'id': data['id'], 'title': data['title'], 'markdownUrl': data['markdown_url'], 'category': data['category'], 'answer': data['answer'] if data['should_be_check'] else None, 'startCode': data['start_code'], 'shouldBeCheck': data['should_be_check'], 'enabled': data['enabled']}
+            return {'id': data['id'], 'title': data['title'], 'markdownUrl': data['markdown_url'], 'category': data['category'], 'answer': data['answer'] #if data['should_be_check'] else None
+            , 'startCode': data['start_code'], 'shouldBeCheck': data['should_be_check'], 'enabled': data['enabled']}
         return None
 
     @staticmethod
@@ -114,7 +116,7 @@ class TutorialService():
     @staticmethod
     def get_user_scoreboard(uuid: str) -> list:
         scores = userTutorialScoreDb.fetch_all_score_of_user(uuid)
-        return scores
+        return scores #call FastAPI fetch scoreboard
 
     @staticmethod
     def get_user_success(uuid: str) -> list:
