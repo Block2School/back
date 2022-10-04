@@ -20,6 +20,7 @@ jobs:
             git stash
             git pull origin production
             export PATH=$PATH:/opt/node/lib/node_modules/pm2/bin
+            source ~/.bashrc
             pm2 --help > log1.txt
             pm2 restart 0 > log2.txt
             echo "Deployed successfully"
