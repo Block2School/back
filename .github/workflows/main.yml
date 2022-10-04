@@ -20,4 +20,6 @@ jobs:
             cd ~/back/
             git stash
             git pull origin production
+            pm2 --help
             pm2 restart 0
+            echo "Deployed successfully"
