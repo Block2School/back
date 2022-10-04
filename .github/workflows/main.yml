@@ -16,10 +16,10 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           port: 22
           script: |
-            exec bash
             cd ~/back/
             git stash
             git pull origin production
+            exec bash
             pm2 --help
             pm2 restart 0
             echo "Deployed successfully"
