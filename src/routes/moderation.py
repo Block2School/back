@@ -220,9 +220,9 @@ async def create_markdown(markdown: CreateMarkdownModel):
         return JSONResponse({'success': f'Markdown "{markdown.name}" created', 'markdown_url': result})
     return JSONResponse({'error': 'Could not create the markdown'}, status_code=400)
 
-# @router.get('/article/available_markdown', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=available_markdown_responses)
-# async def get_available_markdown():
-#     result = ArticleService.get_markdown_list()
-#     if result and result['success'] == True:
-#         return JSONResponse({'success': 'Markdown list', 'markdown_list': result['markdowns']})
-#     return JSONResponse({'error': 'Could not get the markdown list'}, status_code=400)
+@router.get('/article/available_markdown', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=available_markdown_responses)
+async def get_available_markdown():
+    result = ArticleService.get_markdown_list()
+    if result and result['success'] == True:
+        return JSONResponse({'success': 'Markdown list', 'markdown_list': result['markdowns']})
+    return JSONResponse({'error': 'Could not get the markdown list'}, status_code=400)
