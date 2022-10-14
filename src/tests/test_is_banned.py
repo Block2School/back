@@ -1,0 +1,23 @@
+# import unittest
+# from services.login import LoginService
+
+# from unittest.mock import Mock, patch
+
+# from database import Database
+
+# class TestLogin(unittest.TestCase):
+#   # is_banned()
+#   @patch('services.login.LoginService.is_banned')
+#   def test_is_banned_true(self, mock_db):
+#     mock_db.return_value.account = '1'
+#     uuid = mock_db.return_value
+#     print(uuid)
+
+#   def test_is_banned_empty_param(self):
+#     result = LoginService.is_banned('')
+#     self.assertEqual(result, None)
+
+#     # result = LoginService.is_banned('')
+#     # self.assertEqual(result, None)
+
+
