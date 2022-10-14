@@ -14,6 +14,10 @@ class TestLogin(unittest.TestCase):
     print(uuid)
     # ban = LoginService.is_banned(uuid)
     # self.assertEqual(ban, None)
+    # /admin/user
+
+    # si requet ok -> data list d'object et y'a l'uuid 
+    #
 
 
 
