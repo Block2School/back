@@ -226,3 +226,19 @@ async def get_available_markdown():
     if result and result['success'] == True:
         return JSONResponse({'success': 'Markdown list', 'markdown_list': result['markdowns']})
     return JSONResponse({'error': 'Could not get the markdown list'}, status_code=400)
+
+@router.post('/tuto/create_markdown', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=create_markdown_responses)
+async def create_markdown(markdown: CreateMarkdownModel):
+    print(f'markdown: {markdown}', flush=True)
+    result = TutorialService.create_markdown(markdown.name, markdown.content)
+    if result and result['success'] == True:
+        return JSONResponse({'success': f'Markdown "{markdown.name}" created', 'markdown_url': result})
+    return JSONResponse({'error': 'Could not create the markdown'}, status_code=400)
+
+
+@router.get('/tuto/available_markdown', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=available_markdown_responses)
+async def get_tuto_available_markdown():
+    result = TutorialService.get_markdown_list()
+    if result and result['success'] == True:
+        return JSONResponse({'success': 'Markdown list', 'markdown_list': result['markdowns']})
+    return JSONResponse({'error': 'Could not get the markdown list'}, status_code=400)
