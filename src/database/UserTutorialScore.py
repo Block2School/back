@@ -11,11 +11,21 @@ class UserTutorialScore():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (uuid, tutorial_id, language, characters, lines))
             self.db.commit()
-        except:
+        except Exception as e:
+            print("e => ",e)
             return False
         return
 
     def update(self, uuid: str, tutorial_id: int, language: str, characters: int = -1, lines: int = -1) -> dict:
+        if characters != -1 and lines != -1:
+            prepare = "UPDATE `user_tutorial_score` SET `characters` = %s AND `lines` = %s WHERE `uuid` = %s AND `tutorial_id` = %s AND `language` = %s"
+            try:
+                with self.db.cursor() as cursor:
+                    cursor.execute(prepare, (characters, lines, uuid, tutorial_id, language))
+                self.db.commit()
+            except:
+                return None
+            return {'uuid': uuid, 'tutorial_id': tutorial_id, 'language': language, 'characters': characters, 'lines': lines}
         if characters != -1:
             prepare = "UPDATE `user_tutorial_score` SET `characters` = %s WHERE `uuid` = %s AND `tutorial_id` = %s AND `language` = %s"
             try:

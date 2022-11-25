@@ -9,6 +9,7 @@ from models.response.TutorialResponseModel import TutorialResponseModel
 from models.response.ScoreboardTutorialMeListModel import ScoreboardTutorialMeListModel
 from models.response.SuccessByIDModel import SuccessByIDModel
 from models.response.SuccessMeModel import SuccessMeModel
+from database.UserTutorialScore import userTutorialScoreDb
 from services.tutorial import TutorialService
 from starlette.responses import JSONResponse
 from services.utils.JWT import JWT
@@ -135,11 +136,26 @@ async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = De
             if r.status_code == 200:
                 r = r.json()
                 print('r => ', r['output'])
-            # return JSONResponse({'is_correct': False, 'total_completions': 0, 'error_description': 'Not implemented'})
             tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
+            tuto['answer'] += '\n';
             print(f'answer == |{tuto["answer"]}| && output == |{r["output"]}| tutorialid == {tutorial.tutorial_id}')
             if (tuto != None and tuto['answer'] == r['output']):
                 result = TutorialService.validate_tutorial(jwt['uuid'], tutorial.tutorial_id)
+                print("result => ", result)
+                # FETCH si None insert otherwise update
+                fetch = userTutorialScoreDb.fetch(jwt['uuid'], tutorial.tutorial_id, tutorial.language)
+                if (fetch == None):
+                    newScore = userTutorialScoreDb.insert(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, tutorial.lines)
+                else:
+                    if (tutorial.characters < fetch['characters'] and tutorial.lines < fetch['lines']):
+                        print("both")
+                        updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, tutorial.lines)
+                    elif (tutorial.characters < fetch['characters'] and tutorial.lines >= fetch['lines']):
+                        print('characters')
+                        updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, -1)
+                    elif (tutorial.characters >= fetch['characters'] and tutorial.lines < fetch['lines']):
+                        print('lines')
+                        updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, tutorial.language, -1, tutorial.lines)
                 return JSONResponse({'is_correct': True, 'total_completions': result, 'error_description': None})
             else:
                 return JSONResponse({'is_correct': False, 'total_completions': 0, 'error_description': None})
