@@ -1,4 +1,5 @@
 from database.Database import db
+from datetime import datetime
 import pymysql
 
 class AccountDetails():
@@ -16,7 +17,7 @@ class AccountDetails():
         return True
 
     def fetch(self, uuid: str) -> dict:
-        prepare = "SELECT `wallet_address`, `username`, `email` FROM `account_details` WHERE `uuid` = %s"
+        prepare = "SELECT `wallet_address`, `username`, `email`, `description`, `twitter`, `youtube`, `birthdate` FROM `account_details` WHERE `uuid` = %s"
         try:
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (uuid))
@@ -25,35 +26,14 @@ class AccountDetails():
         except:
             return None
 
-    def update(self, uuid: str, username: str = None, email: str = None) -> dict:
-        if username != None and email != None:
-            prepare = "UPDATE `account_details` SET `username` = %s, `email` = %s WHERE `uuid` = %s"
-            try:
-                with self.db.cursor() as cursor:
-                    cursor.execute(prepare, (username, email, uuid))
-                self.db.commit()
-            except:
-                return None
-            return {"username": username, "email": email, "uuid": uuid}
-        elif username != None:
-            prepare = "UPDATE `account_details` SET `username` = %s WHERE `uuid` = %s"
-            try:
-                with self.db.cursor() as cursor:
-                    cursor.execute(prepare, (username, uuid))
-                self.db.commit()
-            except:
-                return None
-            return {"username": username, "uuid": uuid}
-        elif email != None:
-            prepare = "UPDATE `account_details` SET `email` = %s WHERE `uuid` = %s"
-            try:
-                with self.db.cursor() as cursor:
-                    cursor.execute(prepare, (email, uuid))
-                self.db.commit()
-            except:
-                return None
-            return {"email": email, "uuid": uuid}
-        else:
+    def update(self, uuid: str, username: str, email: str, description: str, twitter: str, youtube: str) -> dict:
+        prepare = "UPDATE `account_details` SET `username` = %s, `email` = %s, `description` = %s, `twitter` = %s, `youtube` = %s WHERE `uuid` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (username, email, description, twitter, youtube, uuid))
+            self.db.commit()
+        except:
             return None
+        return {"uuid": uuid, "username": username, "email": email, "description": description, "twitter": twitter, "youtube": youtube}
 
 accountDetailDb = AccountDetails(db)

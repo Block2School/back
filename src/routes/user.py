@@ -17,7 +17,7 @@ async def get_profile(credentials: str = Depends(JWTChecker())):
 @router.patch('/profile', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": ProfileModel}})
 async def update_profile(profile_model: ProfileModel, credentials: str = Depends(JWTChecker())):
     jwt = JWT.decodeJWT(credentials)
-    is_updated = UserService.update_profile(jwt['uuid'], profile_model.username, profile_model.email)
+    is_updated = UserService.update_profile(jwt['uuid'], profile_model.username, profile_model.email, profile_model.description, profile_model.twitter, profile_model.youtube, profile_model.birthdate)
     if is_updated:
         return profile_model
     else:
