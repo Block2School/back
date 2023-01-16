@@ -16,7 +16,7 @@ class AccountDatabase():
         return True
 
     def login(self, wallet_address: str) -> dict:
-        prepare = "SELECT `uuid` FROM `account` WHERE `wallet_address` = %s"
+        prepare = "SELECT `uuid`, `discord_tag` FROM `account` WHERE `wallet_address` = %s"
         try:
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (wallet_address))
@@ -26,7 +26,7 @@ class AccountDatabase():
             return None
 
     def fetch(self, uuid: str) -> dict:
-        prepare = "SELECT `wallet_address`, `is_banned` FROM `account` WHERE `uuid` = %s"
+        prepare = "SELECT `wallet_address`, `is_banned`, `discord_tag`, `discord_token`, `authenticator_revoke_list` FROM `account` WHERE `uuid` = %s"
         try:
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (uuid))
@@ -36,7 +36,7 @@ class AccountDatabase():
             return None
 
     def fetchall(self) -> list:
-        prepare = "SELECT `uuid`, `wallet_address`, `is_banned` FROM `account`"
+        prepare = "SELECT `uuid`, `wallet_address`, `is_banned`, `discord_tag` FROM `account`"
         try:
             with self.db.cursor() as cursor:
                 cursor.execute(prepare)
@@ -45,11 +45,21 @@ class AccountDatabase():
         except:
             return None
 
-    def update(self, uuid: str, is_banned: bool) -> dict:
-        prepare = "UPDATE `account` SET `is_banned` = %r WHERE `uuid` = %s"
+    def add_revoke_word_list(self, uuid: str, revoke_list: str) -> dict:
+        prepare = "UPDATE `account` SET `authenticator_revoke_list` = %s WHERE `uuid` = %s"
         try:
             with self.db.cursor() as cursor:
-                cursor.execute(prepare, (is_banned, uuid))
+                cursor.execute(prepare, (revoke_list, uuid))
+            self.db.commit()
+            return {'uuid': uuid, 'revoke_word_list': revoke_list}
+        except:
+            return None
+
+    def update(self, uuid: str, is_banned: bool, discord_tag: str, discord_token: str) -> dict:
+        prepare = "UPDATE `account` SET `is_banned` = %r, `discord_tag` = %s, discord_token = %s WHERE `uuid` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (is_banned, discord_tag, discord_token, uuid))
             self.db.commit()
             return {'uuid': uuid, 'is_banned': is_banned}
         except:

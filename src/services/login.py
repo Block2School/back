@@ -12,7 +12,7 @@ class LoginService():
         wallet_hash = WalletHash.wallet_hash(encrypted_wallet)
         result = accountDb.login(wallet_hash)
         if result != None:
-            return [wallet_hash, result['uuid']]
+            return [wallet_hash, result['uuid'], result['discord_tag']]
         else:
             return [wallet_hash]
 
@@ -26,8 +26,19 @@ class LoginService():
         return None
 
     @staticmethod
-    def login(user_uuid: str) -> str:
-        jwt = JWT.signJWT(user_uuid)
+    def login(user_uuid: str, discord_token: str = None) -> str:
+        if discord_token == None:
+            jwt = JWT.signJWT(user_uuid)
+        else:
+            account = accountDb.fetch(user_uuid)
+            try:
+                if account['discord_token'] == int(discord_token):
+                    accountDb.update(user_uuid, account['is_banned'], account['discord_tag'], None)
+                    jwt = JWT.signJWT(user_uuid)
+                else:
+                    return None
+            except:
+                return None
         return jwt
 
     @staticmethod
@@ -41,14 +52,14 @@ class LoginService():
                 ban = bans[-1]
                 if ban['expires'] != None:
                     if datetime.now() > ban['expires']:
-                        accountDb.update(user_uuid, False)
+                        accountDb.update(user_uuid, False, account['discord_tag'], account['discord_token'])
                         return None
                 if not ban['is_revoked']:
                     return {"reason": ban['reason'], "expires": datetime.timestamp(ban['expires']) if ban['expires'] else -1}
                 else:
-                    accountDb.update(user_uuid, False)
+                    accountDb.update(user_uuid, False, account['discord_tag'], account['discord_token'])
                     return None
             else:
-                accountDb.update(user_uuid, False)
+                accountDb.update(user_uuid, False, account['discord_tag'], account['discord_token'])
                 return None
         return None
