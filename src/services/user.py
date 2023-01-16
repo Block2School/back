@@ -13,11 +13,11 @@ class UserService():
             "description": response['description'],
             "twitter": response['twitter'],
             "youtube": response['youtube'],
-            # "birthdate": datetime.date(response['birthdate'])
+            "birthdate": datetime.timestamp(response['birthdate'])
         }
 
     @staticmethod
-    def update_profile(uuid: str, username: str, email: str, description: str, twitter: str, youtube: str, birthdate: str) -> bool:
+    def update_profile(uuid: str, username: str, email: str, description: str, twitter: str, youtube: str, birthdate: int) -> bool:
         profile = accountDetailDb.fetch(uuid)
         if username != None:
             profile['username'] = username
@@ -29,8 +29,7 @@ class UserService():
             profile['twitter'] = twitter
         if youtube != None:
             profile['youtube'] = youtube
-        # if birthdate != None:
-        #     profile['birthdate'] = birthdate
-        print(profile)
-        response = accountDetailDb.update(uuid, profile.get('username'), profile.get('email'), profile.get('description'), profile.get('twitter'), profile.get('youtube'))
+        if birthdate != None:
+            profile['birthdate'] = datetime.fromtimestamp(birthdate)
+        response = accountDetailDb.update(uuid, profile.get('username'), profile.get('email'), profile.get('description'), profile.get('twitter'), profile.get('youtube'), profile.get('birthdate'))
         return len(response) > 0

@@ -26,11 +26,11 @@ class AccountDetails():
         except:
             return None
 
-    def update(self, uuid: str, username: str, email: str, description: str, twitter: str, youtube: str) -> dict:
-        prepare = "UPDATE `account_details` SET `username` = %s, `email` = %s, `description` = %s, `twitter` = %s, `youtube` = %s WHERE `uuid` = %s"
+    def update(self, uuid: str, username: str, email: str, description: str, twitter: str, youtube: str, birthdate: datetime) -> dict:
+        prepare = "UPDATE `account_details` SET `username` = %s, `email` = %s, `description` = %s, `twitter` = %s, `youtube` = %s, `birthdate` = %s WHERE `uuid` = %s"
         try:
             with self.db.cursor() as cursor:
-                cursor.execute(prepare, (username, email, description, twitter, youtube, uuid))
+                cursor.execute(prepare, (username, email, description, twitter, youtube, uuid, birthdate))
             self.db.commit()
         except:
             return None
