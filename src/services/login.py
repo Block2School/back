@@ -1,7 +1,7 @@
 from datetime import datetime
 import uuid
 from database.Account import accountDb
-from services.utils.JWT import JWT
+from services.utils.JWT import JWT, RefreshToken
 from services.utils.WalletHash import WalletHash
 from database.AccountDetails import accountDetailDb
 from database.AccountPunishment import accountPunishmentDb
@@ -42,6 +42,11 @@ class LoginService():
         return jwt
 
     @staticmethod
+    def create_refresh_token(access_token: str) -> str:
+        refresh_token = RefreshToken.signRefreshToken(access_token)
+        return refresh_token
+
+    @staticmethod
     def is_banned(user_uuid: str) -> dict:
         account = accountDb.fetch(user_uuid)
         if account == None:
@@ -63,3 +68,13 @@ class LoginService():
                 accountDb.update(user_uuid, False, account['discord_tag'], account['discord_token'])
                 return None
         return None
+
+    @staticmethod
+    def refresh_token(refresh_token: str) -> dict:
+        user = RefreshToken.decodeRefreshToken(refresh_token)
+        if user != None:
+            jwt = JWT.signJWT(user['uuid'])
+            refresh_token = RefreshToken.signRefreshToken(jwt)
+            return {"access_token": jwt, "refresh_token": refresh_token}
+        else:
+            return None
