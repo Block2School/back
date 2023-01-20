@@ -15,7 +15,7 @@ class UserService():
             "description": response['description'],
             "twitter": response['twitter'],
             "youtube": response['youtube'],
-            "birthdate": datetime.timestamp(response['birthdate'])
+            "birthdate": datetime.timestamp(response['birthdate']) if response['birthdate'] != None else None
         }
 
     @staticmethod
