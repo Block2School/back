@@ -9,6 +9,10 @@ from models.response.AddDiscordAuthenticatorResponseModel import AddDiscordAuthe
 from models.input.AddDiscordAuthenticatorModel import AddDiscordAuthenticatorModel
 from models.input.NeedWordlistModel import NeedWordListModel
 from models.response.RemovedAuthenticatorResponseModel import RemovedAuthenticatorResponseModel
+from models.response.SuccessResponseModel import SuccessResponseModel
+from models.response.FriendsListResponseModel import FriendsListResponseModel
+from models.input.FriendsModel import FriendsModel
+from models.response.ErrorResponseModel import ErrorResponseModel
 
 router = APIRouter(prefix='/user')
 
@@ -51,3 +55,37 @@ async def remove_discord_authenticator(wordlist_model: NeedWordListModel, creden
             return JSONResponse({"error": "Bad wordlist or no discord tag found"}, status_code=400)
     else:
         return JSONResponse({"error": "Need a wordlist"}, status_code=400)
+
+@router.get('/friends', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": FriendsListResponseModel}})
+async def get_friends(credentials: str = Depends(JWTChecker())):
+    jwt = JWT.decodeJWT(credentials)
+    friends = UserService.get_friend_list(jwt['uuid'])
+    if friends != None:
+        return JSONResponse({"data": friends})
+    return JSONResponse({"data": []})
+
+@router.post('/friends', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": SuccessResponseModel}, 400: {"model": ErrorResponseModel}})
+async def add_friend(friend: FriendsModel, credentials: str = Depends(JWTChecker())):
+    jwt = JWT.decodeJWT(credentials)
+    if friend.friend_uuid != None:
+        result = UserService.add_friend(jwt['uuid'], friend.friend_uuid)
+        if result == "pending":
+            return JSONResponse({"success": "Friend request is pending"})
+        elif result == "friend":
+            return JSONResponse({"success": "Now friends with"})
+        else:
+            return JSONResponse({"error": "You are already friend with ou pending invite"}, status_code=400)
+    else:
+        return JSONResponse({"error": "You must provid a friend uuid"}, status_code=400)
+
+@router.delete('/friends', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": SuccessResponseModel}, 400: {"model": ErrorResponseModel}})
+async def remove_friend(friend: FriendsModel, credentials: str = Depends(JWTChecker())):
+    jwt = JWT.decodeJWT(credentials)
+    if friend.friend_uuid != None:
+        result = UserService.remove_friend(jwt['uuid'], friend.friend_uuid)
+        if result:
+            return JSONResponse({"success": "Friend removed"})
+        else:
+            return JSONResponse({"error": "You're not friends"}, status_code=400)
+    else:
+        return JSONResponse({"error": "You must provide a friend uuid"}, status_code=400)

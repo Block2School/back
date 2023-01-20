@@ -3,6 +3,7 @@ from datetime import datetime
 from database.AccountDetails import accountDetailDb
 from database.Account import accountDb
 from services.utils.GenerateAuthenticator import GenerateAuthenticator
+from database.Friends import friendsDb
 
 class UserService():
     @staticmethod
@@ -78,3 +79,42 @@ class UserService():
                 return False # Bad wordlist
         else:
             return False # No discord tag
+
+    @staticmethod
+    def add_friend(uuid: str, uuid_friend: str) -> str:
+        if uuid == uuid_friend:
+            return None
+        friend = friendsDb.fetch(uuid, uuid_friend)
+        if friend != None:
+            return None
+        already_pending_other = friendsDb.fetch(uuid_friend, uuid)
+        if already_pending_other != None:
+            if friendsDb.update(uuid_friend, uuid, "friend") == None:
+                return None
+            if friendsDb.insert(uuid, uuid_friend, "friend") == False:
+                return None
+            return "friend"
+        else:
+            if friendsDb.insert(uuid, uuid_friend, "pending") != False:
+                return "pending"
+            return None
+
+    @staticmethod
+    def remove_friend(uuid: str, uuid_friend: str) -> bool:
+        if uuid == uuid_friend:
+            return False
+        friend = friendsDb.fetch(uuid, uuid_friend)
+        if friend != None:
+            friendsDb.remove(uuid, uuid_friend)
+            if friendsDb.fetch(uuid_friend, uuid) != None:
+                friendsDb.update(uuid_friend, uuid, "pending")
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def get_friend_list(uuid: str) -> list:
+        friends = friendsDb.fetchall(uuid)
+        for i in range(0, len(friends)):
+            del friends[i]['uuid']
+        return friends
