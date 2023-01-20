@@ -31,7 +31,7 @@ class ModerationService():
         if user_account['is_banned']:
             return False
         t = accountPunishmentDb.insert(uuid, banned_by, reason, datetime.fromtimestamp(expires) if expires != -1 else None)
-        d = accountDb.update(uuid, True)
+        d = accountDb.update(uuid, True, user_account['discord_tag'], user_account['discord_token'])
         return True
 
     @staticmethod
@@ -42,7 +42,7 @@ class ModerationService():
         if not user_account['is_banned']:
             return False
         accountPunishmentDb.update(uuid, revoked_by, reason)
-        accountDb.update(uuid, False)
+        accountDb.update(uuid, False, user_account['discord_tag'], user_account['discord_token'])
         return True
 
     @staticmethod

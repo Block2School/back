@@ -138,7 +138,7 @@ async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = De
                 print('r => ', r['output'])
             tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
             tuto['answer'] += '\n';
-            print('tuto => ', tuto['answer']) #faire attention au '\n' dans l'answer !!!
+            print(f'answer == |{tuto["answer"]}| && output == |{r["output"]}| tutorialid == {tutorial.tutorial_id}')
             if (tuto != None and tuto['answer'] == r['output']):
                 result = TutorialService.validate_tutorial(jwt['uuid'], tutorial.tutorial_id)
                 print("result => ", result)

@@ -1,9 +1,14 @@
 from datetime import datetime
+import json
 from database.Tutorials import tutorialDb
 from database.Category import categoryDb
 from database.AccountTutorialCompletion import accountTutorialCompletionDb
 from database.UserTutorialScore import userTutorialScoreDb
 from database.Account import accountDb
+from typing import Dict
+import os
+import requests
+import base64
 
 class TutorialService():
     @staticmethod
@@ -129,3 +134,40 @@ class TutorialService():
     def get_total_number_tutorials() -> int:
         tutorials = tutorialDb.fetch_all()
         return len(tutorials)
+
+    @staticmethod
+    def get_markdown_list() -> Dict[bool, list]:
+        headers = {
+            "Authorization": f"Bearer {os.getenv('GITHUB_API_TOKEN')}",
+            "Content-Type": "application/json"
+        }
+        try:
+            r = requests.get('https://api.github.com/repos/Block2School/tutorials/contents/en', headers=headers)
+            r = r.json()
+            markdowns = []
+            for i in range(0, len(r)):
+                if r[i]['name'].endswith('.md'):
+                    markdowns.append({'title': r[i]['name'].replace('.md', ''), 'markdown_url': r[i]['download_url']})
+            return {'success': True, 'markdowns': markdowns}
+        except Exception as e:
+            print(f'error: {e}')
+            return {'success': False, 'markdowns': []}
+
+    @staticmethod
+    def create_markdown(filename: str, content: str) -> Dict[bool, str]:
+        headers = {
+            "Authorization": f"Bearer {os.getenv('GITHUB_API_TOKEN')}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "message": f"Adding {filename}.md to the repository",
+            "content": str(base64.b64encode(content.encode('ascii')).decode("ascii"))
+        }
+        try:
+            r = requests.put(f'https://api.github.com/repos/Block2School/tutorials/contents/en/{filename}.md', data=json.dumps(data), headers=headers)
+            r = r.json()
+            print(f'Github response: {r}')
+            return {'success': True, 'url': r['content']['download_url']}
+        except Exception as e:
+            print(f'error: {e}')
+            return {'success': False}
