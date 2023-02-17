@@ -1,4 +1,3 @@
-from database.Database import db
 import pymysql
 
 class AccountModeration():
@@ -45,4 +44,5 @@ class AccountModeration():
             return False
         return True
 
-accountModerationDb = AccountModeration(db)
+    def close(self):
+        self.db.close()

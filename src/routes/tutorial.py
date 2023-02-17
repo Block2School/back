@@ -9,7 +9,8 @@ from models.response.TutorialResponseModel import TutorialResponseModel
 from models.response.ScoreboardTutorialMeListModel import ScoreboardTutorialMeListModel
 from models.response.SuccessByIDModel import SuccessByIDModel
 from models.response.SuccessMeModel import SuccessMeModel
-from database.UserTutorialScore import userTutorialScoreDb
+from database.Database import Database
+from database.UserTutorialScore import UserTutorialScore
 from services.tutorial import TutorialService
 from starlette.responses import JSONResponse
 from services.utils.JWT import JWT
@@ -106,6 +107,7 @@ async def get_user_success_tutorials(credentials: str = Depends(JWTChecker())):
 
 @router.post('/complete', tags=['tutorial'], dependencies=[Depends(JWTChecker())], responses=submit_tutorial_responses)
 async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = Depends(JWTChecker())):
+    userTutorialScoreDb: UserTutorialScore = Database.get_table("user_tutorial_score")
     jwt = JWT.decodeJWT(credentials)
 
     available_language = ['js']
@@ -156,6 +158,7 @@ async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = De
                     elif (tutorial.characters >= fetch['characters'] and tutorial.lines < fetch['lines']):
                         print('lines')
                         updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, tutorial.language, -1, tutorial.lines)
+                userTutorialScoreDb.close()
                 return JSONResponse({'is_correct': True, 'total_completions': result, 'error_description': None})
             else:
                 return JSONResponse({'is_correct': False, 'total_completions': 0, 'error_description': None})

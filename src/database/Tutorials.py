@@ -1,5 +1,4 @@
 import pymysql
-from database.Database import db
 
 class Tutorials():
     def __init__(self, db: pymysql.connect):
@@ -75,4 +74,5 @@ class Tutorials():
             return False
         return True
 
-tutorialDb = Tutorials(db)
+    def close(self):
+        self.db.close()

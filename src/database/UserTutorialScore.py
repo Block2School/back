@@ -1,5 +1,4 @@
 import pymysql
-from database.Database import db
 
 class UserTutorialScore():
     def __init__(self, db: pymysql.connect):
@@ -85,4 +84,5 @@ class UserTutorialScore():
         except:
             return None
 
-userTutorialScoreDb = UserTutorialScore(db)
+    def close(self):
+        self.db.close()

@@ -1,5 +1,4 @@
 import pymysql
-from database.Database import db
 
 class AccountTutorialCompletion():
     def __init__(self, db: pymysql.connect):
@@ -55,4 +54,5 @@ class AccountTutorialCompletion():
             return None
         return {"uuid": uuid, "tutorial_id": tutorial_id, "total_completions": total_completions}
 
-accountTutorialCompletionDb = AccountTutorialCompletion(db)
+    def close(self):
+        self.db.close()

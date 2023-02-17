@@ -1,6 +1,4 @@
 import pymysql
-from database.Database import db
-
 class AccountDatabase():
     def __init__(self, db: pymysql.connect) -> None:
         self.db = db
@@ -65,4 +63,5 @@ class AccountDatabase():
         except:
             return None
 
-accountDb = AccountDatabase(db)
+    def close(self):
+        self.db.close()
