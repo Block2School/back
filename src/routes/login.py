@@ -33,7 +33,7 @@ async def login(login_model: LoginModel):
             else:
                 return JSONResponse({"error": "An error occured on account creation"}, status_code=400)
         else:
-            if response[2] == None:
+            if response[2] == None and response[3] == None:
                 is_banned = LoginService.is_banned(response[1])
                 if is_banned != None:
                     return JSONResponse({"error": "User is banned", "reason": is_banned['reason'], "expires": is_banned['expires']}, status_code=403)
@@ -41,15 +41,15 @@ async def login(login_model: LoginModel):
                 refresh_token = LoginService.create_refresh_token(access_token)
                 return JSONResponse({"access_token": access_token, "token_type": 'Bearer', "refresh_token": refresh_token})
             else:
-                if login_model.discord_token != None:
-                    access_token = LoginService.login(response[1], login_model.discord_token)
+                if login_model.token != None:
+                    access_token = LoginService.login(response[1], login_model.token)
                     if access_token != None:
                         refresh_token = LoginService.create_refresh_token(access_token)
                         return JSONResponse({"access_token": access_token, "token_type": 'Bearer', 'refresh_token': refresh_token})
                     else:
-                        return JSONResponse({"error": "Bad discord token"}, status_code=403)
+                        return JSONResponse({"error": "Bad token"}, status_code=403)
                 else:
-                    return JSONResponse({"error": "Need a discord token"}, status_code=403)
+                    return JSONResponse({"error": "Need a token"}, status_code=403)
     else:
         return JSONResponse({"error": "Invalid body"}, status_code=400)
 

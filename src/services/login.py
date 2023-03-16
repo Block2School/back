@@ -6,6 +6,7 @@ from services.utils.JWT import JWT, RefreshToken
 from services.utils.WalletHash import WalletHash
 from database.AccountDetails import AccountDetails
 from database.AccountPunishment import AccountPunishment
+import pyotp
 
 class LoginService():
     @staticmethod
@@ -15,7 +16,7 @@ class LoginService():
         result = accountDb.login(wallet_hash)
         accountDb.close()
         if result != None:
-            return [wallet_hash, result['uuid'], result['discord_tag']]
+            return [wallet_hash, result['uuid'], result['discord_tag'], result['qr_secret']]
         else:
             return [wallet_hash]
 
@@ -35,22 +36,35 @@ class LoginService():
         return None
 
     @staticmethod
-    def login(user_uuid: str, discord_token: str = None) -> str:
+    def login(user_uuid: str, token: str = None) -> str:
         accountDb: AccountDatabase = Database.get_table("account")
-        if discord_token == None:
+        if token == None:
             jwt = JWT.signJWT(user_uuid)
         else:
             account = accountDb.fetch(user_uuid)
-            try:
-                if account['discord_token'] == int(discord_token):
-                    accountDb.update(user_uuid, account['is_banned'], account['discord_tag'], None)
-                    jwt = JWT.signJWT(user_uuid)
-                else:
+            if account['discord_token'] != None:
+                try:
+                    if account['discord_token'] == int(token):
+                        accountDb.update(user_uuid, account['is_banned'], account['discord_tag'], None, None)
+                        jwt = JWT.signJWT(user_uuid)
+                    else:
+                        accountDb.close()
+                        return None
+                except:
                     accountDb.close()
                     return None
-            except:
-                accountDb.close()
-                return None
+            else:
+                try:
+                    print(account['qr_secret'])
+                    totp = pyotp.TOTP(account['qr_secret'])
+                    if totp.verify(token):
+                        jwt = JWT.signJWT(user_uuid)
+                    else:
+                        accountDb.close()
+                        return None
+                except:
+                    accountDb.close()
+                    return None
         accountDb.close()
         return jwt
 
@@ -74,7 +88,7 @@ class LoginService():
                 ban = bans[-1]
                 if ban['expires'] != None:
                     if datetime.now() > ban['expires']:
-                        accountDb.update(user_uuid, False, account['discord_tag'], account['discord_token'])
+                        accountDb.update(user_uuid, False, account['discord_tag'], account['discord_token'], account['qr_secret'])
                         accountDb.close()
                         accountPunishmentDb.close()
                         return None
@@ -83,12 +97,12 @@ class LoginService():
                     accountPunishmentDb.close()
                     return {"reason": ban['reason'], "expires": datetime.timestamp(ban['expires']) if ban['expires'] else -1}
                 else:
-                    accountDb.update(user_uuid, False, account['discord_tag'], account['discord_token'])
+                    accountDb.update(user_uuid, False, account['discord_tag'], account['discord_token'], account['qr_secret'])
                     accountDb.close()
                     accountPunishmentDb.close()
                     return None
             else:
-                accountDb.update(user_uuid, False, account['discord_tag'], account['discord_token'])
+                accountDb.update(user_uuid, False, account['discord_tag'], account['discord_token'], account['qr_secret'])
                 accountDb.close()
                 accountPunishmentDb.close()
                 return None

@@ -8,11 +8,12 @@ from models.input.ProfileModel import ProfileModel
 from models.response.AddDiscordAuthenticatorResponseModel import AddDiscordAuthenticatorResponseModel
 from models.input.AddDiscordAuthenticatorModel import AddDiscordAuthenticatorModel
 from models.input.NeedWordlistModel import NeedWordListModel
-from models.response.RemovedAuthenticatorResponseModel import RemovedAuthenticatorResponseModel
 from models.response.SuccessResponseModel import SuccessResponseModel
 from models.response.FriendsListResponseModel import FriendsListResponseModel
 from models.input.FriendsModel import FriendsModel
 from models.response.ErrorResponseModel import ErrorResponseModel
+from models.input.WordlistModel import WordlistModel
+from models.response.QrCodeResponseModel import QrCodeResponseModel
 
 router = APIRouter(prefix='/user')
 
@@ -31,6 +32,32 @@ async def update_profile(profile_model: ProfileModel, credentials: str = Depends
     else:
         return JSONResponse({'error': "Can't update your profile"}, status_code=400)
 
+@router.post('/authenticator/qrcode', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": QrCodeResponseModel}, 400: {"model": ErrorResponseModel}})
+async def add_qrcode_authenticator(wordlist_model: WordlistModel, credentials: str = Depends(JWTChecker())):
+    jwt = JWT.decodeJWT(credentials)
+    if wordlist_model.wordlist == None:
+        wordlist = UserService.activate_authenticator(jwt['uuid'])
+        if wordlist == None:
+            return JSONResponse({"error": "You need to specify the wordlist to activate the 2FA TOTP Authentication"})
+    else:
+        wordlist = wordlist_model.wordlist
+    qr_code = UserService.add_totp(jwt['uuid'], wordlist)
+    if qr_code:
+        return JSONResponse({"qr": qr_code, "wordlist": wordlist if wordlist_model.wordlist == None else None})
+    else:
+        return JSONResponse({"error": "Can't activate TOTP Authenticator"}, status_code=400)
+
+@router.delete('/authenticator/qrcode', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": SuccessResponseModel}, 400: {"model": ErrorResponseModel}})
+async def remove_qrcode_authenticator(wordlist_model: WordlistModel, credentials: str= Depends(JWTChecker())):
+    jwt = JWT.decodeJWT(credentials)
+    if wordlist_model.wordlist == None:
+        return JSONResponse({"error": "Need a wordlist to remove TOTP Authenticator"}, status_code=400)
+    result = UserService.remove_totp(jwt['uuid'], wordlist_model.wordlist)
+    if result:
+        return JSONResponse({"success": "Removed TOTP Authenticator"})
+    else:
+        return JSONResponse({"error": "Wordlist is invalid or TOTP Authenticator is not enabled"}, status_code=400)
+
 @router.post('/authenticator/discord', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": AddDiscordAuthenticatorResponseModel}})
 async def add_discord_authenticator(discord_authenticator_model: AddDiscordAuthenticatorModel, credentials: str = Depends(JWTChecker())):
     jwt = JWT.decodeJWT(credentials)
@@ -40,11 +67,11 @@ async def add_discord_authenticator(discord_authenticator_model: AddDiscordAuthe
         if is_ok:
             return JSONResponse({"wordlist": wordlist})
         else:
-            return JSONResponse({"error": "Need a good wordlist or discord tag already linked"}, status_code=400)
+            return JSONResponse({"error": "Need a good wordlist or an authenticator is already enabled"}, status_code=400)
     else:
         return JSONResponse({"error": "Need a discord tag"}, status_code=400)
 
-@router.delete('/authenticator/discord', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": RemovedAuthenticatorResponseModel}})
+@router.delete('/authenticator/discord', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": SuccessResponseModel}, 400: {"model": ErrorResponseModel}})
 async def remove_discord_authenticator(wordlist_model: NeedWordListModel, credentials: str = Depends(JWTChecker())):
     jwt = JWT.decodeJWT(credentials)
     if wordlist_model.wordlist != None:
