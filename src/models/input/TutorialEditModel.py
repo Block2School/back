@@ -8,3 +8,4 @@ class TutorialEditModel(BaseModel):
     answer: str = None
     startCode: str = None
     shouldBeCheck: bool = None
+    input: str = None

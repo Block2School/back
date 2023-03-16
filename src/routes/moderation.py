@@ -151,7 +151,9 @@ async def create_tutorial(tutorial_model: TutorialModel):
         return JSONResponse({'error': 'Unknown start code'}, status_code=400)
     elif tutorial_model.shouldBeCheck == None:
         return JSONResponse({'error': 'Unknown should be check boolean'}, status_code=400)
-    result = TutorialService.create_tutorial(tutorial_model.title, tutorial_model.markdownUrl, tutorial_model.startCode, tutorial_model.category, tutorial_model.answer, tutorial_model.shouldBeCheck)
+    elif tutorial_model.input == None:
+        return JSONResponse({"error": 'Unknown input'}, status_code=400)
+    result = TutorialService.create_tutorial(tutorial_model.title, tutorial_model.markdownUrl, tutorial_model.startCode, tutorial_model.category, tutorial_model.answer, tutorial_model.shouldBeCheck, tutorial_model.input)
     if result:
         return JSONResponse({"success": "Tutorial created !"})
     else:
@@ -173,7 +175,9 @@ async def edit_tutorial(tutorial_model: TutorialEditModel):
         return JSONResponse({'error': 'Unknown start code'}, status_code=400)
     elif tutorial_model.shouldBeCheck == None:
         return JSONResponse({'error': 'Unknown should be check'}, status_code=400)
-    result = TutorialService.update_tutorial(tutorial_model.id, tutorial_model.title, tutorial_model.markdownUrl, tutorial_model.category, tutorial_model.answer, tutorial_model.startCode, tutorial_model.shouldBeCheck)
+    elif tutorial_model.input == None:
+        return JSONResponse({"error": 'Unknown input'}, status_code=400)
+    result = TutorialService.update_tutorial(tutorial_model.id, tutorial_model.title, tutorial_model.markdownUrl, tutorial_model.category, tutorial_model.answer, tutorial_model.startCode, tutorial_model.shouldBeCheck, tutorial_model.input)
     if result:
         return JSONResponse({'success': 'Updated tutorial !'})
     else:
