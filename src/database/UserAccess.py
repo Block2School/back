@@ -1,4 +1,3 @@
-from database.Database import db
 import pymysql
 
 class UserAccess():
@@ -45,4 +44,5 @@ class UserAccess():
             return False
         return True
 
-userAccessDb = UserAccess(db)
+    def close(self):
+        self.db.close()

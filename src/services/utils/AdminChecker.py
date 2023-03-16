@@ -1,7 +1,8 @@
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from services.utils.JWT import JWT
-from database.AccountModeration import accountModerationDb
+from database.Database import Database
+from database.AccountModeration import AccountModeration
 
 class AdminChecker(HTTPBearer):
     def __init__(self, needed_permission: int, auto_error: bool = True):
@@ -22,10 +23,12 @@ class AdminChecker(HTTPBearer):
             raise HTTPException(status_code=401, detail="Invalid authorization code")
 
     def user_has_permission(self, token: str) -> bool:
+        accountModerationDb: AccountModeration = Database.get_table("account_moderation")
         payload = JWT.decodeJWT(token)
         user_uuid = payload.get('uuid')
         permission = accountModerationDb.fetch(user_uuid)
 
+        accountModerationDb.close()
         if permission == None:
             return False
         if permission['role'] >= self.needed_permission:

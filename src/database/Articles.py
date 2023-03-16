@@ -1,5 +1,4 @@
 import pymysql
-from database.Database import db
 
 class Articles():
     def __init__(self, db: pymysql.connect) -> None:
@@ -55,4 +54,5 @@ class Articles():
             return False
         return True
 
-articlesDb = Articles(db)
+    def close(self):
+        self.db.close()

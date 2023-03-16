@@ -1,4 +1,3 @@
-from database.Database import db
 from datetime import datetime
 import pymysql
 
@@ -36,4 +35,5 @@ class AccountDetails():
             return None
         return {"uuid": uuid, "username": username, "email": email, "description": description, "twitter": twitter, "youtube": youtube}
 
-accountDetailDb = AccountDetails(db)
+    def close(self):
+        self.db.close()

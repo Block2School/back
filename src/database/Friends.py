@@ -1,5 +1,4 @@
 import pymysql
-from database.Database import db
 
 class Friends():
     def __init__(self, db: pymysql.connect) -> None:
@@ -55,4 +54,5 @@ class Friends():
             return None
         return result
 
-friendsDb = Friends(db)
+    def close(self):
+        self.db.close()

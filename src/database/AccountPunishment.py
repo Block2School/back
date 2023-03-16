@@ -1,5 +1,4 @@
 from datetime import datetime
-from database.Database import db
 import pymysql
 
 class AccountPunishment():
@@ -36,4 +35,5 @@ class AccountPunishment():
             return None
         return {"is_revoked": True, "revoked_by": revoked_by, "revoke_reason": revoke_reason, "uuid": uuid}
 
-accountPunishmentDb = AccountPunishment(db)
+    def close(self):
+        self.db.close()
