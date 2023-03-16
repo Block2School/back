@@ -1,10 +1,11 @@
 from urllib import response
 from datetime import datetime
-from database.Account import AccountDatabase
 from database.Database import Database
 from database.AccountDetails import AccountDetails
+from database.Account import AccountDatabase
 from services.utils.GenerateAuthenticator import GenerateAuthenticator
 from database.Friends import Friends
+import pyotp
 
 class UserService():
     @staticmethod
@@ -56,14 +57,50 @@ class UserService():
             return None
 
     @staticmethod
+    def add_totp(uuid: str, wordlist: str) -> str:
+        accountDb: AccountDatabase = Database.get_table("account")
+        accountDetailsDb: AccountDetails = Database.get_table("account_details")
+        account = accountDb.fetch(uuid)
+        if account['discord_tag'] != None or account['qr_secret'] != None:
+            accountDb.close()
+            accountDetailsDb.close()
+            return None
+        if GenerateAuthenticator.signAuthenticator(wordlist) == account['authenticator_revoke_list']:
+            accountDetails = accountDetailsDb.fetch(uuid)
+            secret_key = pyotp.random_base32()
+            qr_code = pyotp.totp.TOTP(secret_key).provisioning_uri(name=accountDetails['username'], issuer_name="Block2School")
+            accountDb.update(uuid, account['is_banned'], None, None, secret_key)
+            accountDb.close()
+            accountDetailsDb.close()
+            return qr_code
+        else:
+            accountDb.close()
+            accountDetailsDb.close()
+            return None
+
+    @staticmethod
+    def remove_totp(uuid: str, wordlist: str) -> bool:
+        accountDb: AccountDatabase = Database.get_table("account")
+        account = accountDb.fetch(uuid)
+        if account['qr_secret'] == None:
+            accountDb.close()
+            return False
+        if GenerateAuthenticator.signAuthenticator(wordlist) == account['authenticator_revoke_list']:
+            accountDb.update(uuid, account['is_banned'], None, None, None)
+            accountDb.close()
+            return True
+
+    @staticmethod
     def add_discord_tag(uuid: str, discord_tag: str, wordlist: str = None) -> bool:
         accountDb: AccountDatabase = Database.get_table("account")
         account = accountDb.fetch(uuid)
-        if account['discord_tag'] == None:
+        print(account['authenticator_revoke_list'])
+        print(wordlist)
+        if account['discord_tag'] == None and account['qr_secret'] == None:
             if account['authenticator_revoke_list'] != None: # Need to have the wordlist to create the authenticator
                 if wordlist != None:
                     if GenerateAuthenticator.signAuthenticator(wordlist) == account['authenticator_revoke_list']:
-                        accountDb.update(uuid, account['is_banned'], discord_tag, None)
+                        accountDb.update(uuid, account['is_banned'], discord_tag, None, None)
                         accountDb.close()
                         return True
                     else:
@@ -73,7 +110,7 @@ class UserService():
                     accountDb.close()
                     return False # Need a wordlist to create the authenticator
             else:
-                accountDb.update(uuid, account['is_banned'], discord_tag, None)
+                accountDb.update(uuid, account['is_banned'], discord_tag, None, None)
                 accountDb.close()
                 return True
         else:
@@ -86,7 +123,7 @@ class UserService():
         account = accountDb.fetch(uuid)
         if account['discord_tag'] != None:
             if GenerateAuthenticator.signAuthenticator(wordlist) == account['authenticator_revoke_list']:
-                accountDb.update(uuid, account['is_banned'], None, None)
+                accountDb.update(uuid, account['is_banned'], None, None, None)
                 accountDb.close()
                 return True
             else:

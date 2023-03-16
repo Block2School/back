@@ -39,9 +39,9 @@ class TutorialService():
         return None
 
     @staticmethod
-    def create_tutorial(title: str, markdownUrl: str, startCode: str, category: str, answer: str, shouldBeCheck: bool) -> bool:
+    def create_tutorial(title: str, markdownUrl: str, startCode: str, category: str, answer: str, shouldBeCheck: bool, input: str) -> bool:
         tutorialDb: Tutorials = Database.get_table("tutorials")
-        result = tutorialDb.insert(title, markdownUrl, category, answer, startCode, shouldBeCheck)
+        result = tutorialDb.insert(title, markdownUrl, category, answer, startCode, shouldBeCheck, input)
         tutorialDb.close()
         return result
 
@@ -60,9 +60,9 @@ class TutorialService():
         return tutorial_list
 
     @staticmethod
-    def update_tutorial(id: int, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool) -> bool:
+    def update_tutorial(id: int, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str) -> bool:
         tutorialDb: Tutorials = Database.get_table("tutorials")
-        result = tutorialDb.update(id, title, markdown_url, category, answer, start_code, should_be_check)
+        result = tutorialDb.update(id, title, markdown_url, category, answer, start_code, should_be_check, input)
         tutorialDb.close()
         return result
 

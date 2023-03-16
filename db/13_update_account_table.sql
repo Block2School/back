@@ -1,0 +1,2 @@
+ALTER TABLE `account`
+ADD (`qr_secret` VARCHAR(255) DEFAULT NULL);

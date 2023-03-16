@@ -139,7 +139,7 @@ async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = De
                 r = r.json()
                 print('r => ', r['output'])
             tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
-            tuto['answer'] += '\n';
+            tuto['answer'] += '\n'
             print(f'answer == |{tuto["answer"]}| && output == |{r["output"]}| tutorialid == {tutorial.tutorial_id}')
             if (tuto != None and tuto['answer'] == r['output']):
                 result = TutorialService.validate_tutorial(jwt['uuid'], tutorial.tutorial_id)

@@ -50,7 +50,7 @@ class ModerationService():
             accountDb.close()
             return False
         t = accountPunishmentDb.insert(uuid, banned_by, reason, datetime.fromtimestamp(expires) if expires != -1 else None)
-        d = accountDb.update(uuid, True, user_account['discord_tag'], user_account['discord_token'])
+        d = accountDb.update(uuid, True, user_account['discord_tag'], user_account['discord_token'], user_account['qr_secret'])
         accountPunishmentDb.close()
         accountModerationDb.close()
         accountDb.close()
@@ -70,7 +70,7 @@ class ModerationService():
             accountDb.close()
             return False
         accountPunishmentDb.update(uuid, revoked_by, reason)
-        accountDb.update(uuid, False, user_account['discord_tag'], user_account['discord_token'])
+        accountDb.update(uuid, False, user_account['discord_tag'], user_account['discord_token'], user_account['qr_secret'])
         accountPunishmentDb.close()
         accountDb.close()
         return True
