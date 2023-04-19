@@ -110,58 +110,54 @@ async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = De
     userTutorialScoreDb: UserTutorialScore = Database.get_table("user_tutorial_score")
     jwt = JWT.decodeJWT(credentials)
 
-    available_language = ['js']
+    available_language = ['js'] #MODIFY TO EXECUTE CODE ON EVERY LANGUAGE
     if (tutorial.language not in available_language):
         return JSONResponse({'error': 'Unsupported language'}, status_code=400)
 
-    if tutorial.is_already_checked:
-        print('is_already_checked')
-        result = TutorialService.validate_tutorial(jwt['uuid'], tutorial.tutorial_id)
-        return JSONResponse({'is_correct': True, 'total_completions': result, 'error_description': None})
-    else:
-        if tutorial.source_code != None and tutorial.language != None:
-            # pass # TO DO
-            print(os.getenv('CODE_EXEC_URL') + '/execute')
-            data = {
-                "code": tutorial.source_code,
-                "language": tutorial.language
-            }
-            data = json.dumps(data)
-            print(data) 
-            # {'code': "const helloWorld = () => {\n    console.log('hello world');\n};", 'language': 'js'}
-            r = requests.post(os.getenv('CODE_EXEC_URL') + '/execute', data=data,
-                headers={
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                })
-            r.raise_for_status()  # raises exception when not a 2xx r
-            if r.status_code == 200:
-                r = r.json()
-                print('r => ', r['output'])
-            tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
-            tuto['answer'] += '\n'
-            print(f'answer == |{tuto["answer"]}| && output == |{r["output"]}| tutorialid == {tutorial.tutorial_id}')
-            if (tuto != None and tuto['answer'] == r['output']):
-                result = TutorialService.validate_tutorial(jwt['uuid'], tutorial.tutorial_id)
-                print("result => ", result)
-                # FETCH si None insert otherwise update
-                fetch = userTutorialScoreDb.fetch(jwt['uuid'], tutorial.tutorial_id, tutorial.language)
-                if (fetch == None):
-                    newScore = userTutorialScoreDb.insert(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, tutorial.lines)
-                else:
-                    if (tutorial.characters < fetch['characters'] and tutorial.lines < fetch['lines']):
-                        print("both")
-                        updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, tutorial.lines)
-                    elif (tutorial.characters < fetch['characters'] and tutorial.lines >= fetch['lines']):
-                        print('characters')
-                        updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, -1)
-                    elif (tutorial.characters >= fetch['characters'] and tutorial.lines < fetch['lines']):
-                        print('lines')
-                        updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, tutorial.language, -1, tutorial.lines)
-                userTutorialScoreDb.close()
-                return JSONResponse({'is_correct': True, 'total_completions': result, 'error_description': None})
+    print(tutorial.source_code + " || " + tutorial.language)
+    if tutorial.source_code != None and tutorial.language != None:
+        # pass # TO DO
+        print(os.getenv('CODE_EXEC_URL') + '/execute')
+        data = {
+            "code": tutorial.source_code,
+            "language": tutorial.language
+        }
+        data = json.dumps(data)
+        print(data)
+        # {'code': "const helloWorld = () => {\n    console.log('hello world');\n};", 'language': 'js'}
+        r = requests.post(os.getenv('CODE_EXEC_URL') + '/execute', data=data,
+            headers={
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            })
+        r.raise_for_status()  # raises exception when not a 2xx r
+        if r.status_code == 200:
+            r = r.json()
+            print('r => ', r['output'])
+        print("ID => " + str(tutorial.tutorial_id))
+        tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
+        tuto['answer'] += '\n'
+        print("answer == " + tuto["answer"] + " || output == " + r["output"] + " || tutorialid == " + str(tutorial.tutorial_id))
+        if (tuto != None and tuto['answer'] == r['output']):
+            result = TutorialService.validate_tutorial(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, tutorial.lines)
+            print("result => ", result)
+            # FETCH si None insert otherwise update
+            fetch = userTutorialScoreDb.fetch(jwt['uuid'], tutorial.tutorial_id, tutorial.language)
+            if (fetch == None):
+                newScore = userTutorialScoreDb.insert(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, tutorial.lines)
             else:
-                return JSONResponse({'is_correct': False, 'total_completions': 0, 'error_description': None})
-
+                if (tutorial.characters < fetch['characters'] and tutorial.lines < fetch['lines']):
+                    print("both")
+                    updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, tutorial.lines)
+                elif (tutorial.characters < fetch['characters'] and tutorial.lines >= fetch['lines']):
+                    print("characters") 
+                    updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, -1)
+                elif (tutorial.characters >= fetch['characters'] and tutorial.lines < fetch['lines']):
+                    print("lines")
+                    updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, tutorial.language, -1, tutorial.lines)
+            userTutorialScoreDb.close()
+            return JSONResponse({'is_correct': True, 'total_completions': result, 'error_description': None})
         else:
-            return JSONResponse({'error': 'Missing source code or language'}, status_code=400)
+            return JSONResponse({'is_correct': False, 'total_completions': 0, 'error_description': None})
+    # else:
+    #     return JSONResponse({'error': 'Missing source code or language'}, status_code=400)

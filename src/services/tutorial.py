@@ -2,7 +2,6 @@ from datetime import datetime
 import json
 from database.Tutorials import Tutorials
 from database.Category import Category
-from database.AccountTutorialCompletion import AccountTutorialCompletion
 from database.UserTutorialScore import UserTutorialScore
 from database.Database import Database
 from database.Account import AccountDatabase
@@ -108,9 +107,9 @@ class TutorialService():
         return result
 
     @staticmethod
-    def validate_tutorial(uuid: str, tutorial_id: int) -> int:
-        accountTutorialCompletionDb: AccountTutorialCompletion = Database.get_table("account_tutorial_completion")
-        total_completions = accountTutorialCompletionDb.fetch_tutorial(uuid, tutorial_id)
+    def validate_tutorial(uuid: str, tutorial_id: int, language: str, characters: int, lines: int) -> int:
+        userTutorialScoreDb : UserTutorialScore = Database().get_table("user_tutorial_score")
+        total_completions = userTutorialScoreDb.fetch(uuid, tutorial_id, language)
         if total_completions == None:
             total_completions = 1
         else:
@@ -118,39 +117,37 @@ class TutorialService():
             total_completions += 1
 
         if total_completions == 1:
-            result = accountTutorialCompletionDb.insert(uuid, tutorial_id)
+            result = userTutorialScoreDb.insert(uuid, tutorial_id, language, characters, lines)
             if result:
-                accountTutorialCompletionDb.close()
+                userTutorialScoreDb.close()
                 return 1
-            accountTutorialCompletionDb.close()
+            userTutorialScoreDb.close()
             return 0
         else:
-            result = accountTutorialCompletionDb.update(uuid, tutorial_id, total_completions)
-            accountTutorialCompletionDb.close()
+            result = userTutorialScoreDb.update(uuid, tutorial_id, total_completions, language, characters, lines)
+            userTutorialScoreDb.close()
             return result['total_completions']
 
     @staticmethod
     def get_scoreboard_tutorial_id(tutorial_id: int) -> list:
-        accountTutorialCompletionDb: AccountTutorialCompletion = Database.get_table("account_tutorial_completion")
         userTutorialScoreDb: UserTutorialScore = Database.get_table("user_tutorial_score")
         scoreboard_tutorial_list = userTutorialScoreDb.fetch_all_score_of_tutorial(tutorial_id)
         scoreboard_tutorial_list.sort(key=lambda obj: obj['characters'], reverse=True)
 
         for i in range(0, len(scoreboard_tutorial_list)):
             uuid = scoreboard_tutorial_list[i].get('uuid')
-            tmp = accountTutorialCompletionDb.fetch_tutorial(uuid, tutorial_id)
+            tmp = userTutorialScoreDb.fetch(uuid, tutorial_id)
             scoreboard_tutorial_list[i]['total_completions'] = tmp.get('total_completions')
-        accountTutorialCompletionDb.close()
         userTutorialScoreDb.close()
         return scoreboard_tutorial_list
 
     @staticmethod
     def get_percentage_tutorial_id(tutorial_id: int) -> float:
-        accountTutorialCompletionDb: AccountTutorialCompletion = Database.get_table("account_tutorial_completion")
+        userTutorialScoreDb: UserTutorialScore = Database.get_table("user_tutorial_score")
         accountDb: AccountDatabase = Database.get_table("account")
-        total_completions = len(accountTutorialCompletionDb.fetch_by_tutorial_id(tutorial_id))
+        total_completions = len(userTutorialScoreDb.fetch_all_score_of_tutorial(tutorial_id))
         total_users = len(accountDb.fetchall())
-        accountTutorialCompletionDb.close()
+        userTutorialScoreDb.close()
         accountDb.close()
         return (total_completions / total_users) * 100
 
@@ -163,11 +160,11 @@ class TutorialService():
 
     @staticmethod
     def get_user_success(uuid: str) -> list:
-        accountTutorialCompletionDb: AccountTutorialCompletion = Database.get_table("account_tutorial_completion")
-        success = accountTutorialCompletionDb.fetch_all_tutorials(uuid)
+        userTutorialScoreDb: UserTutorialScore = Database.get_table("user_tutorial_score")
+        success = userTutorialScoreDb.fetch_all_score_of_user(uuid)
         for i in range(0, len(success)):
             success[i]['last_completion'] = datetime.timestamp(success[i]['last_completion'])
-        accountTutorialCompletionDb.close()
+        userTutorialScoreDb.close()
         return success
 
     @staticmethod

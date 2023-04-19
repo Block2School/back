@@ -1,4 +1,4 @@
-CREATE TABLE `articles` (
+CREATE TABLE IF NOT EXISTS `articles` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(255) NOT NULL,
     `markdown_url` VARCHAR(255) NOT NULL,

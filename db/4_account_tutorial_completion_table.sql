@@ -1,4 +1,4 @@
-CREATE TABLE `account_tutorial_completion` (
+CREATE TABLE IF NOT EXISTS `account_tutorial_completion` (
     `uuid` VARCHAR(36) NOT NULL,
     `tutorial_id` INT(11) NOT NULL,
     `total_completions` INT(11) NOT NULL DEFAULT 1,
