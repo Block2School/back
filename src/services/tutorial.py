@@ -19,7 +19,7 @@ class TutorialService():
         if len(tutorials) > 0:
             for tutorial in tutorials:
                 tutorial_list.append({'id': tutorial['id'], 'title': tutorial['title'], 'markdownUrl': tutorial['markdown_url'], 'category': tutorial['category'], 'answer': tutorial['answer'] #if tutorial['should_be_check'] else None
-                , 'startCode': tutorial['start_code'], 'shouldBeCheck': tutorial['should_be_check'], 'enabled': tutorial['enabled']})
+                , 'startCode': tutorial['start_code'], 'shouldBeCheck': tutorial['should_be_check'], 'enabled': tutorial['enabled'], 'points': tutorial['points']})
         else:
             tutorialDb.close()
             return []
@@ -33,14 +33,14 @@ class TutorialService():
         if tutorial != None:
             data = tutorial
             return {'id': data['id'], 'title': data['title'], 'markdownUrl': data['markdown_url'], 'category': data['category'], 'answer': data['answer'] #if data['should_be_check'] else None
-            , 'startCode': data['start_code'], 'shouldBeCheck': data['should_be_check'], 'enabled': data['enabled']}
+            , 'startCode': data['start_code'], 'shouldBeCheck': data['should_be_check'], 'enabled': data['enabled'], 'points': data['points']}
         tutorialDb.close()
         return None
 
     @staticmethod
-    def create_tutorial(title: str, markdownUrl: str, startCode: str, category: str, answer: str, shouldBeCheck: bool, input: str) -> bool:
+    def create_tutorial(title: str, markdownUrl: str, startCode: str, category: str, answer: str, shouldBeCheck: bool, input: str, points: int) -> bool:
         tutorialDb: Tutorials = Database.get_table("tutorials")
-        result = tutorialDb.insert(title, markdownUrl, category, answer, startCode, shouldBeCheck, input)
+        result = tutorialDb.insert(title, markdownUrl, category, answer, startCode, shouldBeCheck, input, points)
         tutorialDb.close()
         return result
 
@@ -51,7 +51,7 @@ class TutorialService():
         tutorial_list = []
         if len(tutorials) > 0:
             for tutorial in tutorials:
-                tutorial_list.append({'id': tutorial['id'], 'title': tutorial['title'], 'markdownUrl': tutorial['markdown_url'], 'category': tutorial['category'], 'answer': tutorial['answer'] if tutorial['should_be_check'] else None, 'startCode': tutorial['start_code'], 'shouldBeCheck': tutorial['should_be_check'], 'enabled': tutorial['enabled']})
+                tutorial_list.append({'id': tutorial['id'], 'title': tutorial['title'], 'markdownUrl': tutorial['markdown_url'], 'category': tutorial['category'], 'answer': tutorial['answer'] if tutorial['should_be_check'] else None, 'startCode': tutorial['start_code'], 'shouldBeCheck': tutorial['should_be_check'], 'points': tutorial['points'], 'enabled': tutorial['enabled']})
         else:
             tutorialDb.close()
             return []
@@ -59,9 +59,9 @@ class TutorialService():
         return tutorial_list
 
     @staticmethod
-    def update_tutorial(id: int, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str) -> bool:
+    def update_tutorial(id: int, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str, points: int) -> bool:
         tutorialDb: Tutorials = Database.get_table("tutorials")
-        result = tutorialDb.update(id, title, markdown_url, category, answer, start_code, should_be_check, input)
+        result = tutorialDb.update(id, title, markdown_url, category, answer, start_code, should_be_check, input, points)
         tutorialDb.close()
         return result
 
@@ -117,7 +117,14 @@ class TutorialService():
             total_completions += 1
 
         if total_completions == 1:
+            accountDb: AccountDatabase = Database().get_table("account")
+            tutorialDb: Tutorials = Database().get_table("tutorials")
+            tuto_details = tutorialDb.fetch(tutorial_id)
             result = userTutorialScoreDb.insert(uuid, tutorial_id, language, characters, lines)
+            user = accountDb.fetch(uuid)
+            accountDb.update_points(uuid, user['points'] + tuto_details['points'])
+            accountDb.close()
+            tutorialDb.close()
             if result:
                 userTutorialScoreDb.close()
                 return 1

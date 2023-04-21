@@ -26,11 +26,20 @@ async def get_profile(credentials: str = Depends(JWTChecker())):
 @router.patch('/profile', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": ProfileModel}})
 async def update_profile(profile_model: ProfileModel, credentials: str = Depends(JWTChecker())):
     jwt = JWT.decodeJWT(credentials)
-    is_updated = UserService.update_profile(jwt['uuid'], profile_model.username, profile_model.email, profile_model.description, profile_model.twitter, profile_model.youtube, profile_model.birthdate)
+    is_updated = UserService.update_profile(jwt['uuid'], profile_model.username, profile_model.email, profile_model.description, profile_model.twitter, profile_model.youtube, profile_model.birthdate, profile_model.privacy)
     if is_updated:
         return profile_model
     else:
         return JSONResponse({'error': "Can't update your profile"}, status_code=400)
+
+@router.get('/profile/{username}', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": ProfileResponseModel}, 401: {"model": ErrorResponseModel}})
+async def get_user_profile(username: str, credentials: str = Depends(JWTChecker())):
+    jwt = JWT.decodeJWT(credentials)
+    response = UserService.get_user_privacy(jwt['uuid'], username)
+    if response != None:
+        return JSONResponse(response)
+    else:
+        return JSONResponse({"error": "You're not allowed to see this profile"}, status_code=401)
 
 @router.post('/authenticator/qrcode', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": QrCodeResponseModel}, 400: {"model": ErrorResponseModel}})
 async def add_qrcode_authenticator(wordlist_model: WordlistModel, credentials: str = Depends(JWTChecker())):

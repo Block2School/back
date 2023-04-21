@@ -4,11 +4,11 @@ class Tutorials():
     def __init__(self, db: pymysql.connect):
         self.db = db
 
-    def insert(self, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str) -> bool:
-        prepare = "INSERT INTO `tutorials` (`title`, `markdown_url`, `category`, `answer`, `start_code`, `should_be_check`, `input`) VALUES (%s, %s, %s, %s, %s, %r, %s)"
+    def insert(self, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str, points: int) -> bool:
+        prepare = "INSERT INTO `tutorials` (`title`, `markdown_url`, `category`, `answer`, `start_code`, `should_be_check`, `input`, `points`) VALUES (%s, %s, %s, %s, %s, %r, %s, %s)"
         try:
             with self.db.cursor() as cursor:
-                cursor.execute(prepare, (title, markdown_url, category, answer, start_code, should_be_check, input))
+                cursor.execute(prepare, (title, markdown_url, category, answer, start_code, should_be_check, input, points))
             self.db.commit()
         except:
             return False
@@ -44,15 +44,15 @@ class Tutorials():
             return None
         return result
 
-    def update(self, id: int, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str) -> dict:
-        prepare = "UPDATE `tutorials` SET `title` = %s, `markdown_url` = %s, `category` = %s, `answer` = %s, `start_code` = %s, `should_be_check` = %r, `input` = %s WHERE `id` = %s"
+    def update(self, id: int, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str, points: int) -> dict:
+        prepare = "UPDATE `tutorials` SET `title` = %s, `markdown_url` = %s, `category` = %s, `answer` = %s, `start_code` = %s, `should_be_check` = %r, `input` = %s, `points` = %s WHERE `id` = %s"
         try:
             with self.db.cursor() as cursor:
-                cursor.execute(prepare, (title, markdown_url, category, answer, start_code, should_be_check, input, id))
+                cursor.execute(prepare, (title, markdown_url, category, answer, start_code, should_be_check, input, points, id))
             self.db.commit()
         except:
             return None
-        return {"id": id, "title": title, "markdown_url": markdown_url, "category": category, "answer": answer, "start_code": start_code, "should_be_check": should_be_check, "input": input}
+        return {"id": id, "title": title, "markdown_url": markdown_url, "category": category, "answer": answer, "start_code": start_code, "should_be_check": should_be_check, "input": input, "points": points}
 
     def update_enabled(self, id: int, enabled: bool) -> dict:
         prepare = "UPDATE `tutorials` SET `enabled` = %r WHERE `id` = %s"

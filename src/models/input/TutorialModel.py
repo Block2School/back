@@ -8,3 +8,4 @@ class TutorialModel(BaseModel):
     startCode: str = None
     shouldBeCheck: bool = None
     input: str = None
+    points: int = 0

@@ -7,3 +7,4 @@ class ProfileModel(BaseModel):
     twitter: str = None
     youtube: str = None
     birthdate: int = None
+    privacy: str = None
