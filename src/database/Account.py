@@ -24,7 +24,7 @@ class AccountDatabase():
             return None
 
     def fetch(self, uuid: str) -> dict:
-        prepare = "SELECT `wallet_address`, `is_banned`, `discord_tag`, `discord_token`, `authenticator_revoke_list`, `qr_secret` FROM `account` WHERE `uuid` = %s"
+        prepare = "SELECT `wallet_address`, `is_banned`, `discord_tag`, `discord_token`, `authenticator_revoke_list`, `qr_secret`, `points` FROM `account` WHERE `uuid` = %s"
         try:
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (uuid))
@@ -34,7 +34,7 @@ class AccountDatabase():
             return None
 
     def fetchall(self) -> list:
-        prepare = "SELECT `uuid`, `wallet_address`, `is_banned`, `discord_tag` FROM `account`"
+        prepare = "SELECT `uuid`, `wallet_address`, `is_banned`, `discord_tag`, `points` FROM `account`"
         try:
             with self.db.cursor() as cursor:
                 cursor.execute(prepare)
@@ -60,6 +60,16 @@ class AccountDatabase():
                 cursor.execute(prepare, (is_banned, discord_tag, discord_token, qr_secret, uuid))
             self.db.commit()
             return {'uuid': uuid, 'is_banned': is_banned}
+        except:
+            return None
+
+    def update_points(self, uuid: str, points: int) -> dict:
+        prepare = "UPDATE `account` SET `points` = %s WHERE `uuid` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (points, uuid))
+            self.db.commit()
+            return {"uuid": uuid, 'points': points}
         except:
             return None
 

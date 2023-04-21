@@ -11,8 +11,11 @@ class UserService():
     @staticmethod
     def get_profile(uuid: str) -> dict:
         accountDetailDb: AccountDetails = Database.get_table("account_details")
+        accountDb: AccountDatabase = Database.get_table("account")
         response = accountDetailDb.fetch(uuid)
         accountDetailDb.close()
+        user = accountDb.fetch(uuid)
+        accountDb.close()
         return {
             "wallet": response['wallet_address'],
             "username": response['username'],
@@ -21,7 +24,8 @@ class UserService():
             "twitter": response['twitter'],
             "youtube": response['youtube'],
             "birthdate": datetime.timestamp(response['birthdate']) if response['birthdate'] != None else None,
-            "privacy": response['private']
+            "privacy": response['private'],
+            "points": user['points']
         }
 
     @staticmethod
