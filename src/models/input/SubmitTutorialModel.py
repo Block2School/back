@@ -7,3 +7,4 @@ class SubmitTutorialModel(BaseModel):
     language: str = None
     characters :int
     lines:int
+    exec:bool
