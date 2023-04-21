@@ -20,11 +20,12 @@ class UserService():
             "description": response['description'],
             "twitter": response['twitter'],
             "youtube": response['youtube'],
-            "birthdate": datetime.timestamp(response['birthdate']) if response['birthdate'] != None else None
+            "birthdate": datetime.timestamp(response['birthdate']) if response['birthdate'] != None else None,
+            "privacy": response['private']
         }
 
     @staticmethod
-    def update_profile(uuid: str, username: str, email: str, description: str, twitter: str, youtube: str, birthdate: int) -> bool:
+    def update_profile(uuid: str, username: str, email: str, description: str, twitter: str, youtube: str, birthdate: int, private: str) -> bool:
         accountDetailDb: AccountDetails = Database.get_table("account_details")
         profile = accountDetailDb.fetch(uuid)
         if username != None:
@@ -39,7 +40,11 @@ class UserService():
             profile['youtube'] = youtube
         if birthdate != None:
             profile['birthdate'] = datetime.fromtimestamp(birthdate)
-        response = accountDetailDb.update(uuid, profile.get('username'), profile.get('email'), profile.get('description'), profile.get('twitter'), profile.get('youtube'), profile.get('birthdate'))
+            print(birthdate)
+        if private != None:
+            if private == "public" or private == "private" or private == "friends":
+                profile['private'] = private
+        response = accountDetailDb.update(uuid, profile.get('username'), profile.get('email'), profile.get('description'), profile.get('twitter'), profile.get('youtube'), profile.get('birthdate'), profile.get('private'))
         accountDetailDb.close()
         return len(response) > 0
 
@@ -55,6 +60,32 @@ class UserService():
         else:
             accountDb.close()
             return None
+
+    @staticmethod
+    def get_user_privacy(uuid: str, name: str) -> str:
+        accountDb: AccountDetails = Database.get_table("account_details")
+        privacy = accountDb.fetch_privacy(name)
+        if privacy != None:
+            if privacy['private'] == "private":
+                accountDb.close()
+                return None
+            elif privacy['private'] == "friends":
+                friendsDb: Friends = Database.get_table("friends")
+                is_friends = friendsDb.fetch(uuid, privacy['uuid'])
+                if is_friends != None:
+                    if is_friends['status'] != 'pending':
+                        result = accountDb.fetch(privacy['uuid'])
+                        friendsDb.close()
+                        accountDb.close()
+                        return result
+                    accountDb.close()
+                friendsDb.close()
+                return None
+            else:
+                result = accountDb.fetch(privacy['uuid'])
+                accountDb.close()
+                return result
+        return None
 
     @staticmethod
     def add_totp(uuid: str, wordlist: str) -> str:
