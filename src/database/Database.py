@@ -6,7 +6,6 @@ from database.Account import AccountDatabase
 from database.AccountDetails import AccountDetails
 from database.AccountModeration import AccountModeration
 from database.AccountPunishment import AccountPunishment
-from database.AccountTutorialCompletion import AccountTutorialCompletion
 from database.Articles import Articles
 from database.Category import Category
 from database.Friends import Friends
@@ -21,7 +20,6 @@ tables = {
     "account_details": AccountDetails,
     "account_moderation": AccountModeration,
     "account_punishment": AccountPunishment,
-    "account_tutorial_completion": AccountTutorialCompletion,
     "articles": Articles,
     "category": Category,
     "friends": Friends,

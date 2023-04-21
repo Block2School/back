@@ -1,6 +1,6 @@
 from pydantic import BaseModel
-from models.response.AccountTutorialCompletionModel import AccountTutorialCompletionModel
+from models.response.ScoreboardTutorialIDModel import ScoreboardTutorialIDModel
 
 class SuccessMeModel(BaseModel):
-    data: list[AccountTutorialCompletionModel]
+    data: list[ScoreboardTutorialIDModel]
     total_completion: float
