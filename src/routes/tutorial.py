@@ -136,14 +136,16 @@ async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = De
                 print('r => ', r['output'])
             print("ID => " + str(tutorial.tutorial_id))
             tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
-            tuto['answer'] += '\n'
+            # tuto['answer'] += '\n'
             # print("answer == " + tuto["answer"] + " || output == " + r["output"] + " || tutorialid == " + str(tutorial.tutorial_id))
+            print("answer == '" + tuto["answer"] + "' || output == '" + r["output"] + "'")
             if tuto['answer'] == r['output']:
                 check = True
-            check = False
+            # check = False
         else:
             check = False
             tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
+        print(((check == True or tuto['answer'] == tutorial.source_code)))
         if (tuto != None and (check == True or tuto['answer'] == tutorial.source_code)):
             result = TutorialService.validate_tutorial(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, tutorial.lines)
             print("result => ", result)
