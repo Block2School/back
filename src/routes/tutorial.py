@@ -110,6 +110,7 @@ async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = De
     userTutorialScoreDb: UserTutorialScore = Database.get_table("user_tutorial_score")
     jwt = JWT.decodeJWT(credentials)
 
+    check = False
     available_language = ['js','py','R','cpp', 'c', 'solidity']
     if (tutorial.language not in available_language):
         return JSONResponse({'error': 'Unsupported language'}, status_code=400)
@@ -145,7 +146,7 @@ async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = De
         else:
             check = False
             tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
-        print(((check == True or tuto['answer'] == tutorial.source_code)))
+        # print(((check == True or tuto['answer'] == tutorial.source_code)))
         if (tuto != None and (check == True or tuto['answer'] == tutorial.source_code)):
             result = TutorialService.validate_tutorial(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, tutorial.lines)
             print("result => ", result)
