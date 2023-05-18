@@ -215,8 +215,11 @@ class UserService():
     @staticmethod
     def get_friend_list(uuid: str) -> list:
         friendsDb: Friends = Database.get_table("friends")
+        detailsDb: AccountDetails = Database.get_table("account_details")
         friends = friendsDb.fetchall(uuid)
         for i in range(0, len(friends)):
+            details = detailsDb.fetch(friends[i]['friend_uuid'])
+            friends[i]['username'] = details['username'] if details != None else friends[i]['friend_uuid']
             del friends[i]['uuid']
         friendsDb.close()
         return friends
