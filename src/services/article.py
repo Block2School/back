@@ -1,6 +1,7 @@
 import json
 from typing import Dict
-from database.Articles import articlesDb
+from database.Database import Database
+from database.Articles import Articles
 from datetime import datetime
 import requests
 import os
@@ -9,32 +10,42 @@ import base64
 class ArticleService():
     @staticmethod
     def get_all_articles() -> list:
+        articlesDb: Articles = Database.get_table("articles")
         articles = articlesDb.fetchall()
         for i in range(0, len(articles)):
             articles[i]['publicationDate'] = datetime.timestamp(articles[i]['publicationDate'])
             articles[i]['editDate'] = datetime.timestamp(articles[i]['editDate'])
+        articlesDb.close()
         return articles
 
     @staticmethod
     def get_article(id: int) -> dict:
+        articlesDb: Articles = Database.get_table("articles")
         article = articlesDb.fetch(id)
         article['publicationDate'] = datetime.timestamp(article['publicationDate'])
         article['editDate'] = datetime.timestamp(article['editDate'])
+        articlesDb.close()
         return article
 
     @staticmethod
     def create_article(title: str, markdown_url: str, author: str, short_description: str) -> bool:
+        articlesDb: Articles = Database.get_table("articles")
         success = articlesDb.insert(title, markdown_url, short_description, author)
+        articlesDb.close()
         return success
 
     @staticmethod
     def update_article(id: int, title: str, markdown_url: str, short_description: str) -> bool:
+        articlesDb: Articles = Database.get_table("articles")
         result = articlesDb.update(id, title, markdown_url, short_description)
+        articlesDb.close()
         return result
 
     @staticmethod
     def delete_article(id: int) -> bool:
+        articlesDb: Articles = Database.get_table("articles")
         result = articlesDb.remove(id)
+        articlesDb.close()
         return result
 
     @staticmethod

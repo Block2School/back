@@ -9,3 +9,4 @@ class TutorialResponseModel(BaseModel):
     startCode: str
     shouldBeCheck: bool
     enabled: bool
+    points: int

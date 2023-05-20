@@ -1,0 +1,1368 @@
+Script started on 2023-04-19 04:16:28+02:00 [TERM="xterm-256color" TTY="/dev/pts/1" COLUMNS="80" LINES="24"]
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;32m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hscripts[?1l>[?2004l
+]2;scripts]1;scripts[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back/scripts]1;../back/scripts[0m[27m[24m[J[01;32m➜  [36mscripts[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hlld[?1l>[?2004l
+]2;ld]1;ldld: no input files
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back/scripts]1;../back/scripts[0m[27m[24m[J[01;31m➜  [36mscripts[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hlls[?1l>[?2004l
+]2;ls --color=tty]1;ls[0m[01;32mcreate_db_update.sh[0m  [01;32mupdate_db.sh[0m
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back/scripts]1;../back/scripts[0m[27m[24m[J[01;32m➜  [36mscripts[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hccd ../[?1l>[?2004l
+]2;cd ../]1;cd[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;32m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hssci s  sscripts/.scripts/[8D./scripts/[8D[1C[1C[1C[1C[1C[1C[1C[1Ccreate_db_update.sh[1m [0m[0m [?1l>[?2004l
+]2;./scripts/create_db_update.sh]1;./scripts/create_db_update.shEnter a filename: RemoveUserT           ^C
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;31m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hlls[?1l>[?2004l
+]2;ls --color=tty]1;ls[0m[01;34mdb[0m  [01;34mdocs[0m  README.md  requirements.txt  [01;34mscripts[0m  [01;34msrc[0m  [01;32mstart.sh[0m  typescript
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;32m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hccd ..[?1l>[?2004l
+]2;cd ..]1;cd[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School]1;../Block2School[0m[27m[24m[J[01;32m➜  [36mBlock2School[00m [01;34mgit:([31mmaster[34m) [33m✗[00m [K[?1h=[?2004hlls[?1l>[?2004l
+]2;ls --color=tty]1;ls[0m[01;34mback[0m  [01;34mCodeExecuter[0m  [01;34mfront[0m  [01;34mTutoriels[0m
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School]1;../Block2School[0m[27m[24m[J[01;32m➜  [36mBlock2School[00m [01;34mgit:([31mmaster[34m) [33m✗[00m [K[?1h=[?2004hbback[?1l>[?2004l
+]2;back]1;back[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;32m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hggit pull origin master[?1l>[?2004l
+]2;git pull origin master]1;gitfatal: couldn't find remote ref master
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;31m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hgit pull origin master    in[?1l>[?2004l
+]2;git pull origin main]1;gitFrom github.com:Block2School/back
+ * branch            main       -> FETCH_HEAD
+Updating 505c45d..bfa6b53
+error: Your local changes to the following files would be overwritten by merge:
+	db/version
+	src/database/AccountTutorialCompletion.py
+	src/database/UserTutorialScore.py
+	src/routes/tutorial.py
+Please commit your changes or stash them before you merge.
+Aborting
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;31m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hggit stash[?1l>[?2004l
+]2;git stash]1;gitSaved working directory and index state WIP on scoreboard: 505c45d adding list of markdowns for blog
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;32m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hgit stashpull origin main[?1l>[?2004l
+]2;git pull origin main]1;gitFrom github.com:Block2School/back
+ * branch            main       -> FETCH_HEAD
+Updating 505c45d..bfa6b53
+Fast-forward
+ db/10_update_account_table_add_revoke_wordlist.sql |   2 [32m+[m
+ db/11_friend_table.sql                             |   9 [32m++[m
+ db/12_update_tutorial_table.sql                    |   2 [32m+[m
+ db/13_update_account_table.sql                     |   2 [32m+[m
+ db/7_update_account_detais.sql                     |  15 [32m++[m
+ db/8_update_account_details_birthdate.sql          |   2 [32m+[m
+ db/9_update_user_table.sql                         |   4 [32m+[m
+ db/version                                         |   2 [32m+[m[31m-[m
+ requirements.txt                                   |   3 [32m+[m[31m-[m
+ src/database/Account.py                            |  27 [32m++[m[31m--[m
+ src/database/AccountDetails.py                     |  44 [32m++[m[31m---[m
+ src/database/AccountModeration.py                  |   4 [32m+[m[31m-[m
+ src/database/AccountPunishment.py                  |   4 [32m+[m[31m-[m
+ src/database/AccountTutorialCompletion.py          |   4 [32m+[m[31m-[m
+ src/database/Articles.py                           |   4 [32m+[m[31m-[m
+ src/database/Category.py                           |   4 [32m+[m[31m-[m
+ src/database/Database.py                           |  42 [32m++++[m[31m-[m
+ src/database/Friends.py                            |  58 [32m+++++++[m
+ src/database/Tutorials.py                          |  18 [32m+[m[31m--[m
+ src/database/UserAccess.py                         |  48 [32m++++++[m
+ src/database/UserTutorialScore.py                  |   4 [32m+[m[31m-[m
+ src/models/input/AddDiscordAuthenticatorModel.py   |   5 [32m+[m
+ src/models/input/FriendsModel.py                   |   4 [32m+[m
+ src/models/input/LoginModel.py                     |   3 [32m+[m[31m-[m
+ src/models/input/NeedWordlistModel.py              |   4 [32m+[m
+ src/models/input/ProfileModel.py                   |   8 [32m+[m[31m-[m
+ src/models/input/RefreshTokenModel.py              |   4 [32m+[m
+ src/models/input/TutorialEditModel.py              |   3 [32m+[m[31m-[m
+ src/models/input/TutorialModel.py                  |   3 [32m+[m[31m-[m
+ src/models/input/WordlistModel.py                  |   4 [32m+[m
+ .../AddDiscordAuthenticatorResponseModel.py        |   4 [32m+[m
+ src/models/response/FriendResponseModel.py         |   5 [32m+[m
+ src/models/response/FriendsListResponseModel.py    |   5 [32m+[m
+ src/models/response/LoginResponseModel.py          |   3 [32m+[m[31m-[m
+ src/models/response/ProfileResponseModel.py        |   6 [32m+[m[31m-[m
+ src/models/response/QrCodeResponseModel.py         |   5 [32m+[m
+ src/routes/login.py                                |  44 [32m++++[m[31m-[m
+ src/routes/moderation.py                           |  24 [32m++[m[31m-[m
+ src/routes/tutorial.py                             |   9 [32m+[m[31m-[m
+ src/routes/user.py                                 |  96 [32m++++++++++[m[31m-[m
+ src/services/article.py                            |  13 [32m+[m[31m-[m
+ src/services/login.py                              |  89 [32m++++++++[m[31m--[m
+ src/services/moderation.py                         |  59 [32m++++++[m[31m-[m
+ src/services/tutorial.py                           | 104 [32m++++++++++[m[31m--[m
+ src/services/user.py                               | 180 [32m++++++++++++++++++++[m[31m-[m
+ src/services/utils/AdminChecker.py                 |   5 [32m+[m[31m-[m
+ src/services/utils/GenerateAuthenticator.py        |  26 [32m+++[m
+ src/services/utils/JWT.py                          |  26 [32m++[m[31m-[m
+ src/services/utils/UserAccess.py                   |  14 [32m++[m
+ src/services/utils/json/wordlist.json              |  58 [32m+++++++[m
+ 50 files changed, 990 insertions(+), 125 deletions(-)
+ create mode 100644 db/10_update_account_table_add_revoke_wordlist.sql
+ create mode 100644 db/11_friend_table.sql
+ create mode 100644 db/12_update_tutorial_table.sql
+ create mode 100644 db/13_update_account_table.sql
+ create mode 100644 db/7_update_account_detais.sql
+ create mode 100644 db/8_update_account_details_birthdate.sql
+ create mode 100644 db/9_update_user_table.sql
+ create mode 100644 src/database/Friends.py
+ create mode 100644 src/database/UserAccess.py
+ create mode 100644 src/models/input/AddDiscordAuthenticatorModel.py
+ create mode 100644 src/models/input/FriendsModel.py
+ create mode 100644 src/models/input/NeedWordlistModel.py
+ create mode 100644 src/models/input/RefreshTokenModel.py
+ create mode 100644 src/models/input/WordlistModel.py
+ create mode 100644 src/models/response/AddDiscordAuthenticatorResponseModel.py
+ create mode 100644 src/models/response/FriendResponseModel.py
+ create mode 100644 src/models/response/FriendsListResponseModel.py
+ create mode 100644 src/models/response/QrCodeResponseModel.py
+ create mode 100644 src/services/utils/GenerateAuthenticator.py
+ create mode 100644 src/services/utils/UserAccess.py
+ create mode 100644 src/services/utils/json/wordlist.json
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;32m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hggit stsh  ash pop[?1l>[?2004l
+]2;git stash pop]1;gitAuto-merging src/routes/tutorial.py
+CONFLICT (content): Merge conflict in src/routes/tutorial.py
+Auto-merging src/database/UserTutorialScore.py
+CONFLICT (content): Merge conflict in src/database/UserTutorialScore.py
+Auto-merging src/database/AccountTutorialCompletion.py
+Auto-merging db/version
+CONFLICT (content): Merge conflict in db/version
+The stash entry is kept in case you need it again.
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;31m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hg ggit branch[?1l>[?2004l
+]2;git branch]1;git[?1049h[22;0;0t[?1h=  main[m[m
+* [32mscoreboard[m[m
+[7m(END)[27m[K[H[2J[H[H[2J[H  main[m[m
+* [32mscoreboard[m[m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[1m~[0m
+[7m(END)[27m[K[K[?1l>[?1049l[23;0;0t
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;31m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hhhih  ggotu  g git pull origin master[?1l>[?2004l
+]2;git pull origin master]1;gitfatal: couldn't find remote ref master
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;31m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004hgit pull origin master    in[?1l>[?2004l
+]2;git pull origin main]1;gitFrom github.com:Block2School/back
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;32m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004h[H[2J[0m[27m[24m[J[01;32m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [Ks ../scripts/
+[J[01;32mcreate_db_update.sh[0m*  [J[01;32mupdate_db.sh[0m*       [J[A[0m[27m[24m[27C./scripts/[Kcreate_db_update.sh
+[J[7mcreate_db_update.sh*[0m  [J[01;32mupdate_db.sh[0m*       [J[A[0m[27m[24m[27C./scripts/create_db_update.sh[K
+[7mcreate_db_update.sh*[0m  [7mcreate_db_update.sh*[0m  [A[0m[27m[24m[27C./scripts/create_db_update.sh[K
+[J[A[56C[1m [0m[0m [?1l>[?2004l
+[J]2;./scripts/create_db_update.sh]1;./scripts/create_db_update.shEnter a filename: RemoveAccountTutorialCompletion_UpdateUserTutorialScore
+Migration file '14_RemoveAccountTutorialCompletion_UpdateUserTutorialScore.sql' created
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;32m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004h./scripts/create_db_update.sh                   
+[J[01;32mcreate_db_update.sh[0m*  [J[01;32mupdate_db.sh[0m*       [J[A[0m[27m[24m[27C./scripts/[Kcreate_db_update.sh
+[J[7mcreate_db_update.sh*[0m  [J[01;32mupdate_db.sh[0m*       [J[A[0m[27m[24m[27C./scripts/create_db_update.sh[K
+[7mcreate_db_update.sh*[0m  [7mcreate_db_update.sh*[0m  [A[0m[27m[24m[27C./scripts/create_db_update.sh[K[19Dupd[6C.sh       
+[22C[7mupdate_db.sh*       [0m[01;32mcreate_db_update.sh[0m*  [A[0m[27m[24m[27C./scripts/update_db.sh[K
+[J[A[49C[1m [0m[0m                     .  lls[?1l>[?2004l
+[J]2;ls --color=tty]1;ls[0m[01;34mdb[0m  [01;34mdocs[0m  README.md  requirements.txt  [01;34mscripts[0m  [01;34msrc[0m  [01;32mstart.sh[0m  typescript
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;32m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004h../start.sh[1m [0m[0m [?1l>[?2004l
+]2;./start.sh]1;./start.shDefaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: fastapi<0.69.0,>=0.68.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 1)) (0.68.2)
+Requirement already satisfied: python-dotenv in /usr/lib/python3/dist-packages (from -r requirements.txt (line 2)) (0.19.2)
+Requirement already satisfied: PyMySQL==1.0.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 3)) (1.0.2)
+Requirement already satisfied: PyJWT==2.4.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 4)) (2.4.0)
+Requirement already satisfied: uvicorn==0.17.6 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 5)) (0.17.6)
+Collecting pyotp
+  Downloading pyotp-2.8.0-py3-none-any.whl (12 kB)
+Requirement already satisfied: asgiref>=3.4.0 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (3.5.0)
+Requirement already satisfied: click>=7.0 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (8.0.3)
+Requirement already satisfied: h11>=0.8 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (0.13.0)
+Requirement already satisfied: pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (1.10.1)
+Requirement already satisfied: starlette==0.14.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (0.14.2)
+Requirement already satisfied: typing-extensions>=4.1.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2->fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (4.3.0)
+Installing collected packages: pyotp
+Successfully installed pyotp-2.8.0
+Checking database...
+Database version 7
+Traceback (most recent call last):
+  File "/home/lorenzo/Documents/Block2School/back/./db/database_migration.py", line 37, in <module>
+    cursor.execute(i + ";")
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/cursors.py", line 148, in execute
+    result = self._query(query)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/cursors.py", line 310, in _query
+    conn.query(q)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/connections.py", line 548, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/connections.py", line 775, in _read_query_result
+    result.read()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/connections.py", line 1156, in read
+    first_packet = self.connection._read_packet()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/connections.py", line 725, in _read_packet
+    packet.raise_for_error()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/protocol.py", line 221, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/err.py", line 143, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'birthdate' in 'account_details'")
+Starting server...
+[32mINFO[0m:     Will watch for changes in these directories: ['/home/lorenzo/Documents/Block2School/back/src']
+[32mINFO[0m:     Uvicorn running on [1mhttp://0.0.0.0:8080[0m (Press CTRL+C to quit)
+[32mINFO[0m:     Started reloader process [[36m[1m13210[0m] using [36m[1mstatreload[0m
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 60, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 646, in run_until_complete
+    return future.result()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 67, in serve
+    config.load()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/lorenzo/Documents/Block2School/back/src/./main.py", line 2, in <module>
+    import routes.login as LoginRoute
+  File "/home/lorenzo/Documents/Block2School/back/src/./routes/login.py", line 5, in <module>
+    from services.login import LoginService
+  File "/home/lorenzo/Documents/Block2School/back/src/./services/login.py", line 3, in <module>
+    from database.Database import Database
+  File "/home/lorenzo/Documents/Block2School/back/src/./database/Database.py", line 15, in <module>
+    from database.UserTutorialScore import UserTutorialScore
+  File "/home/lorenzo/Documents/Block2School/back/src/./database/UserTutorialScore.py", line 104, in <module>
+    userTutorialScoreDb = UserTutorialScore(db)
+NameError: name 'db' is not defined
+^[[A^C[32mINFO[0m:     Stopping reloader process [[36m[1m13210[0m]
+
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;31m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004h./start.sh[?1l>[?2004l
+]2;./start.sh]1;./start.shDefaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: fastapi<0.69.0,>=0.68.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 1)) (0.68.2)
+Requirement already satisfied: python-dotenv in /usr/lib/python3/dist-packages (from -r requirements.txt (line 2)) (0.19.2)
+Requirement already satisfied: PyMySQL==1.0.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 3)) (1.0.2)
+Requirement already satisfied: PyJWT==2.4.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 4)) (2.4.0)
+Requirement already satisfied: uvicorn==0.17.6 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 5)) (0.17.6)
+Requirement already satisfied: pyotp in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 6)) (2.8.0)
+Requirement already satisfied: click>=7.0 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (8.0.3)
+Requirement already satisfied: asgiref>=3.4.0 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (3.5.0)
+Requirement already satisfied: h11>=0.8 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (0.13.0)
+Requirement already satisfied: starlette==0.14.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (0.14.2)
+Requirement already satisfied: pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (1.10.1)
+Requirement already satisfied: typing-extensions>=4.1.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2->fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (4.3.0)
+Checking database...
+Database version 7
+Traceback (most recent call last):
+  File "/home/lorenzo/Documents/Block2School/back/./db/database_migration.py", line 37, in <module>
+    cursor.execute(i + ";")
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/cursors.py", line 148, in execute
+    result = self._query(query)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/cursors.py", line 310, in _query
+    conn.query(q)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/connections.py", line 548, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/connections.py", line 775, in _read_query_result
+    result.read()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/connections.py", line 1156, in read
+    first_packet = self.connection._read_packet()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/connections.py", line 725, in _read_packet
+    packet.raise_for_error()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/protocol.py", line 221, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/pymysql/err.py", line 143, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'birthdate' in 'account_details'")
+Starting server...
+[32mINFO[0m:     Will watch for changes in these directories: ['/home/lorenzo/Documents/Block2School/back/src']
+[32mINFO[0m:     Uvicorn running on [1mhttp://0.0.0.0:8080[0m (Press CTRL+C to quit)
+[32mINFO[0m:     Started reloader process [[36m[1m13289[0m] using [36m[1mstatreload[0m
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 60, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 646, in run_until_complete
+    return future.result()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 67, in serve
+    config.load()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/lorenzo/Documents/Block2School/back/src/./main.py", line 2, in <module>
+    import routes.login as LoginRoute
+  File "/home/lorenzo/Documents/Block2School/back/src/./routes/login.py", line 5, in <module>
+    from services.login import LoginService
+  File "/home/lorenzo/Documents/Block2School/back/src/./services/login.py", line 3, in <module>
+    from database.Database import Database
+  File "/home/lorenzo/Documents/Block2School/back/src/./database/Database.py", line 15, in <module>
+    from database.UserTutorialScore import UserTutorialScore
+  File "/home/lorenzo/Documents/Block2School/back/src/./database/UserTutorialScore.py", line 104, in <module>
+    userTutorialScoreDb = UserTutorialScore(db)
+NameError: name 'db' is not defined
+^C[32mINFO[0m:     Stopping reloader process [[36m[1m13289[0m]
+
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;31m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004h./start.sh[?1l>[?2004l
+]2;./start.sh]1;./start.shDefaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: fastapi<0.69.0,>=0.68.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 1)) (0.68.2)
+Requirement already satisfied: python-dotenv in /usr/lib/python3/dist-packages (from -r requirements.txt (line 2)) (0.19.2)
+Requirement already satisfied: PyMySQL==1.0.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 3)) (1.0.2)
+Requirement already satisfied: PyJWT==2.4.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 4)) (2.4.0)
+Requirement already satisfied: uvicorn==0.17.6 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 5)) (0.17.6)
+Requirement already satisfied: pyotp in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 6)) (2.8.0)
+Requirement already satisfied: asgiref>=3.4.0 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (3.5.0)
+Requirement already satisfied: click>=7.0 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (8.0.3)
+Requirement already satisfied: h11>=0.8 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (0.13.0)
+Requirement already satisfied: starlette==0.14.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (0.14.2)
+Requirement already satisfied: pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (1.10.1)
+Requirement already satisfied: typing-extensions>=4.1.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2->fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (4.3.0)
+Checking database...
+Database version 6
+Finished database migration, now version 14
+Starting server...
+[32mINFO[0m:     Will watch for changes in these directories: ['/home/lorenzo/Documents/Block2School/back/src']
+[32mINFO[0m:     Uvicorn running on [1mhttp://0.0.0.0:8080[0m (Press CTRL+C to quit)
+[32mINFO[0m:     Started reloader process [[36m[1m13359[0m] using [36m[1mstatreload[0m
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 60, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 646, in run_until_complete
+    return future.result()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 67, in serve
+    config.load()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/lorenzo/Documents/Block2School/back/src/./main.py", line 2, in <module>
+    import routes.login as LoginRoute
+  File "/home/lorenzo/Documents/Block2School/back/src/./routes/login.py", line 5, in <module>
+    from services.login import LoginService
+  File "/home/lorenzo/Documents/Block2School/back/src/./services/login.py", line 3, in <module>
+    from database.Database import Database
+  File "/home/lorenzo/Documents/Block2School/back/src/./database/Database.py", line 15, in <module>
+    from database.UserTutorialScore import UserTutorialScore
+  File "/home/lorenzo/Documents/Block2School/back/src/./database/UserTutorialScore.py", line 104, in <module>
+    userTutorialScoreDb = UserTutorialScore(db)
+NameError: name 'db' is not defined
+^^C^C[32mINFO[0m:     Stopping reloader process [[36m[1m13359[0m]
+
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;31m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004h./start.sh[?1l>[?2004l
+]2;./start.sh]1;./start.shDefaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: fastapi<0.69.0,>=0.68.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 1)) (0.68.2)
+Requirement already satisfied: python-dotenv in /usr/lib/python3/dist-packages (from -r requirements.txt (line 2)) (0.19.2)
+Requirement already satisfied: PyMySQL==1.0.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 3)) (1.0.2)
+Requirement already satisfied: PyJWT==2.4.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 4)) (2.4.0)
+Requirement already satisfied: uvicorn==0.17.6 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 5)) (0.17.6)
+Requirement already satisfied: pyotp in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 6)) (2.8.0)
+Requirement already satisfied: click>=7.0 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (8.0.3)
+Requirement already satisfied: h11>=0.8 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (0.13.0)
+Requirement already satisfied: asgiref>=3.4.0 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (3.5.0)
+Requirement already satisfied: pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (1.10.1)
+Requirement already satisfied: starlette==0.14.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (0.14.2)
+Requirement already satisfied: typing-extensions>=4.1.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2->fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (4.3.0)
+Checking database...
+Database version 14
+Database is already up to date
+Starting server...
+[32mINFO[0m:     Will watch for changes in these directories: ['/home/lorenzo/Documents/Block2School/back/src']
+[32mINFO[0m:     Uvicorn running on [1mhttp://0.0.0.0:8080[0m (Press CTRL+C to quit)
+[32mINFO[0m:     Started reloader process [[36m[1m13405[0m] using [36m[1mstatreload[0m
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 60, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 646, in run_until_complete
+    return future.result()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 67, in serve
+    config.load()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/lorenzo/Documents/Block2School/back/src/./main.py", line 2, in <module>
+    import routes.login as LoginRoute
+  File "/home/lorenzo/Documents/Block2School/back/src/./routes/login.py", line 5, in <module>
+    from services.login import LoginService
+  File "/home/lorenzo/Documents/Block2School/back/src/./services/login.py", line 3, in <module>
+    from database.Database import Database
+  File "/home/lorenzo/Documents/Block2School/back/src/./database/Database.py", line 15, in <module>
+    from database.UserTutorialScore import UserTutorialScore
+  File "/home/lorenzo/Documents/Block2School/back/src/./database/UserTutorialScore.py", line 104, in <module>
+    userTutorialScoreDb = UserTutorialScore(db)
+NameError: name 'db' is not defined
+[33mWARNING[0m:  StatReload detected file change in 'database/UserTutorialScore.py'. Reloading...
+Process SpawnProcess-2:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 60, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 646, in run_until_complete
+    return future.result()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 67, in serve
+    config.load()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/lorenzo/Documents/Block2School/back/src/./main.py", line 2, in <module>
+    import routes.login as LoginRoute
+  File "/home/lorenzo/Documents/Block2School/back/src/./routes/login.py", line 5, in <module>
+    from services.login import LoginService
+  File "/home/lorenzo/Documents/Block2School/back/src/./services/login.py", line 3, in <module>
+    from database.Database import Database
+  File "/home/lorenzo/Documents/Block2School/back/src/./database/Database.py", line 15, in <module>
+    from database.UserTutorialScore import UserTutorialScore
+  File "/home/lorenzo/Documents/Block2School/back/src/./database/UserTutorialScore.py", line 104, in <module>
+    userTutorialScoreDb = UserTutorialScore(db)
+NameError: name 'db' is not defined
+[33mWARNING[0m:  StatReload detected file change in 'database/UserTutorialScore.py'. Reloading...
+Process SpawnProcess-3:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 60, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 646, in run_until_complete
+    return future.result()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 67, in serve
+    config.load()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/lorenzo/Documents/Block2School/back/src/./main.py", line 5, in <module>
+    import routes.tutorial as TutorialRoute
+  File "/home/lorenzo/Documents/Block2School/back/src/./routes/tutorial.py", line 173
+    else:
+    ^^^^
+SyntaxError: invalid syntax
+[33mWARNING[0m:  StatReload detected file change in 'database/UserTutorialScore.py'. Reloading...
+Process SpawnProcess-4:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 60, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 646, in run_until_complete
+    return future.result()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 67, in serve
+    config.load()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/lorenzo/Documents/Block2School/back/src/./main.py", line 5, in <module>
+    import routes.tutorial as TutorialRoute
+  File "/home/lorenzo/Documents/Block2School/back/src/./routes/tutorial.py", line 173
+    else:
+    ^^^^
+SyntaxError: invalid syntax
+^C[32mINFO[0m:     Stopping reloader process [[36m[1m13405[0m]
+
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;31m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004h./start.sh[?1l>[?2004l
+]2;./start.sh]1;./start.shDefaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: fastapi<0.69.0,>=0.68.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 1)) (0.68.2)
+Requirement already satisfied: python-dotenv in /usr/lib/python3/dist-packages (from -r requirements.txt (line 2)) (0.19.2)
+Requirement already satisfied: PyMySQL==1.0.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 3)) (1.0.2)
+Requirement already satisfied: PyJWT==2.4.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 4)) (2.4.0)
+Requirement already satisfied: uvicorn==0.17.6 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 5)) (0.17.6)
+Requirement already satisfied: pyotp in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 6)) (2.8.0)
+Requirement already satisfied: asgiref>=3.4.0 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (3.5.0)
+Requirement already satisfied: h11>=0.8 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (0.13.0)
+Requirement already satisfied: click>=7.0 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (8.0.3)
+Requirement already satisfied: starlette==0.14.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (0.14.2)
+Requirement already satisfied: pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (1.10.1)
+Requirement already satisfied: typing-extensions>=4.1.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2->fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (4.3.0)
+Checking database...
+Database version 14
+Database is already up to date
+Starting server...
+[32mINFO[0m:     Will watch for changes in these directories: ['/home/lorenzo/Documents/Block2School/back/src']
+[32mINFO[0m:     Uvicorn running on [1mhttp://0.0.0.0:8080[0m (Press CTRL+C to quit)
+[32mINFO[0m:     Started reloader process [[36m[1m13518[0m] using [36m[1mstatreload[0m
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 60, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 646, in run_until_complete
+    return future.result()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 67, in serve
+    config.load()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/lorenzo/Documents/Block2School/back/src/./main.py", line 5, in <module>
+    import routes.tutorial as TutorialRoute
+  File "/home/lorenzo/Documents/Block2School/back/src/./routes/tutorial.py", line 173
+    else:
+    ^^^^
+SyntaxError: invalid syntax
+[33mWARNING[0m:  StatReload detected file change in 'routes/tutorial.py'. Reloading...
+[32mINFO[0m:     Started server process [[36m13553[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+^C[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m13553[0m]
+[32mINFO[0m:     Stopping reloader process [[36m[1m13518[0m]
+
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;31m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004h./start.sh[?1l>[?2004l
+]2;./start.sh]1;./start.shDefaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: fastapi<0.69.0,>=0.68.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 1)) (0.68.2)
+Requirement already satisfied: python-dotenv in /usr/lib/python3/dist-packages (from -r requirements.txt (line 2)) (0.19.2)
+Requirement already satisfied: PyMySQL==1.0.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 3)) (1.0.2)
+Requirement already satisfied: PyJWT==2.4.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 4)) (2.4.0)
+Requirement already satisfied: uvicorn==0.17.6 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 5)) (0.17.6)
+Requirement already satisfied: pyotp in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 6)) (2.8.0)
+Requirement already satisfied: asgiref>=3.4.0 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (3.5.0)
+Requirement already satisfied: h11>=0.8 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (0.13.0)
+Requirement already satisfied: click>=7.0 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (8.0.3)
+Requirement already satisfied: starlette==0.14.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (0.14.2)
+Requirement already satisfied: pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (1.10.1)
+Requirement already satisfied: typing-extensions>=4.1.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2->fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (4.3.0)
+Checking database...
+Database version 14
+Database is already up to date
+Starting server...
+[32mINFO[0m:     Will watch for changes in these directories: ['/home/lorenzo/Documents/Block2School/back/src']
+[32mINFO[0m:     Uvicorn running on [1mhttp://0.0.0.0:8080[0m (Press CTRL+C to quit)
+[32mINFO[0m:     Started reloader process [[36m[1m13584[0m] using [36m[1mstatreload[0m
+[32mINFO[0m:     Started server process [[36m13586[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'routes/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m13586[0m]
+[32mINFO[0m:     Started server process [[36m13598[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'routes/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m13598[0m]
+[32mINFO[0m:     Started server process [[36m13602[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'database/Database.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m13602[0m]
+[32mINFO[0m:     Started server process [[36m13644[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m13644[0m]
+Process SpawnProcess-5:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 60, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 646, in run_until_complete
+    return future.result()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 67, in serve
+    config.load()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/lorenzo/Documents/Block2School/back/src/./main.py", line 4, in <module>
+    import routes.moderation as ModerationRoute
+  File "/home/lorenzo/Documents/Block2School/back/src/./routes/moderation.py", line 24, in <module>
+    from services.tutorial import TutorialService
+  File "/home/lorenzo/Documents/Block2School/back/src/./services/tutorial.py", line 112
+    userTutorialScoreDb : 
+                          ^
+SyntaxError: invalid syntax
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Started server process [[36m13777[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m13777[0m]
+[32mINFO[0m:     Started server process [[36m13927[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m13927[0m]
+[32mINFO[0m:     Started server process [[36m13943[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m13943[0m]
+[32mINFO[0m:     Started server process [[36m13966[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m13966[0m]
+[32mINFO[0m:     Started server process [[36m14008[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14008[0m]
+[32mINFO[0m:     Started server process [[36m14013[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14013[0m]
+[32mINFO[0m:     Started server process [[36m14018[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14018[0m]
+[32mINFO[0m:     Started server process [[36m14045[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14045[0m]
+[32mINFO[0m:     Started server process [[36m14053[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14053[0m]
+[32mINFO[0m:     Started server process [[36m14130[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'database/UserTutorialScore.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14130[0m]
+[32mINFO[0m:     Started server process [[36m14160[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'database/UserTutorialScore.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14160[0m]
+Process SpawnProcess-17:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 60, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 646, in run_until_complete
+    return future.result()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 67, in serve
+    config.load()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/lorenzo/Documents/Block2School/back/src/./main.py", line 2, in <module>
+    import routes.login as LoginRoute
+  File "/home/lorenzo/Documents/Block2School/back/src/./routes/login.py", line 5, in <module>
+    from services.login import LoginService
+  File "/home/lorenzo/Documents/Block2School/back/src/./services/login.py", line 3, in <module>
+    from database.Database import Database
+  File "/home/lorenzo/Documents/Block2School/back/src/./database/Database.py", line 15, in <module>
+    from database.UserTutorialScore import UserTutorialScore
+  File "/home/lorenzo/Documents/Block2School/back/src/./database/UserTutorialScore.py", line 7
+    def insert(self, uuid: str, tutorial_id: int, total_completions: int = 1, language: str, characters: int, lines: int) -> bool:
+                                                                              ^^^^^^^^^^^^^
+SyntaxError: non-default argument follows default argument
+[33mWARNING[0m:  StatReload detected file change in 'database/UserTutorialScore.py'. Reloading...
+[32mINFO[0m:     Started server process [[36m14203[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'database/UserTutorialScore.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14203[0m]
+[32mINFO[0m:     Started server process [[36m14215[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14215[0m]
+[32mINFO[0m:     Started server process [[36m14233[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14233[0m]
+[32mINFO[0m:     Started server process [[36m14266[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14266[0m]
+[32mINFO[0m:     Started server process [[36m14278[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14278[0m]
+[32mINFO[0m:     Started server process [[36m14285[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14285[0m]
+[32mINFO[0m:     Started server process [[36m14319[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14319[0m]
+[32mINFO[0m:     Started server process [[36m14327[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'routes/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14327[0m]
+[32mINFO[0m:     Started server process [[36m14459[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'routes/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14459[0m]
+[32mINFO[0m:     Started server process [[36m14485[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14485[0m]
+[32mINFO[0m:     Started server process [[36m14524[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14524[0m]
+[32mINFO[0m:     Started server process [[36m14538[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14538[0m]
+[32mINFO[0m:     Started server process [[36m14555[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14555[0m]
+[32mINFO[0m:     Started server process [[36m14562[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14562[0m]
+[32mINFO[0m:     Started server process [[36m14570[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14570[0m]
+[32mINFO[0m:     Started server process [[36m14582[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14582[0m]
+[32mINFO[0m:     Started server process [[36m14607[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14607[0m]
+[32mINFO[0m:     Started server process [[36m14611[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14611[0m]
+[32mINFO[0m:     Started server process [[36m14637[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14637[0m]
+[32mINFO[0m:     Started server process [[36m14648[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14648[0m]
+[32mINFO[0m:     Started server process [[36m14695[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14695[0m]
+[32mINFO[0m:     Started server process [[36m14730[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14730[0m]
+[32mINFO[0m:     Started server process [[36m14744[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14744[0m]
+[32mINFO[0m:     Started server process [[36m14793[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14793[0m]
+[32mINFO[0m:     Started server process [[36m14801[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'database/Database.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14801[0m]
+[32mINFO[0m:     Started server process [[36m14827[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'services/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14827[0m]
+[32mINFO[0m:     Started server process [[36m14844[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'models/response/SuccessMeModel.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14844[0m]
+[32mINFO[0m:     Started server process [[36m14953[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'models/response/SuccessMeModel.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14953[0m]
+[32mINFO[0m:     Started server process [[36m14983[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[33mWARNING[0m:  StatReload detected file change in 'models/response/SuccessMeModel.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m14983[0m]
+Process SpawnProcess-47:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 60, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 646, in run_until_complete
+    return future.result()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/server.py", line 67, in serve
+    config.load()
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/lorenzo/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/lorenzo/Documents/Block2School/back/src/./main.py", line 5, in <module>
+    import routes.tutorial as TutorialRoute
+  File "/home/lorenzo/Documents/Block2School/back/src/./routes/tutorial.py", line 11, in <module>
+    from models.response.SuccessMeModel import SuccessMeModel
+  File "/home/lorenzo/Documents/Block2School/back/src/./models/response/SuccessMeModel.py", line 4, in <module>
+    class SuccessMeModel(BaseModel):
+  File "/home/lorenzo/Documents/Block2School/back/src/./models/response/SuccessMeModel.py", line 5, in SuccessMeModel
+    data: list[AccountTutorialCompletionModel]
+NameError: name 'AccountTutorialCompletionModel' is not defined
+[33mWARNING[0m:  StatReload detected file change in 'models/response/SuccessMeModel.py'. Reloading...
+[32mINFO[0m:     Started server process [[36m15089[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+^C[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m15089[0m]
+[32mINFO[0m:     Stopping reloader process [[36m[1m13584[0m]
+
+[1m[7m%[27m[1m[0m                                                                                ]2;lorenzo@lorenzo-lenovo:~/Documents/Block2School/back]1;..k2School/back[0m[27m[24m[J[01;31m➜  [36mback[00m [01;34mgit:([31mscoreboard[34m) [33m✗[00m [K[?1h=[?2004h./start.sh[?1l>[?2004l
+]2;./start.sh]1;./start.shDefaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: fastapi<0.69.0,>=0.68.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 1)) (0.68.2)
+Requirement already satisfied: python-dotenv in /usr/lib/python3/dist-packages (from -r requirements.txt (line 2)) (0.19.2)
+Requirement already satisfied: PyMySQL==1.0.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 3)) (1.0.2)
+Requirement already satisfied: PyJWT==2.4.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 4)) (2.4.0)
+Requirement already satisfied: uvicorn==0.17.6 in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 5)) (0.17.6)
+Requirement already satisfied: pyotp in /home/lorenzo/.local/lib/python3.10/site-packages (from -r requirements.txt (line 6)) (2.8.0)
+Requirement already satisfied: click>=7.0 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (8.0.3)
+Requirement already satisfied: asgiref>=3.4.0 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (3.5.0)
+Requirement already satisfied: h11>=0.8 in /usr/lib/python3/dist-packages (from uvicorn==0.17.6->-r requirements.txt (line 5)) (0.13.0)
+Requirement already satisfied: pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (1.10.1)
+Requirement already satisfied: starlette==0.14.2 in /home/lorenzo/.local/lib/python3.10/site-packages (from fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (0.14.2)
+Requirement already satisfied: typing-extensions>=4.1.0 in /home/lorenzo/.local/lib/python3.10/site-packages (from pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2->fastapi<0.69.0,>=0.68.0->-r requirements.txt (line 1)) (4.3.0)
+Checking database...
+Database version 14
+Database is already up to date
+Starting server...
+[32mINFO[0m:     Will watch for changes in these directories: ['/home/lorenzo/Documents/Block2School/back/src']
+[32mINFO[0m:     Uvicorn running on [1mhttp://0.0.0.0:8080[0m (Press CTRL+C to quit)
+[32mINFO[0m:     Started reloader process [[36m[1m15153[0m] using [36m[1mstatreload[0m
+[32mINFO[0m:     Started server process [[36m15155[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[32mINFO[0m:     127.0.0.1:54974 - "[1mOPTIONS /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:54974 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:37606 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:37614 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:37606 - "[1mOPTIONS /tuto/category/all HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:37626 - "[1mOPTIONS /tuto/category/all HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:37614 - "[1mGET /tuto/category/all HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:37606 - "[1mGET /tuto/category/all HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:37614 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:37606 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:37614 - "[1mOPTIONS /tuto/category/Test HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:37606 - "[1mGET /tuto/category/Test HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48142 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mOPTIONS /tuto/1 HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48142 - "[1mGET /tuto/1 HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/1 HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mOPTIONS /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48142 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mOPTIONS /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48142 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48176 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48142 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48176 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48142 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48176 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48162 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48152 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:41604 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:41604 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:41616 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:50400 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:50400 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:50400 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:50400 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[33mWARNING[0m:  StatReload detected file change in 'routes/tutorial.py'. Reloading...
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+[32mINFO[0m:     Finished server process [[36m15155[0m]
+[32mINFO[0m:     Started server process [[36m16465[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[32mINFO[0m:     127.0.0.1:48834 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48834 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48844 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:60842 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:60842 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:60842 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:60842 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:49904 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:49904 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:49904 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mOPTIONS /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55080 - "[1mOPTIONS /tuto/category/all HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55090 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mOPTIONS /tuto/category/all HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55090 - "[1mGET /tuto/category/all HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mGET /tuto/category/all HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55090 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55090 - "[1mOPTIONS /tuto/category/Test HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mGET /tuto/category/Test HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55090 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mOPTIONS /tuto/1 HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55096 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55090 - "[1mGET /tuto/1 HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mOPTIONS /tuto/1 HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55090 - "[1mGET /tuto/1 HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55090 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mOPTIONS /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55090 - "[1mOPTIONS /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55090 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55090 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55090 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55096 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36768 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55064 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55090 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:36776 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:45326 - "[1mOPTIONS /tuto/undefined HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:45338 - "[1mOPTIONS /tuto/undefined HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:45326 - "[1mGET /tuto/undefined HTTP/1.1[0m" [31m422 Unprocessable Entity[0m
+[32mINFO[0m:     127.0.0.1:45338 - "[1mGET /tuto/undefined HTTP/1.1[0m" [31m422 Unprocessable Entity[0m
+[32mINFO[0m:     127.0.0.1:45338 - "[1mGET /tuto/1 HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:45338 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:45338 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:45338 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:45338 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:45326 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:45338 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48820 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:45338 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:45338 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:48828 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55046 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55056 - "[1mGET /tuto/1 HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55056 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55046 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55056 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55046 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55056 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55046 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55056 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55046 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55056 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55046 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55056 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55058 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55046 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:55056 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:33488 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:33504 - "[1mGET /tuto/1 HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:33504 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:33488 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:33504 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:33488 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:33504 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:33488 - "[1mGET /tuto/scoreboard/me HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:33504 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     127.0.0.1:33488 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[

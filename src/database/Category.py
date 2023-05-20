@@ -1,4 +1,3 @@
-from database.Database import db
 import pymysql
 
 class Category():
@@ -45,4 +44,5 @@ class Category():
             return False
         return True
 
-categoryDb = Category(db)
+    def close(self):
+        self.db.close()

@@ -1,0 +1,5 @@
+ALTER TABLE `account`
+ADD COLUMN `points` INT DEFAULT 0;
+
+ALTER TABLE `tutorials`
+ADD COLUMN `points` INT DEFAULT 0;
