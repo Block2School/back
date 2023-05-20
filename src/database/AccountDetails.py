@@ -26,7 +26,7 @@ class AccountDetails():
             return None
 
     def fetch(self, uuid: str) -> dict:
-        prepare = "SELECT `uuid`, `wallet_address`, `username`, `email`, `description`, `twitter`, `youtube`, `birthdate`, `private` FROM `account_details` WHERE `uuid` = %s"
+        prepare = "SELECT `wallet_address`, `username`, `email`, `description`, `twitter`, `youtube`, `birthdate`, `private` FROM `account_details` WHERE `uuid` = %s"
         try:
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (uuid))
