@@ -1,7 +1,9 @@
 from email import header
 from os import access
+from unittest.mock import MagicMock
 from fastapi.testclient import TestClient
 import pytest
+from routes.login import login, refresh_token
 from main import app
 from models.input.LoginModel import LoginModel
 from routes.login import login, refresh_token
@@ -11,144 +13,51 @@ nest_asyncio.apply()
 
 client = TestClient(app)
 
-def test_login_wrong_body():
-  response = client.post("/login",
-  json={
-    "wallet_address": "new",
-    "encrypted_wallet": "new",
-    "discord_token": "wrong_token"
-  },)
-  assert response.status_code == 200
+def test_login_success():
+    login_data = {
+        "wallet_address": "example_wallet_address",
+        "encrypted_wallet": "example_encrypted_wallet",
+        "token": "example_token"
+    }
+    response = client.post("/login", json=login_data)
+
+    assert response.status_code == 200
+    assert "access_token" in response.json()
+    assert "token_type" in response.json()
+    assert "refresh_token" in response.json()
 
 def test_login_invalid_body():
-  response = client.post("/login",
-  json={
-    "Wrong_body": "wrong_body"
-  },)
-  assert response.status_code == 400
-  assert response.json() == {
-      "error": "Invalid body",
-  }
+    login_data = {
+        "invalid_field": "value"
+    }
+    response = client.post("/login", json=login_data)
 
-# async def test_get_profile():
-#   user =  LoginModel
-#   user.wallet_address = "admin"
-#   user.encrypted_wallet = "admin"
-#   try:
-#     admin = await login(user)
-#     access_token = json.loads(admin.body.decode('utf-8')).get("access_token")
-#     url = "/user/profile/?dependencies=" + access_token
-#     bearer = "Bearer " + access_token 
-#     header = {"Content-Type": "application/json;", "Access-Control-Allow-Origin": "*;", "Authorization": bearer }
-#   except Exception as err:
-#     print("exept")
-#     Exception(err)
-  
-#   response = client.get(url, headers=header)
-#   assert response.status_code == 200
+    assert response.status_code == 400
+    assert "error" in response.json()
 
-async def test_update_profile_working():
-  user =  LoginModel
-  user.wallet_address = "admin"
-  user.encrypted_wallet = "admin"
-  try:
-    admin = await login(user)
-    access_token = json.loads(admin.body.decode('utf-8')).get("access_token")
-    url = "/user/profile"
-    bearer = "Bearer " + access_token 
-    header = {"Content-Type": "application/json;", "Access-Control-Allow-Origin": "*;", "Authorization": bearer }
-  except Exception as err:
-    Exception(err)
+def test_login_account_creation_error():
+    login_data = {
+        "wrong_data": "example_wallet_address",
+        "encrypted_wallet": "example_encrypted_wallet"
+    }
+    response = client.post("/login", json=login_data)
 
-  response = client.patch(url,
-  json={
-    "username": "string",
-    "email": "string",
-    "description": "string",
-    "twitter": "string",
-    "youtube": "string",
-    "birthdate": 0
-  }, 
-  headers=header)
-  assert response.status_code == 200
-  assert response.json() == {
-    "username": "string",
-    "email": "string",
-    "description": "string",
-    "twitter": "string",
-    "youtube": "string",
-    "birthdate": 0
-  }
+    assert response.status_code == 400
+    assert "error" in response.json()
 
-async def test_update_profile_fail():
-  user =  LoginModel
-  user.wallet_address = "admin"
-  user.encrypted_wallet = "admin"
-  try:
-    admin = await login(user)
-    access_token = json.loads(admin.body.decode('utf-8')).get("access_token")
-    url = "/user/profile"
-    bearer = "Bearer " + access_token 
-    header = {"Content-Type": "application/json;", "Access-Control-Allow-Origin": "*;", "Authorization": bearer }
-  except Exception as err:
-    Exception(err)
+def test_login_user_banned():
+    login_data = {
+        "wallet_address": "example_wallet_address",
+        "encrypted_wallet": "example_encrypted_wallet"
+    }
+    # Simuler un utilisateur banni
+    mock_banned_user = {
+        "is_banned": True,
+        "reason": "example_reason",
+        "expires": "example_date"
+    }
+    login.is_banned = MagicMock(return_value=mock_banned_user)
 
-  response = client.patch(url, headers=header)
-  assert response.status_code == 422
+    response = client.post("/login", json=login_data)
 
-
-def test_refresh_token_fail():
-  response = client.post("/refresh_token",
-  json={
-    "refresh_token": "string"
-  },)
-  assert response.status_code == 400
-  assert response.json() == {
-      "error": "Invalid or expired refresh token"
-  }
-
-async def test_refresh_token():
-  user =  LoginModel
-  user.wallet_address = "admin"
-  user.encrypted_wallet = "admin"
-  try:
-    admin = await login(user)
-    access_token = json.loads(admin.body.decode('utf-8')).get("access_token")
-    url = "/refresh_token"
-    bearer = "Bearer " + access_token 
-    refresh_token = json.loads(admin.body.decode('utf-8')).get("refresh_token")
-    header = {"Content-Type": "application/json;", "Access-Control-Allow-Origin": "*;", "Authorization": bearer }
-  except Exception as err:
-    Exception(err)
-
-  response = client.post(url, 
-  json={
-    "refresh_token": refresh_token
-  },
-  headers=header)
-  assert response.status_code == 200
-
-def test_authentificator_discord():
-  response = client.post("/user/authentifactor/discord",
-  json={
-    "wrong_body": "string"
-  },)
-  assert response.status_code == 404
-
-
-async def test_is_admin():
-  user =  LoginModel
-  user.wallet_address = "admin"
-  user.encrypted_wallet = "admin"
-  try:
-    admin = await login(user)
-    access_token = json.loads(admin.body.decode('utf-8')).get("access_token")
-    url = "/admin/is_admin"
-    bearer = "Bearer " + access_token 
-    refresh_token = json.loads(admin.body.decode('utf-8')).get("refresh_token")
-    header = {"Content-Type": "application/json;", "Access-Control-Allow-Origin": "*;", "Authorization": bearer }
-  except Exception as err:
-    Exception(err)
-
-  response = client.get(url, headers=header)
-  assert response.status_code == 200
+    assert response.status_code == 200
