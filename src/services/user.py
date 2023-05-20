@@ -25,7 +25,8 @@ class UserService():
             "youtube": response['youtube'],
             "birthdate": datetime.timestamp(response['birthdate']) if response['birthdate'] != None else None,
             "privacy": response['private'],
-            "points": user['points']
+            "points": user['points'],
+            "uuid": uuid
         }
 
     @staticmethod
