@@ -6,7 +6,7 @@ class AccountTutorialCompletion():
         self.db = db
 
     def __log_error(self, e: Exception, function: str):
-        if len(e) == 2:
+        if len(e.args) == 2:
             _, message = e.args
         else:
             message = str(e.args[0])
