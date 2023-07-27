@@ -125,3 +125,13 @@ async def remove_friend(friend: FriendsModel, credentials: str = Depends(JWTChec
             return JSONResponse({"error": "You're not friends"}, status_code=400)
     else:
         return JSONResponse({"error": "You must provide a friend uuid"}, status_code=400)
+
+@router.get("/search")
+async def search_user(user: str = None, page: int = 1, offset: int = 50, credentials: str = Depends(JWTChecker())):
+    jwt = JWT.decodeJWT(credentials)
+    if not user:
+        return JSONResponse({"error": "You must provide a partial username"}, status_code=400)
+    response = UserService.search_user(user, page, offset)
+    if not response:
+        return JSONResponse({"error": "Invalid parameters"}, status_code=400)
+    return JSONResponse(response)

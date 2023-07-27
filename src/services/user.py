@@ -224,3 +224,20 @@ class UserService():
             del friends[i]['uuid']
         friendsDb.close()
         return friends
+
+    @staticmethod
+    def search_user(user: str, page: int, offset: int) -> dict:
+        accountDb: AccountDetails = Database.get_table("account_details")
+        if page < 1 or offset < 1:
+            return None
+        start = offset * (page - 1)
+        result = accountDb.search_user(user, start, offset)
+        if not result:
+            accountDb.close()
+            return None
+        datas = {
+            "total": result[1]["total"],
+            "datas": result[0]
+        }
+        accountDb.close()
+        return datas

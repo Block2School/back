@@ -46,5 +46,21 @@ class AccountDetails():
             return None
         return {"uuid": uuid, "username": username, "email": email, "description": description, "twitter": twitter, "youtube": youtube, "private": private}
 
+    def search_user(self, username: str, start: int, offset: int) -> dict:
+        prepare_count = "SELECT COUNT(*) AS total FROM account_details WHERE username LIKE %s"
+        prepare = "SELECT uuid, username FROM account_details " \
+                "WHERE username LIKE %s LIMIT %s OFFSET %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (f"%{username}%", offset, start))
+                response = cursor.fetchall()
+                cursor.execute(prepare_count, (f"%{username}%"))
+                response_count = cursor.fetchone()
+            self.db.commit()
+            return response, response_count
+        except Exception as e:
+            print(e)
+            return None
+
     def close(self):
         self.db.close()
