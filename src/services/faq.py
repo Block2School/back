@@ -11,7 +11,7 @@ class FaqService():
     @staticmethod
     def get_all_faq() -> list:
         faqDb: Faq = Database.get_table("faq")
-        response = faqDb.fetch_all()
+        response = faqDb.fetchall()
         faqDb.close()
         return response
     
