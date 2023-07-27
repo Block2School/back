@@ -8,6 +8,7 @@ from database.AccountModeration import AccountModeration
 from database.AccountPunishment import AccountPunishment
 from database.Articles import Articles
 from database.Category import Category
+from database.Faq import Faq
 from database.Friends import Friends
 from database.Tutorials import Tutorials
 from database.UserAccess import UserAccess
@@ -22,6 +23,7 @@ tables = {
     "account_punishment": AccountPunishment,
     "articles": Articles,
     "category": Category,
+    "faq": Faq,
     "friends": Friends,
     "tutorials": Tutorials,
     "user_access": UserAccess,
