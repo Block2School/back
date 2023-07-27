@@ -1,9 +1,18 @@
 from datetime import datetime
 import pymysql
+from services.utils.Log import Log
 
 class AccountDetails():
     def __init__(self, db: pymysql.connect):
         self.db = db
+
+    def __log_error(self, e: Exception, function: str):
+        if len(e) == 2:
+            _, message = e.args
+        else:
+            message = str(e.args[0])
+        Log.error_log("account_details table", function, function, message)
+
 
     def insert(self, uuid: str, wallet: str) -> bool:
         prepare = "INSERT INTO `account_details` (`uuid`, `wallet_address`, `username`) VALUES (%s, %s, %s)"
@@ -11,7 +20,8 @@ class AccountDetails():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (uuid, wallet, wallet))
             self.db.commit()
-        except:
+        except Exception as e:
+            self.__log_error(e, "insert")
             return False
         return True
 
@@ -22,7 +32,8 @@ class AccountDetails():
                 cursor.execute(prepare, (name))
                 result = cursor.fetchone()
                 return result
-        except:
+        except Exception as e:
+            self.__log_error(e, "fetch_privacy")
             return None
 
     def fetch(self, uuid: str) -> dict:
@@ -32,7 +43,8 @@ class AccountDetails():
                 cursor.execute(prepare, (uuid))
                 result = cursor.fetchone()
                 return result
-        except:
+        except Exception as e:
+            self.__log_error(e, "fetch")
             return None
 
     def update(self, uuid: str, username: str, email: str, description: str, twitter: str, youtube: str, birthdate: datetime, private: str) -> dict:
@@ -42,7 +54,7 @@ class AccountDetails():
                 cursor.execute(prepare, (username, email, description, twitter, youtube, birthdate, private, uuid))
             self.db.commit()
         except Exception as e:
-            print(e)
+            self.__log_error(e, "update")
             return None
         return {"uuid": uuid, "username": username, "email": email, "description": description, "twitter": twitter, "youtube": youtube, "private": private}
 
@@ -59,7 +71,7 @@ class AccountDetails():
             self.db.commit()
             return response, response_count
         except Exception as e:
-            print(e)
+            self.__log_error(e, "search_user")
             return None
 
     def close(self):

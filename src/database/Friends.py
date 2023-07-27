@@ -1,8 +1,16 @@
 import pymysql
+from services.utils.Log import Log
 
 class Friends():
     def __init__(self, db: pymysql.connect) -> None:
         self.db = db
+
+    def __log_error(self, e: Exception, function: str):
+        if len(e) == 2:
+            _, message = e.args
+        else:
+            message = str(e.args[0])
+        Log.error_log("friends table", function, function, message)
 
     def insert(self, uuid: str, uuid_friend: str, status: str) -> bool:
         prepare = "INSERT INTO `friends` (`uuid`, `friend_uuid`, `status`) VALUES (%s, %s, %s)"
@@ -10,7 +18,8 @@ class Friends():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (uuid, uuid_friend, status))
             self.db.commit()
-        except:
+        except Exception as e:
+            self.__log_error(e, "insert")
             return False
         return True
 
@@ -21,7 +30,8 @@ class Friends():
                 cursor.execute(prepare, (status, uuid, uuid_friend))
             self.db.commit()
             return {"uuid": uuid, "uuid_friend": uuid_friend, "status": status}
-        except:
+        except Exception as e:
+            self.__log_error(e, "update")
             return None
 
     def remove(self, uuid: str, uuid_friend: str) -> bool:
@@ -30,7 +40,8 @@ class Friends():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (uuid, uuid_friend))
             self.db.commit()
-        except:
+        except Exception as e:
+            self.__log_error(e, "remove")
             return False
         return True
 
@@ -40,7 +51,8 @@ class Friends():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (uuid, uuid_friend))
                 result = cursor.fetchone()
-        except:
+        except Exception as e:
+            self.__log_error(e, "fetch")
             return None
         return result
 
@@ -50,7 +62,8 @@ class Friends():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (uuid))
                 result = cursor.fetchall()
-        except:
+        except Exception as e:
+            self.__log_error(e, "fetchall")
             return None
         return result
 

@@ -1,8 +1,16 @@
 import pymysql
+from services.utils.Log import Log
 
 class Tutorials():
     def __init__(self, db: pymysql.connect):
         self.db = db
+
+    def __log_error(self, e: Exception, function: str):
+        if len(e) == 2:
+            _, message = e.args
+        else:
+            message = str(e.args[0])
+        Log.error_log("tutorials table", function, function, message)
 
     def insert(self, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str, points: int) -> bool:
         prepare = "INSERT INTO `tutorials` (`title`, `markdown_url`, `category`, `answer`, `start_code`, `should_be_check`, `input`, `points`) VALUES (%s, %s, %s, %s, %s, %r, %s, %s)"
@@ -10,7 +18,8 @@ class Tutorials():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (title, markdown_url, category, answer, start_code, should_be_check, input, points))
             self.db.commit()
-        except:
+        except Exception as e:
+            self.__log_error(e, "insert")
             return False
         return True
 
@@ -20,7 +29,8 @@ class Tutorials():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (id))
                 result = cursor.fetchone()
-        except:
+        except Exception as e:
+            self.__log_error(e, "fetch")
             return None
         return result
 
@@ -30,7 +40,8 @@ class Tutorials():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare)
                 result = cursor.fetchall()
-        except:
+        except Exception as e:
+            self.__log_error(e, "fetch_all")
             return None
         return result
 
@@ -40,7 +51,8 @@ class Tutorials():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (category))
                 result = cursor.fetchall()
-        except:
+        except Exception as e:
+            self.__log_error(e, "fetch_by_category")
             return None
         return result
 
@@ -50,7 +62,8 @@ class Tutorials():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (title, markdown_url, category, answer, start_code, should_be_check, input, points, id))
             self.db.commit()
-        except:
+        except Exception as e:
+            self.__log_error(e, "update")
             return None
         return {"id": id, "title": title, "markdown_url": markdown_url, "category": category, "answer": answer, "start_code": start_code, "should_be_check": should_be_check, "input": input, "points": points}
 
@@ -60,7 +73,8 @@ class Tutorials():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (enabled, id))
             self.db.commit()
-        except:
+        except Exception as e:
+            self.__log_error(e, "update_enabled")
             return None
         return {"id": id, "enabled": enabled}
 
@@ -70,7 +84,8 @@ class Tutorials():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (id))
             self.db.commit()
-        except:
+        except Exception as e:
+            self.__log_error(e, "remove")
             return False
         return True
 
