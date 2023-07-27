@@ -178,8 +178,8 @@ async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = De
                     print("lines")
                     updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, 100, tutorial.language, -1, tutorial.lines)
             userTutorialScoreDb.close()
-            return JSONResponse({'is_correct': True, 'total_completions': result, 'error_description': None})
+            return JSONResponse({'is_correct': True, 'total_completions': result, 'error': None})
         else:
-            return JSONResponse({'is_correct': False, 'total_completions': 0, 'error_description': None})
+            return JSONResponse({'is_correct': False, 'total_completions': 0, 'error': r['error'], "received": r['output']})
     else:
         return JSONResponse({'error': 'Missing source code or language'}, status_code=400)
