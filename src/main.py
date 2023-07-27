@@ -4,6 +4,7 @@ import routes.user as UserRoute
 import routes.moderation as ModerationRoute
 import routes.tutorial as TutorialRoute
 import routes.article as ArticleRoute
+import routes.faq as FaqRoute
 from services.utils.JWTChecker import JWTChecker
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
@@ -61,6 +62,7 @@ app.include_router(UserRoute.router)
 app.include_router(ModerationRoute.router)
 app.include_router(TutorialRoute.router)
 app.include_router(ArticleRoute.router)
+app.include_router(FaqRoute.router)
 
 # @app.get("/", dependencies=[Depends(JWTChecker())], tags=['root'])
 # def read_root():

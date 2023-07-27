@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from services.utils.JWT import JWT
 from services.utils.JWTChecker import JWTChecker
 from starlette.responses import JSONResponse
-from services.user import FaqService
+from services.faq import FaqService
 from models.response.ProfileResponseModel import ProfileResponseModel
 from models.input.ProfileModel import ProfileModel
 from models.response.AddDiscordAuthenticatorResponseModel import AddDiscordAuthenticatorResponseModel
