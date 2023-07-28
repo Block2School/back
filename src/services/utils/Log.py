@@ -4,7 +4,7 @@ import os
 
 logger = logging.getLogger("graylog_logger")
 
-prod = "production," if os.getenv("MODE") == "production" else ""
+prod = "production," if os.getenv("MODE") == "production" else "local,"
 
 class Log():
     @staticmethod
