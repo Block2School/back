@@ -1,6 +1,7 @@
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from services.utils.JWT import JWT
+from services.utils.Log import Log
 
 class JWTChecker(HTTPBearer):
     def __init__(self, auto_error: bool = True):
@@ -11,19 +12,21 @@ class JWTChecker(HTTPBearer):
         if credentials:
             if credentials.scheme != "Bearer":
                 raise HTTPException(status_code=401, detail="Invalid token scheme")
-            if not self.jwt_is_correct(credentials.credentials):
+            if not self.jwt_is_correct(request, credentials.credentials):
                 raise HTTPException(status_code=401, detail="Invalid token")
             return credentials.credentials
         else:
             raise HTTPException(status_code=401, detail="Invalid authorization code")
 
-    def jwt_is_correct(self, token: str) -> bool:
+    def jwt_is_correct(self, request: Request, token: str) -> bool:
         payload = JWT.decodeJWT(token)
 
         try:
             if payload != None:
                 return True
             else:
+                Log.jwt_log(request)
                 return False
         except:
+            Log.jwt_log(request)
             return False

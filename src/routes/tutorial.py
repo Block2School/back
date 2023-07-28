@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from models.input.SubmitTutorialModel import SubmitTutorialModel
 from models.response.CategoryResponseListModel import CategoryResponseListModel
 from models.response.CompleteTutorialResponseModel import CompleteTutorialResponseModel
@@ -15,6 +15,7 @@ from services.tutorial import TutorialService
 from starlette.responses import JSONResponse
 from services.utils.JWT import JWT
 import requests, os, json
+from services.utils.Log import Log
 
 from services.utils.JWTChecker import JWTChecker
 
@@ -57,12 +58,14 @@ get_success_me_response = {
 router = APIRouter(prefix='/tuto')
 
 @router.get('/all', tags=['tutorial'], responses=get_all_tutorials_response)
-async def get_all_tutorials():
+async def get_all_tutorials(r: Request):
+    Log.route_log(r, "tutorial routes", "open_route")
     tutorial_list = TutorialService.get_all_tutorials()
     return JSONResponse({'data': tutorial_list})
 
 @router.get('/{id}', tags=['tutorial'], responses=get_tutorial_response)
-async def get_tutorial(id: int):
+async def get_tutorial(r: Request, id: int):
+    Log.route_log(r, "tutorial routes", "open_route")
     tutorial = TutorialService.get_tutorial(id)
     if tutorial == None:
         return JSONResponse({'error': 'Tutorial not found'}, status_code=400)
@@ -70,45 +73,52 @@ async def get_tutorial(id: int):
         return JSONResponse(tutorial)
 
 @router.get('/category/all', tags=['tutorial'], responses=get_category_list_response)
-async def get_all_categories():
+async def get_all_categories(r: Request):
+    Log.route_log(r, "tutorial routes", "open_route")
     categories = TutorialService.get_all_categories()
     return JSONResponse({'data': categories})
 
 @router.get('/category/{category}', tags=['tutorial'], responses=get_all_tutorials_by_category_response)
-async def get_all_tutorials_by_category(category: str):
+async def get_all_tutorials_by_category(r: Request, category: str):
+    Log.route_log(r, "tutorial routes", "open_route")
     tutorial_list = TutorialService.get_all_tutorials_by_category(category)
     return JSONResponse({'data': tutorial_list})
 
 @router.get('/scoreboard/id/{id}', tags=['tutorial'], responses=get_scoreboard_tutorial_response)
-async def get_scoreboard_tutorial(id: int):
+async def get_scoreboard_tutorial(r: Request, id: int):
+    Log.route_log(r, "tutorial routes", "open_route")
     scoreboard_tutorial = TutorialService.get_scoreboard_tutorial_id(id)
     return JSONResponse({'data': scoreboard_tutorial})
 
 @router.get('/success/id/{id}', tags=['tutorial'], responses=get_success_by_id)
-async def get_success_percentage_tutorial(id: int):
+async def get_success_percentage_tutorial(r: Request, id: int):
+    Log.route_log(r, "tutorial routes", "open_route")
     percentage = TutorialService.get_percentage_tutorial_id(id)
 
     return JSONResponse({'percentage': percentage})
 
 @router.get('/scoreboard/me', tags=['tutorial'], dependencies=[Depends(JWTChecker())], responses=get_scoreboard_me_tutorial_response)
-async def get_user_all_score(credentials: str = Depends(JWTChecker())):
+async def get_user_all_score(r: Request, credentials: str = Depends(JWTChecker())):
     jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "tutorial routes", jwt["uuid"])
     scoreboard = TutorialService.get_user_scoreboard(jwt['uuid'])
 
     return JSONResponse({'data': scoreboard})
 
 @router.get('/success/me', tags=['tutorial'], dependencies=[Depends(JWTChecker())], responses=get_success_me_response)
-async def get_user_success_tutorials(credentials: str = Depends(JWTChecker())):
+async def get_user_success_tutorials(r: Request, credentials: str = Depends(JWTChecker())):
     jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "tutorial routes", jwt["uuid"])
     success = TutorialService.get_user_success(jwt['uuid'])
     nb_tutorials = TutorialService.get_total_number_tutorials()
 
     return JSONResponse({'data': success, 'total_completion': (len(success) / nb_tutorials) * 100})
 
 @router.post('/complete', tags=['tutorial'], dependencies=[Depends(JWTChecker())], responses=submit_tutorial_responses)
-async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = Depends(JWTChecker())):
+async def complete_tutorial(r: Request, tutorial: SubmitTutorialModel, credentials: str = Depends(JWTChecker())):
     userTutorialScoreDb: UserTutorialScore = Database.get_table("user_tutorial_score")
     jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "tutorial routes", jwt["uuid"])
 
     check = False
     available_language = ['js','py','R','cpp', 'c', 'solidity']
@@ -178,8 +188,8 @@ async def complete_tutorial(tutorial: SubmitTutorialModel, credentials: str = De
                     print("lines")
                     updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, 100, tutorial.language, -1, tutorial.lines)
             userTutorialScoreDb.close()
-            return JSONResponse({'is_correct': True, 'total_completions': result, 'error_description': None})
+            return JSONResponse({'is_correct': True, 'total_completions': result, 'error': None})
         else:
-            return JSONResponse({'is_correct': False, 'total_completions': 0, 'error_description': None})
+            return JSONResponse({'is_correct': False, 'total_completions': 0, 'error': r['error'], "received": r['output']})
     else:
         return JSONResponse({'error': 'Missing source code or language'}, status_code=400)

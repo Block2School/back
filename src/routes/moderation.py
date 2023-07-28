@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from models.input.BanModel import BanModel
 from models.input.CategoryModel import CategoryModel
 from models.input.CategoryNameModel import CategoryNameModel
@@ -26,6 +26,7 @@ from starlette.responses import JSONResponse
 from services.utils.AdminChecker import AdminChecker
 from services.utils.JWT import JWT
 from services.utils.JWTChecker import JWTChecker
+from services.utils.Log import Log
 
 router = APIRouter(prefix='/admin')
 
@@ -87,24 +88,28 @@ is_admin_responses = {
 }
 
 @router.get('/is_admin', tags=['admin'], dependencies=[Depends(JWTChecker())], responses=is_admin_responses)
-async def is_admin(credentials: str = Depends(JWTChecker())):
+async def is_admin(r: Request, credentials: str = Depends(JWTChecker())):
     jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "moderation routes", jwt["uuid"])
     is_admin = ModerationService.is_admin(jwt['uuid'])
     return JSONResponse({'is_admin': is_admin})
 
 @router.get('/users', dependencies=[Depends(AdminChecker(2))], tags=['admin'], responses=get_all_users_responses)
-async def get_all_users():
+async def get_all_users(r: Request, credentials: str = Depends(AdminChecker(2))):
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
     users = ModerationService.get_all_users()
     return JSONResponse({'data': users})
 
 @router.get('/banlist/{uuid}', dependencies=[Depends(AdminChecker(1))], tags=['moderation'], responses=banlist_responses)
-async def get_banlist(uuid: str):
+async def get_banlist(r: Request, uuid: str, credentials: str = Depends(AdminChecker(1))):
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
     datas = ModerationService.get_banlist(uuid)
     return JSONResponse({"data": datas})
 
 @router.post('/ban', dependencies=[Depends(AdminChecker(1))], tags=['moderation'], responses=ban_responses)
-async def ban(ban_model: BanModel, credentials: str = Depends(JWTChecker())):
+async def ban(r: Request, ban_model: BanModel, credentials: str = Depends(JWTChecker())):
     jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "moderation routes", jwt["uuid"])
     if ban_model.uuid == None:
         return JSONResponse({"error": "UUID not provided"}, status_code=400)
     else:
@@ -115,8 +120,9 @@ async def ban(ban_model: BanModel, credentials: str = Depends(JWTChecker())):
             return JSONResponse({"error": "Cannot ban this user"}, status_code=400)
 
 @router.post('/unban', dependencies=[Depends(AdminChecker(1))], tags=['moderation'], responses=unban_responses)
-async def unban(revoke: UnbanModel, credentials: str = Depends(JWTChecker())):
+async def unban(r: Request, revoke: UnbanModel, credentials: str = Depends(JWTChecker())):
     jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "moderation routes", jwt["uuid"])
     if revoke.uuid == None:
         return JSONResponse({"error": "UUID not provided"}, status_code=400)
     else:
@@ -127,7 +133,8 @@ async def unban(revoke: UnbanModel, credentials: str = Depends(JWTChecker())):
             return JSONResponse({"error": "Cannot unban this user"}, status_code=400)
 
 @router.post('/mod', dependencies=[Depends(AdminChecker(2))], tags=['admin'])
-async def set_mod(mod_model: ModModel):
+async def set_mod(r: Request, mod_model: ModModel, credentials: str = Depends(AdminChecker(2))):
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
     if mod_model.uuid == None:
         return JSONResponse({"error": "UUID not provided"}, status_code=400)
     else:
@@ -138,7 +145,8 @@ async def set_mod(mod_model: ModModel):
             return JSONResponse({"error": "Cannot change mod role of this user"}, status_code=400)
 
 @router.post('/tuto/create', dependencies=[Depends(AdminChecker(2))], tags=['admin'], responses=create_tutorial_responses)
-async def create_tutorial(tutorial_model: TutorialModel):
+async def create_tutorial(r: Request, tutorial_model: TutorialModel, credentials: str = Depends(AdminChecker(2))):
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
     if tutorial_model.answer == None:
         return JSONResponse({'error': 'Unknown answer'}, status_code=400)
     elif tutorial_model.category == None:
@@ -162,7 +170,8 @@ async def create_tutorial(tutorial_model: TutorialModel):
         return JSONResponse({"error": "This tutorial already exists"}, status_code=400)
 
 @router.patch('/tuto/update', dependencies=[Depends(AdminChecker(2))], tags=['admin'], responses=update_tutorial_responses)
-async def edit_tutorial(tutorial_model: TutorialEditModel):
+async def edit_tutorial(r: Request, tutorial_model: TutorialEditModel, credentials: str = Depends(AdminChecker(2))):
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
     if tutorial_model.id == None:
         return JSONResponse({'error': 'Unknown id'}, status_code=400)
     elif tutorial_model.title == None:
@@ -188,7 +197,8 @@ async def edit_tutorial(tutorial_model: TutorialEditModel):
         return JSONResponse({'error': 'Can\'t update tutorial'}, status_code=400)
 
 @router.patch('/tuto/toggle', dependencies=[Depends(AdminChecker(2))], tags=['admin'], responses=toggle_tutorial_responses)
-async def enable_disable_tutorial(id_model: IdModel):
+async def enable_disable_tutorial(r: Request, id_model: IdModel, credentials: str = Depends(AdminChecker(2))):
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
     if id_model.id == None:
         return JSONResponse({'error': 'Tutorial ID not provided'}, status_code=400)
     tutorial = TutorialService.get_tutorial(id_model.id)
@@ -200,28 +210,32 @@ async def enable_disable_tutorial(id_model: IdModel):
     return JSONResponse({'error': 'Can\'t toggle this tutorial'}, status_code=400)
 
 @router.post('/category/create', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=create_category_responses)
-async def create_category(category: CategoryModel):
+async def create_category(r: Request, category: CategoryModel, credentials: str = Depends(AdminChecker(2))):
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
     result = TutorialService.create_category(category.name, category.description, category.image)
     if result:
         return JSONResponse({'success': 'Created category ' + category.name})
     return JSONResponse({'error': 'Could not create the category'}, status_code=400)
 
 @router.patch('/category/update', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=update_category_responses)
-async def update_category(category: CategoryModel):
+async def update_category(r: Request, category: CategoryModel, credentials: str = Depends(AdminChecker(2))):
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
     result = TutorialService.update_category(category.name, category.description, category.image)
     if result:
         return JSONResponse({'success': 'Updated category ' + category.name})
     return JSONResponse({'error': 'Could not update the category'}, status_code=400)
 
 @router.delete('/category/delete', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=delete_category_responses)
-async def delete_category(name: CategoryNameModel):
+async def delete_category(r: Request, name: CategoryNameModel, credentials: str = Depends(AdminChecker(2))):
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
     result = TutorialService.delete_category(name.name)
     if result:
         return JSONResponse({'success': 'Category deleted'})
     return JSONResponse({'error': 'Could not delete the category'}, status_code=400)
 
 @router.post('/article/create_markdown', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=create_markdown_responses)
-async def create_markdown(markdown: CreateMarkdownModel):
+async def create_markdown(r: Request, markdown: CreateMarkdownModel, credentials: str = Depends(AdminChecker(2))):
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
     print(f'markdown: {markdown}', flush=True)
     result = ArticleService.create_markdown(markdown.name, markdown.content)
     if result and result['success'] == True:
@@ -229,14 +243,16 @@ async def create_markdown(markdown: CreateMarkdownModel):
     return JSONResponse({'error': 'Could not create the markdown'}, status_code=400)
 
 @router.get('/article/available_markdown', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=available_markdown_responses)
-async def get_available_markdown():
+async def get_available_markdown(r: Request, credentials: str = Depends(AdminChecker(2))):
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
     result = ArticleService.get_markdown_list()
     if result and result['success'] == True:
         return JSONResponse({'success': 'Markdown list', 'markdown_list': result['markdowns']})
     return JSONResponse({'error': 'Could not get the markdown list'}, status_code=400)
 
 @router.post('/tuto/create_markdown', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=create_markdown_responses)
-async def create_markdown(markdown: CreateMarkdownModel):
+async def create_markdown(r: Request, markdown: CreateMarkdownModel, credentials: str = Depends(AdminChecker(2))):
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
     print(f'markdown: {markdown}', flush=True)
     result = TutorialService.create_markdown(markdown.name, markdown.content)
     if result and result['success'] == True:
@@ -245,7 +261,8 @@ async def create_markdown(markdown: CreateMarkdownModel):
 
 
 @router.get('/tuto/available_markdown', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=available_markdown_responses)
-async def get_tuto_available_markdown():
+async def get_tuto_available_markdown(r: Request, credentials: str = Depends(AdminChecker(2))):
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
     result = TutorialService.get_markdown_list()
     if result and result['success'] == True:
         return JSONResponse({'success': 'Markdown list', 'markdown_list': result['markdowns']})

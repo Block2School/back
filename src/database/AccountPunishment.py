@@ -1,9 +1,17 @@
 from datetime import datetime
 import pymysql
+from services.utils.Log import Log
 
 class AccountPunishment():
     def __init__(self, db: pymysql.connect):
         self.db = db
+
+    def __log_error(self, e: Exception, function: str):
+        if len(e.args) == 2:
+            _, message = e.args
+        else:
+            message = str(e.args[0])
+        Log.error_log("account_punishment table", function, function, message)
 
     def fetch(self, uuid: str) -> list:
         prepare = "SELECT `reason`, `banned_by`, `expires`, `is_revoked`, `revoked_by`, `revoke_reason` FROM `account_punishment` WHERE `uuid` = %s ORDER BY `created_at` ASC"
@@ -11,7 +19,8 @@ class AccountPunishment():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (uuid))
                 result = cursor.fetchall()
-        except:
+        except Exception as e:
+            self.__log_error(e, "fetch")
             return None
         return result
 
@@ -21,7 +30,8 @@ class AccountPunishment():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (uuid, banned_by, reason, expires))
             self.db.commit()
-        except:
+        except Exception as e:
+            self.__log_error(e, "insert")
             return False
         return True
 
@@ -31,7 +41,8 @@ class AccountPunishment():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (True, revoked_by, revoke_reason, uuid))
             self.db.commit()
-        except:
+        except Exception as e:
+            self.__log_error(e, "update")
             return None
         return {"is_revoked": True, "revoked_by": revoked_by, "revoke_reason": revoke_reason, "uuid": uuid}
 

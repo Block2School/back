@@ -1,8 +1,16 @@
 import pymysql
+from services.utils.Log import Log
 
 class Articles():
     def __init__(self, db: pymysql.connect) -> None:
         self.db = db
+
+    def __log_error(self, e: Exception, function: str):
+        if len(e.args) == 2:
+            _, message = e.args
+        else:
+            message = str(e.args[0])
+        Log.error_log("articles table", function, function, message)
 
     def insert(self, title: str, markdown_url: str, short_description: str, author: str) -> bool:
         prepare = "INSERT INTO `articles` (`title`, `markdown_url`, `short_description`, `author`) VALUES (%s, %s, %s, %s)"
@@ -11,7 +19,8 @@ class Articles():
                 cursor.execute(prepare, (title, markdown_url, short_description, author))
             self.db.commit()
             return True
-        except:
+        except Exception as e:
+            self.__log_error(e, "insert")
             return False
 
     def fetch(self, id: int) -> dict:
@@ -20,7 +29,8 @@ class Articles():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (id))
                 result = cursor.fetchone()
-        except:
+        except Exception as e:
+            self.__log_error(e, "fetch")
             return None
         return result
 
@@ -30,7 +40,8 @@ class Articles():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare)
                 result = cursor.fetchall()
-        except:
+        except Exception as e:
+            self.__log_error(e, "fetchall")
             return None
         return result
 
@@ -40,7 +51,8 @@ class Articles():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (title, markdown_url, short_description, id))
             self.db.commit()
-        except:
+        except Exception as e:
+            self.__log_error(e, "update")
             return False
         return True
 
@@ -50,7 +62,8 @@ class Articles():
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (id))
             self.db.commit()
-        except:
+        except Exception as e:
+            self.__log_error(e, "remove")
             return False
         return True
 

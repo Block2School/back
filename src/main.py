@@ -9,6 +9,9 @@ from services.utils.JWTChecker import JWTChecker
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+import logging
+import graypy
+import os
 
 load_dotenv()
 
@@ -42,6 +45,12 @@ app = FastAPI(
     version="1.0.0",
     openapi_tags=tags_metadata,
 )
+
+logger = logging.getLogger("graylog_logger")
+logger.setLevel(logging.INFO)
+
+handler = graypy.GELFUDPHandler(os.getenv("GRAYLOG_HOST"), 12201)
+logger.addHandler(handler)
 
 origins = [
     "http://localhost",
