@@ -239,7 +239,7 @@ async def create_markdown(r: Request, markdown: CreateMarkdownModel, credentials
     print(f'markdown: {markdown}', flush=True)
     result = ArticleService.create_markdown(markdown.name, markdown.content)
     if result and result['success'] == True:
-        return JSONResponse({'success': f'Markdown "{markdown.name}" created', 'markdown_url': result})
+        return JSONResponse({'success': f'Markdown "{markdown.name}" created', 'markdown_url': result}, status_code=201)
     return JSONResponse({'error': 'Could not create the markdown'}, status_code=400)
 
 @router.get('/article/available_markdown', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=available_markdown_responses)
@@ -256,7 +256,7 @@ async def create_markdown(r: Request, markdown: CreateMarkdownModel, credentials
     print(f'markdown: {markdown}', flush=True)
     result = TutorialService.create_markdown(markdown.name, markdown.content)
     if result and result['success'] == True:
-        return JSONResponse({'success': f'Markdown "{markdown.name}" created', 'markdown_url': result})
+        return JSONResponse({'success': f'Markdown "{markdown.name}" created', 'markdown_url': result}, status_code=201)
     return JSONResponse({'error': 'Could not create the markdown'}, status_code=400)
 
 
