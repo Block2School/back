@@ -55,7 +55,7 @@ async def create_article(r: Request, article: ArticleModel, jwt: str = Depends(A
     if success:
         return JSONResponse({'success': 'Article created !'}, status_code=201)
     else:
-        return JSONResponse({'error': "Can't create article"})
+        return JSONResponse({'error': "Can't create article"}, status_code=400)
 
 @router.patch('/update', tags=['article'], dependencies=[Depends(AdminChecker(1))], responses=update_article_response)
 async def update_article(r: Request, article: ArticleModel, jwt: str = Depends(AdminChecker(1))):
