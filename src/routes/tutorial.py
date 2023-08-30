@@ -127,11 +127,16 @@ async def complete_tutorial(r: Request, tutorial: SubmitTutorialModel, credentia
 
     print(tutorial.source_code + " || " + tutorial.language)
     if tutorial.source_code != None:
+        tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
+        print('exec => ', tutorial.exec)
+        print('tuto.inputs => "', tuto['inputs'], '"')
+        
         if (tutorial.exec == True):
             print(os.getenv('CODE_EXEC_URL') + '/execute')
             data = {
                 "code": tutorial.source_code,
-                "language": tutorial.language
+                "language": tutorial.language,
+                "input": tuto['inputs'],
             }
             data = json.dumps(data)
             print(data)
@@ -146,7 +151,7 @@ async def complete_tutorial(r: Request, tutorial: SubmitTutorialModel, credentia
                 r = r.json()
                 print('r => ', r['output'])
             print("ID => " + str(tutorial.tutorial_id))
-            tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
+            # tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
             # tuto['answer'] += '\n'
             # print("answer == " + tuto["answer"] + " || output == " + r["output"] + " || tutorialid == " + str(tutorial.tutorial_id))
             print("answer == '" + tuto["answer"] + "' || output == '" + r["output"] + "'")

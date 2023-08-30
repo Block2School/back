@@ -33,7 +33,7 @@ class TutorialService():
         if tutorial != None:
             data = tutorial
             return {'id': data['id'], 'title': data['title'], 'markdownUrl': data['markdown_url'], 'category': data['category'], 'answer': data['answer'] #if data['should_be_check'] else None
-            , 'startCode': data['start_code'], 'shouldBeCheck': data['should_be_check'], 'enabled': data['enabled'], 'points': data['points']}
+            , 'startCode': data['start_code'], 'shouldBeCheck': data['should_be_check'], 'enabled': data['enabled'], 'points': data['points'], 'inputs': data['input']}
         tutorialDb.close()
         return None
 
