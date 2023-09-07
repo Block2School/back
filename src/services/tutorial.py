@@ -169,8 +169,6 @@ class TutorialService():
     def get_user_success(uuid: str) -> list:
         userTutorialScoreDb: UserTutorialScore = Database.get_table("user_tutorial_score")
         success = userTutorialScoreDb.fetch_all_score_of_user(uuid)
-        for i in range(0, len(success)):
-            success[i]['last_completion'] = datetime.timestamp(success[i]['last_completion'])
         userTutorialScoreDb.close()
         return success
 
