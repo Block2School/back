@@ -193,7 +193,7 @@ async def complete_tutorial(r: Request, tutorial: SubmitTutorialModel, credentia
                     print("lines")
                     updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, 100, tutorial.language, -1, tutorial.lines)
             userTutorialScoreDb.close()
-            return JSONResponse({'is_correct': True, 'total_completions': result, 'error': None})
+            return JSONResponse({'is_correct': True, 'total_completions': result, 'error': None, "received": r['output']})
         else:
             return JSONResponse({'is_correct': False, 'total_completions': 0, 'error': r['error'], "received": r['output']})
     else:
