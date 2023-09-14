@@ -7,7 +7,6 @@ load_dotenv()
 
 logger = logging.getLogger("graylog_logger")
 
-print(os.getenv("MODE"))
 prod = "production," if os.getenv("MODE") == "production" else "local,"
 
 class Log():
