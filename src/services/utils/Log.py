@@ -1,9 +1,13 @@
 import logging
 from fastapi import Request
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 logger = logging.getLogger("graylog_logger")
 
+print(os.getenv("MODE"))
 prod = "production," if os.getenv("MODE") == "production" else "local,"
 
 class Log():
