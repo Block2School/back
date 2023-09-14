@@ -1,6 +1,9 @@
 import logging
 from fastapi import Request
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 logger = logging.getLogger("graylog_logger")
 
