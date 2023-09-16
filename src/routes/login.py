@@ -54,10 +54,10 @@ async def login(req: Request, login_model: LoginModel):
                         return JSONResponse({"access_token": access_token, "token_type": 'Bearer', 'refresh_token': refresh_token})
                     else:
                         Log.login_log(req, login_model.wallet_address)
-                        return JSONResponse({"error": "Bad token"}, status_code=403)
+                        return JSONResponse({"error": "Bad token"}, status_code=401)
                 else:
                     Log.login_log(req, login_model.wallet_address)
-                    return JSONResponse({"error": "Need a token"}, status_code=403)
+                    return JSONResponse({"error": "Need a token"}, status_code=401)
     else:
         return JSONResponse({"error": "Invalid body"}, status_code=400)
 
