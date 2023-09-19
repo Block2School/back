@@ -19,7 +19,7 @@ class ChallengesService():
         leaderboard_list = []
         if len(leaderboard) > 0:
             for user in leaderboard:
-                leaderboard_list.append({'user': user['username'], 'points': user['points']})
+                leaderboard_list.append({'username': user['username'], 'points': user['points'], 'user_uuid': user['user_uuid']})
             leaderboard_list.sort(key=lambda x: x['points'], reverse=True)
             for i in range(0, len(leaderboard_list)):
                 leaderboard_list[i]['rank'] = i + 1
@@ -36,7 +36,7 @@ class ChallengesService():
         leaderboard_list = []
         if len(leaderboard) > 0:
             for user in leaderboard:
-                leaderboard_list.append({'user_uuid': user['user_uuid'], 'user': user['username'], 'points': user['points']})
+                leaderboard_list.append({'user_uuid': user['user_uuid'], 'username': user['username'], 'points': user['points']})
             leaderboard_list.sort(key=lambda x: x['points'], reverse=True)
         else:
             leaderboardDB.close()
@@ -44,7 +44,7 @@ class ChallengesService():
         leaderboardDB.close()
         for i in range(0, len(leaderboard_list)):
             if leaderboard_list[i]['user_uuid'] == user_uuid:
-                return {'rank': i + 1, 'points': leaderboard_list[i]['points'], 'user': leaderboard_list[i]['user']}
+                return {'rank': i + 1, 'points': leaderboard_list[i]['points'], 'username': leaderboard_list[i]['username'], 'user_uuid': leaderboard_list[i]['user_uuid']}
         return {'rank': -99, 'points': 0}
 
     @staticmethod

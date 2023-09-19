@@ -68,7 +68,9 @@ async def get_leaderboard(r: Request):
 )
 async def get_user_leaderboard_rank(r: Request, jwt: JWT = Depends(JWTChecker())):
     Log.route_log(r, "challenges routes", "auth_route")
-    leaderboard = ChallengesService.get_user_leaderboard_rank(jwt.get_uuid())
+    _jwt: dict = JWT.decodeJWT(jwt)
+
+    leaderboard = ChallengesService.get_user_leaderboard_rank(_jwt["uuid"])
     return leaderboard
 
 
