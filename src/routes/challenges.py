@@ -254,7 +254,7 @@ async def test_challenge(
 
 
 @router.post(
-    "/submit_challenge/{id}", tags=["challenges"], responses=submit_challenge_response
+    "/submit_challenge/{challenge_id}", tags=["challenges"], responses=submit_challenge_response
 )
 async def submit_challenge(
     r: Request,
@@ -264,6 +264,7 @@ async def submit_challenge(
 ):
     Log.route_log(r, "challenges routes", "auth_route")
     _jwt = JWT.decodeJWT(jwt)
+    print(user_submit)
     challenge = ChallengesService.get_challenge(challenge_id)
     if challenge == None:
         return JSONResponse({"error": "Challenge not found"}, status_code=400)
