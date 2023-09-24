@@ -209,7 +209,7 @@ async def test_challenge(
         url = os.getenv("CODE_EXEC_URL") + "/execute"
         data = {
             "code": user_submit.code,
-            "language": challenge["language"],
+            "language": user_submit.language,
             "input": input_to_test,
         }
         print(data)
@@ -276,7 +276,7 @@ async def submit_challenge(
         for i in range(len(challenge["inputs"])):
             data = {
                 "code": user_submit.code,
-                "language": challenge["language"],
+                "language": user_submit.language,
                 "input": challenge["inputs"][i],
             }
             data = json.dumps(data)
