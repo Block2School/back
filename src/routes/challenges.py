@@ -293,6 +293,17 @@ async def submit_challenge(
             if res.status_code == 200:
                 res = res.json()
                 last_output = res["output"]
+                if res["output"] != challenge["answers"][i] and res["error"] != "":
+                    return JSONResponse(
+                        {
+                            "success": False,
+                            "output": res["output"],
+                            "expected_output": challenge["answers"][i],
+                            "error_description": res["error"],
+                            "error_test_index": -1,
+                            "isError": True
+                        }
+                    )
                 if res["output"] != challenge["answers"][i]:
                     return JSONResponse(
                         {
@@ -300,7 +311,8 @@ async def submit_challenge(
                             "output": res["output"],
                             "expected_output": challenge["answers"][i],
                             "error_description": res["error"],
-                            "test_number": i + 1,
+                            "error_test_index": i + 1,
+                            "isError": False
                         }
                     )
             else:
@@ -331,5 +343,7 @@ async def submit_challenge(
                 "output": last_output,
                 "expected_output": challenge["answers"][len(challenge["answers"]) - 1],
                 "error_description": res["error"],
+                "error_test_index": -1,
+                "isError": False
             }
         )
