@@ -73,6 +73,13 @@ async def get_user_leaderboard_rank(r: Request, jwt: JWT = Depends(JWTChecker())
     leaderboard = ChallengesService.get_user_leaderboard_rank(_jwt["uuid"])
     return leaderboard
 
+@router.get(
+    "/leaderboard/top_10_monthly", tags=["challenges"], responses=get_leaderboard_response
+)
+async def get_top_10_monthly(r: Request):
+    Log.route_log(r, "challenges routes", "open_route")
+    leaderboard = ChallengesService.get_top_10_monthly()
+    return leaderboard
 
 @router.post("/add", tags=["challenges"], responses=create_challenge_response)
 async def create_challenge(
