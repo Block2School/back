@@ -65,6 +65,23 @@ class ChallengesService():
         return leaderboard_list[:10]
 
     @staticmethod
+    def get_top_monthly() -> list:
+        completedDB: ChallengesCompleted = Database.get_table("challenges_completed")
+        leaderboard = completedDB.fetch_top_monthly()
+        leaderboard_list = []
+        if len(leaderboard) > 0:
+            for user in leaderboard:
+                leaderboard_list.append({'username': user['username'], 'points': user['points'], 'user_uuid': user['user_uuid']})
+            leaderboard_list.sort(key=lambda x: x['points'], reverse=True)
+            for i in range(0, len(leaderboard_list)):
+                leaderboard_list[i]['rank'] = i + 1
+        else:
+            completedDB.close()
+            return []
+        completedDB.close()
+        return leaderboard_list
+
+    @staticmethod
     def add_points(user_uuid: str, points: int) -> bool:
         leaderboardDB: ChallengesLeaderboard = Database.get_table("challenges_leaderboard")
         result = leaderboardDB.add_points(user_uuid, points)
