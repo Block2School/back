@@ -84,9 +84,15 @@ class ChallengesService():
     @staticmethod
     def add_points(user_uuid: str, points: int) -> bool:
         leaderboardDB: ChallengesLeaderboard = Database.get_table("challenges_leaderboard")
-        result = leaderboardDB.add_points(user_uuid, points)
-        leaderboardDB.close()
-        return result
+        check = leaderboardDB.fetch(user_uuid)
+        if check is None:
+            result = leaderboardDB.insert_with_points(user_uuid, points)
+            leaderboardDB.close()
+            return result
+        else:
+            result = leaderboardDB.add_points(user_uuid, points)
+            leaderboardDB.close()
+            return result
 
     @staticmethod
     def override_points(user_uuid: str, points: int) -> bool:
@@ -120,7 +126,7 @@ class ChallengesService():
     @staticmethod
     def complete_challenge(user_uuid: str, challenge_id: int) -> bool:
         completedDB: ChallengesCompleted = Database.get_table("challenges_completed")
-        result = completedDB.insert(user_uuid, challenge_id)
+        result = completedDB.insert_if_never_completed(user_uuid, challenge_id)
         print(result)
         completedDB.close()
         return result

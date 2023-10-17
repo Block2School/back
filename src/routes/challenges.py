@@ -137,7 +137,9 @@ async def get_random_challenge(r: Request):
 
 
 @router.get(
-    "/start_challenge/v2", tags=["challenges"], responses=get_random_challenge_response_v2
+    "/start_challenge/v2",
+    tags=["challenges"],
+    responses=get_random_challenge_response_v2,
 )
 async def get_random_challenge_v2(r: Request, jwt: JWT = Depends(JWTChecker())):
     Log.route_log(r, "challenges routes", "auth_route")
@@ -147,9 +149,7 @@ async def get_random_challenge_v2(r: Request, jwt: JWT = Depends(JWTChecker())):
     challenge = ChallengesService.get_random_challenge()
     challenge["inputs"] = json.loads(challenge["inputs"])
     challenge["answers"] = json.loads(challenge["answers"])
-    completed = ChallengesService.get_completed_challenge(
-        _jwt["uuid"], challenge["id"]
-    )
+    completed = ChallengesService.get_completed_challenge(_jwt["uuid"], challenge["id"])
     if completed != None:
         challenge["already_completed"] = True
         print(completed)
@@ -159,10 +159,15 @@ async def get_random_challenge_v2(r: Request, jwt: JWT = Depends(JWTChecker())):
         challenge["completed_at"] = None
     return challenge
 
+
 @router.get(
-    "/is_already_completed/{id}", tags=["challenges"], responses=get_completion_status_response
+    "/is_already_completed/{id}",
+    tags=["challenges"],
+    responses=get_completion_status_response,
 )
-async def check_completion_status(r: Request, challenge_id: int, jwt: JWT = Depends(JWTChecker())):
+async def check_completion_status(
+    r: Request, challenge_id: int, jwt: JWT = Depends(JWTChecker())
+):
     Log.route_log(r, "challenges routes", "auth_route")
 
     _jwt: dict = JWT.decodeJWT(jwt)
@@ -184,6 +189,7 @@ async def check_completion_status(r: Request, challenge_id: int, jwt: JWT = Depe
             )
         else:
             return JSONResponse({"already_completed": False, "completed_at": None})
+
 
 @router.get(
     "/challenges_input/{id}",
@@ -269,7 +275,9 @@ async def test_challenge(
 
 
 @router.post(
-    "/submit_challenge/{challenge_id}", tags=["challenges"], responses=submit_challenge_response
+    "/submit_challenge/{challenge_id}",
+    tags=["challenges"],
+    responses=submit_challenge_response,
 )
 async def submit_challenge(
     r: Request,
@@ -316,7 +324,7 @@ async def submit_challenge(
                             "expected_output": challenge["answers"][i],
                             "error_description": res["error"],
                             "error_test_index": -1,
-                            "isError": True
+                            "isError": True,
                         }
                     )
                 if res["output"] != challenge["answers"][i]:
@@ -327,7 +335,7 @@ async def submit_challenge(
                             "expected_output": challenge["answers"][i],
                             "error_description": res["error"],
                             "error_test_index": i + 1,
-                            "isError": False
+                            "isError": False,
                         }
                     )
             else:
@@ -336,6 +344,22 @@ async def submit_challenge(
                     status_code=400,
                 )
         print(_jwt["uuid"])
+        was_completed = ChallengesService.get_completed_challenge(
+            _jwt["uuid"], challenge["id"]
+        )
+        if was_completed != None:
+            return JSONResponse(
+                {
+                    "success": True,
+                    "output": last_output,
+                    "expected_output": challenge["answers"][
+                        len(challenge["answers"]) - 1
+                    ],
+                    "error_description": res["error"],
+                    "error_test_index": -1,
+                    "isError": False,
+                }
+            )
         success = ChallengesService.complete_challenge(_jwt["uuid"], challenge_id)
         if success == False:
             Log.error_log(
@@ -359,6 +383,6 @@ async def submit_challenge(
                 "expected_output": challenge["answers"][len(challenge["answers"]) - 1],
                 "error_description": res["error"],
                 "error_test_index": -1,
-                "isError": False
+                "isError": False,
             }
         )

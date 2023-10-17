@@ -29,6 +29,25 @@ class ChallengesCompleted():
             return False
         return True
 
+    def insert_if_never_completed(
+        self,
+        uuid: str,
+        challenge_id: int
+    ) -> bool:
+        # check if the user has already completed the challenge before inserting if never completed add to db otherwise do nothing
+        prepare = "SELECT `user_uuid` FROM `challenges_completed` WHERE `user_uuid` = %s AND `challenge_id` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (uuid, challenge_id))
+                result = cursor.fetchone()
+                if result is None:
+                    return self.insert(uuid, challenge_id)
+                else:
+                    return True
+        except Exception as e:
+            self.__log_error(e, "insert_if_not_exists")
+            return False
+
     def fetch_all_by_user(self, user_uuid: str) -> list:
         prepare = "SELECT `challenge_id`, `completed_at` FROM `challenges_completed` WHERE `user_uuid` = %s"
         try:
