@@ -27,6 +27,21 @@ class ChallengesLeaderboard():
             return False
         return True
 
+    def insert_with_points(
+        self,
+        user_uuid: str,
+        points: int
+    ) -> bool:
+        prepare = "INSERT INTO `challenges_leaderboard` (`user_uuid`, `points`) VALUES (%s, %s)"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (user_uuid, points))
+            self.db.commit()
+        except Exception as e:
+            self.__log_error(e, "insert_with_points")
+            return False
+        return True
+
     def fetch_all(self) -> list:
         prepare = "SELECT `user_uuid`, `points` FROM `challenges_leaderboard`"
         try:
