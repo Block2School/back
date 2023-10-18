@@ -25,4 +25,4 @@ CREATE TABLE IF NOT EXISTS `challenges_leaderboard` (
     PRIMARY KEY (`id`),
     INDEX `user_uuid_idx` (`user_uuid` ASC) VISIBLE,
     CONSTRAINT `user_uuid` FOREIGN KEY (`user_uuid`) REFERENCES `account` (`uuid`)
-);
+) DEFAULT CHARSET=utf8;

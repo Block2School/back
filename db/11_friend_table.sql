@@ -1,4 +1,4 @@
-CREATE TABLE `friends` (
+CREATE TABLE IF NOT EXISTS `friends` (
     `uuid` VARCHAR(36) NOT NULL,
     `friend_uuid` VARCHAR(36) NOT NULL,
     `status` VARCHAR(10) NOT NULL DEFAULT 'pending',
