@@ -60,6 +60,15 @@ class Log():
             logger.info(f"A user accessed to {str(request.url)}", extra=extradict)
 
     @staticmethod
+    def warning_log(where: str, what: str):
+        extradict = {
+            "tags": f"{prod}back,warning",
+            "where": where,
+            "what": what
+        }
+        logger.warning(f"{what} in {where}", extra=extradict)
+
+    @staticmethod
     def jwt_log(request: Request, uuid: str = None, admin_checker: bool = False):
         extradict = {
             "tags": f"{prod}back,login",

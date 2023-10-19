@@ -14,9 +14,14 @@ from models.response.LeaderboardByIDResponseModel import LeaderboardByIDResponse
 from models.response.LeaderboardResoonseModel import LeaderboardResponseModel
 from models.response.SubmitChallengeResponseModel import SubmitChallengeResponseModel
 from services.challenges import ChallengesService
+from services.moderation import ModerationService
 from services.utils.JWTChecker import JWTChecker
 from services.utils.Log import Log
 from services.utils.JWT import JWT
+from services.utils.CodeExecuterChecker import (
+    CodeExecuterChecker,
+    CodeExecuterCheckerResult
+)
 
 # LEADERBOARD CHALLENGE -->
 get_leaderboard_response = {200: {"model": LeaderboardResponseModel}}
@@ -215,6 +220,20 @@ async def test_challenge(
     jwt: JWT = Depends(JWTChecker()),
 ):
     Log.route_log(r, "challenges routes", "auth_route")
+
+    # perform some checks first
+    check_result: CodeExecuterCheckerResult = CodeExecuterChecker.check_code(user_submit.code, JWT.decodeJWT(jwt)['uuid'])
+    if check_result.safe == False:
+        # code is not safe, therefore ban the user
+        ModerationService.ban(JWT.decodeJWT(jwt)['uuid'], '75f5a47d-fad7-487c-8ac1-89admin43cbb', check_result.reason, -1)
+        Log.warning_log("challenges routes", check_result.logOutput)
+        return JSONResponse({
+            "success": False,
+            "output": "You were banned.\nReason: " + check_result.reason,
+            "expected_output": "",
+            "error_description": check_result.reason,
+        })
+
     challenge = ChallengesService.get_challenge(challenge_id)
     if challenge == None:
         return JSONResponse({"error": "Challenge not found"}, status_code=400)
@@ -287,6 +306,22 @@ async def submit_challenge(
 ):
     Log.route_log(r, "challenges routes", "auth_route")
     _jwt = JWT.decodeJWT(jwt)
+
+    # perform some checks first
+    check_result: CodeExecuterCheckerResult = CodeExecuterChecker.check_code(user_submit.code, _jwt['uuid'])
+    if check_result.safe == False:
+        # code is not safe, therefore ban the user
+        ModerationService.ban(_jwt['uuid'], '75f5a47d-fad7-487c-8ac1-89admin43cbb', check_result.reason, -1)
+        Log.warning_log("challenges routes", check_result.logOutput)
+        return JSONResponse({
+            "success": False,
+            "output": "You were banned.\nReason: " + check_result.reason,
+            "expected_output": "",
+            "error_description": check_result.reason,
+            "error_test_index": -1,
+            "isError": True,
+        })
+
     print(user_submit)
     challenge = ChallengesService.get_challenge(challenge_id)
     if challenge == None:
