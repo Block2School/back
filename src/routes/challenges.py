@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Form, Request
+from fastapi import APIRouter, Depends, Form, Request, WebSocket
 from fastapi.responses import JSONResponse
 
 import requests, os, json
@@ -13,6 +13,7 @@ from models.response.ErrorResponseModel import ErrorResponseModel
 from models.response.LeaderboardByIDResponseModel import LeaderboardByIDResponseModel
 from models.response.LeaderboardResoonseModel import LeaderboardResponseModel
 from models.response.SubmitChallengeResponseModel import SubmitChallengeResponseModel
+from models.response.JoinChallengeResponseModel import JoinChallengeResponseModel
 from services.challenges import ChallengesService
 from services.utils.JWTChecker import JWTChecker
 from services.utils.Log import Log
@@ -50,6 +51,11 @@ test_challenge_response = {
 
 create_challenge_response = {
     200: {"model": ChallengeResponseModel},
+    400: {"model": ErrorResponseModel},
+}
+
+join_challenge_response = {
+    200: {"model": JoinChallengeResponseModel},
     400: {"model": ErrorResponseModel},
 }
 
@@ -386,3 +392,22 @@ async def submit_challenge(
                 "isError": False,
             }
         )
+
+@router.post("/createRoom/{challengeID}/{roomID}")
+async def createRoom(challengeID: int, roomID: int):
+    success = ChallengesService.create_room(challengeID, roomID)
+    return success
+
+@router.websocket("/joinRoom/{roomID}")
+async def join_room(ws: WebSocket, roomID: int):
+    success = await ChallengesService.join_room(roomID, ws)
+    if success:
+        await ws.accept()
+        while True:
+            data = await ws.receive_text()
+    return success
+
+@router.post("/broadcast/{roomID}")
+async def broadcast(roomID: int):
+    success = await ChallengesService.broadcast(roomID, json.dumps({"message": "test"}))
+    return success

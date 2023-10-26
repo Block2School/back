@@ -1,12 +1,19 @@
 from datetime import datetime
 import json
+from typing import List
+
+from fastapi import WebSocket
 from database.Account import AccountDatabase
 from database.ChallengesLeaderboard import ChallengesLeaderboard
 from database.ChallengesCompleted import ChallengesCompleted
 from database.Challenges import Challenges
 from database.Database import Database
+from _thread import *
 
+from services.challengeRoom import ChallengeRoom
+from services.challengeUser import ChallengeUser
 class ChallengesService():
+    challengeRooms: List[ChallengeRoom] = []
 
     # Leaderboard
     @staticmethod
@@ -166,3 +173,43 @@ class ChallengesService():
         result = challengesDB.insert(inputs, answers, markdown_url, start_code, points, title, language)
         challengesDB.close()
         return result
+    
+    @staticmethod
+    def get_room(id: int) -> ChallengeRoom:
+        for room in ChallengesService.challengeRooms:
+            if room.getRoomID() == id:
+                return room
+        return None
+
+    @staticmethod
+    def create_room(challenge_id: int, room_id: int) -> bool:
+        room: ChallengeRoom = ChallengesService.get_room(room_id)
+        if room is None:
+            room = ChallengeRoom(challenge_id, room_id)
+            ChallengesService.challengeRooms.append(room)
+            # room.startRoom()
+            # print("Room started")
+            return True
+        return False
+
+    @staticmethod
+    async def join_room(room_id: int, ws: WebSocket) -> bool:
+        room: ChallengeRoom = ChallengesService.get_room(room_id)
+        if room is not None:
+            user = ChallengeUser("test", ws)
+            await room.joinRoom(ws, user)
+            return True
+        return False
+    
+    @staticmethod
+    async def broadcast(room_id: int, message: str) -> bool:
+        room: ChallengeRoom = ChallengesService.get_room(room_id)
+        if room is not None:
+            await room.broadcast(message)
+            return True
+        else:
+            return False
+        
+    @staticmethod
+    def getAllRooms() -> List[ChallengeRoom]:
+        return ChallengesService.challengeRooms
