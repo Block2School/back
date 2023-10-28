@@ -187,18 +187,23 @@ class ChallengesService():
         if room is None:
             room = ChallengeRoom(challenge_id, room_id)
             ChallengesService.challengeRooms.append(room)
-            # room.startRoom()
-            # print("Room started")
+            room.startRoom()
             return True
         return False
 
     @staticmethod
     async def join_room(room_id: int, ws: WebSocket) -> bool:
+        join = True
         room: ChallengeRoom = ChallengesService.get_room(room_id)
         if room is not None:
             user = ChallengeUser("test", ws)
-            await room.joinRoom(ws, user)
-            return True
+            for i in ChallengesService.challengeRooms:
+                for j in i._occupants:
+                    if j == None or j._userUUID == user._userUUID:
+                        join = False
+            if join == True:
+                await room.joinRoom(ws, user)
+                return True
         return False
     
     @staticmethod

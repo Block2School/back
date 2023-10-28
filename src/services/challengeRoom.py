@@ -13,7 +13,7 @@ class ChallengeRoom():
         self._maxTime: int = maxTime
         self._startTime: int = 0
         self._limitUser: int = 2
-        # self._listener: threading.Thread = threading.Thread(target=self._listenWrapper)
+        self._listener: threading.Thread = threading.Thread(target=self._listenWrapper)
         self._roomID: int = roomID
 
     def getOccupants(self) -> List[ChallengeUser]:
@@ -34,15 +34,16 @@ class ChallengeRoom():
     def getRoomID(self) -> int:
         return self._roomID
 
-    # def startRoom(self) -> None:
-    #     self._listener.start()
+    def startRoom(self) -> None:
+        self._listener.start()
 
     def _isServerFull(self) -> bool:
         return len(self._occupants) == self._limitUser
 
-    # def _listenWrapper(self) -> None:
-    #     asyncio.run(self._listen())
+    def _listenWrapper(self) -> None:
+        asyncio.run(self._listen())
 
-    # async def _listen(self) -> None:
-    #     while True:
-    #         message = await self.active_connections[0].receive_text()
+    async def _listen(self) -> None:
+        while True:
+            time.sleep(8)
+            print("check")

@@ -394,7 +394,7 @@ async def submit_challenge(
         )
 
 @router.post("/createRoom/{challengeID}/{roomID}")
-async def createRoom(challengeID: int, roomID: int):
+def createRoom(challengeID: int, roomID: int):
     success = ChallengesService.create_room(challengeID, roomID)
     return success
 
