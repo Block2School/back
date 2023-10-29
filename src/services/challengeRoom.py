@@ -15,24 +15,23 @@ class ChallengeRoom():
         self._limitUser: int = 2
         self._listener: threading.Thread = threading.Thread(target=self._listenWrapper)
         self._roomID: int = roomID
+        self._exitFlag: bool = False
 
     def getOccupants(self) -> List[ChallengeUser]:
         return self._occupants
+
+    def getRoomID(self) -> int:
+        return self._roomID
     
-    def getOccupantsAt(self, index: int) -> ChallengeUser:
-        return self._occupants[index]
+    def getExitFlag(self) -> bool:
+        return self._exitFlag
     
     async def joinRoom(self, ws: WebSocket, user: ChallengeUser) -> None:
         self._occupants.append(user)
         self.active_connections.append(ws)
 
     async def leaveRoom(self, ws: WebSocket, user: ChallengeUser) -> None:
-        try:
-            await ws.close()
-        except websockets.exceptions.ConnectionClosedOK:
-            print("La connexion WebSocket a été fermée avec succès")
-        except websockets.exceptions.ConnectionClosedError as e:
-            print(f"Erreur lors de la fermeture de la connexion : {e}")
+        await ws.close()
         self._occupants.remove(user)
         self.active_connections.remove(ws)
 
@@ -40,11 +39,12 @@ class ChallengeRoom():
         for conn in self.active_connections:
             await conn.send_text(message)
 
-    def getRoomID(self) -> int:
-        return self._roomID
-
     def startRoom(self) -> None:
         self._listener.start()
+
+    def deleteRoom(self) -> None:
+        self._exitFlag = True
+        self._listener.join()
 
     def _isServerFull(self) -> bool:
         return len(self._occupants) == self._limitUser
@@ -53,6 +53,6 @@ class ChallengeRoom():
         asyncio.run(self._listen())
 
     async def _listen(self) -> None:
-        while True:
-            time.sleep(8)
-            print("check")
+        while self._exitFlag == False:
+            #DO THINGS if we need
+            continue

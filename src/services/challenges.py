@@ -14,6 +14,7 @@ from services.challengeRoom import ChallengeRoom
 from services.challengeUser import ChallengeUser
 class ChallengesService():
     challengeRooms: List[ChallengeRoom] = []
+    stop_message: bool = False
 
     # Leaderboard
     @staticmethod
@@ -188,6 +189,14 @@ class ChallengesService():
             room = ChallengeRoom(challenge_id, room_id)
             ChallengesService.challengeRooms.append(room)
             room.startRoom()
+            return True
+        return False
+
+    @staticmethod
+    def delete_room(room_id: int) -> bool:
+        room: ChallengeRoom = ChallengesService.get_room(room_id)
+        if len(room.getOccupants()) == 0:
+            room.deleteRoom()
             return True
         return False
 

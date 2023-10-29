@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Form, Request, WebSocket
 from fastapi.responses import JSONResponse
 
-import requests, os, json
+import requests, os, json, time
 from models.input.ChallengeModel import ChallengeModel
 from models.input.ChallengeTestModel import ChallengeTestModel
 from models.response.ChallengeResponseModel import (
@@ -399,13 +399,22 @@ def createRoom(challengeID: int, roomID: int):
     success = ChallengesService.create_room(challengeID, roomID)
     return success
 
+@router.post("/deleteRoom/{roomID}")
+def delete_room(roomID: int):
+    success = ChallengesService.delete_room(roomID)
+    return success
+
 @router.websocket("/joinRoom/{roomID}")
 async def join_room(ws: WebSocket, roomID: int):
     success = await ChallengesService.join_room(roomID, ws)
+    room = ChallengesService.get_room(roomID)
     if success:
         await ws.accept()
-        # while True:
-        #     await ws.receive_text()
+        while len(room.getOccupants()) > 0:
+            try:
+                await ws.receive_text()
+            except:
+                continue
     return success
 
 @router.post("/leaveRoom/{roomID}")
