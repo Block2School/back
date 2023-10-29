@@ -14,6 +14,7 @@ from models.response.LeaderboardByIDResponseModel import LeaderboardByIDResponse
 from models.response.LeaderboardResoonseModel import LeaderboardResponseModel
 from models.response.SubmitChallengeResponseModel import SubmitChallengeResponseModel
 from models.response.JoinChallengeResponseModel import JoinChallengeResponseModel
+from models.response.LeaveChallengeRoomModel import LeaveChallengeRoomModel
 from services.challenges import ChallengesService
 from services.utils.JWTChecker import JWTChecker
 from services.utils.Log import Log
@@ -403,8 +404,19 @@ async def join_room(ws: WebSocket, roomID: int):
     success = await ChallengesService.join_room(roomID, ws)
     if success:
         await ws.accept()
-        while True:
-            data = await ws.receive_text()
+        # while True:
+        #     await ws.receive_text()
+    return success
+
+@router.post("/leaveRoom/{roomID}")
+async def leave_room(user_uuid: LeaveChallengeRoomModel, roomID: int):
+    uuid = user_uuid.user_uuid
+    users = ChallengesService.get_room(roomID).getOccupants()
+    ws = None
+    for i in range(len(users)):
+        if users[i].getUserUUID() == uuid:
+            ws = users[i].getWs()
+    success = await ChallengesService.leave_room(roomID, uuid, ws)
     return success
 
 @router.post("/broadcast/{roomID}")

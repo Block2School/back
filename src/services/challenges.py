@@ -205,7 +205,16 @@ class ChallengesService():
                 await room.joinRoom(ws, user)
                 return True
         return False
-    
+
+    @staticmethod
+    async def leave_room(room_id: int, user_id: str, ws:WebSocket) -> bool:
+        room: ChallengeRoom = ChallengesService.get_room(room_id)
+        for j in room._occupants:
+            if j.getUserUUID() == user_id:
+                await room.leaveRoom(ws, j)
+                return True
+        return False
+
     @staticmethod
     async def broadcast(room_id: int, message: str) -> bool:
         room: ChallengeRoom = ChallengesService.get_room(room_id)

@@ -19,11 +19,20 @@ class ChallengeRoom():
     def getOccupants(self) -> List[ChallengeUser]:
         return self._occupants
     
+    def getOccupantsAt(self, index: int) -> ChallengeUser:
+        return self._occupants[index]
+    
     async def joinRoom(self, ws: WebSocket, user: ChallengeUser) -> None:
         self._occupants.append(user)
         self.active_connections.append(ws)
 
-    def leaveRoom(self, ws: WebSocket, user: ChallengeUser) -> None:
+    async def leaveRoom(self, ws: WebSocket, user: ChallengeUser) -> None:
+        try:
+            await ws.close()
+        except websockets.exceptions.ConnectionClosedOK:
+            print("La connexion WebSocket a été fermée avec succès")
+        except websockets.exceptions.ConnectionClosedError as e:
+            print(f"Erreur lors de la fermeture de la connexion : {e}")
         self._occupants.remove(user)
         self.active_connections.remove(ws)
 

@@ -7,6 +7,9 @@ class ChallengeUser():
 
     def getUserUUID(self) -> str:
         return self._userUUID
+
+    def getWs(self) -> WebSocket:
+        return self.socket
     
     def send(self, message: str) -> None:
         pass
