@@ -432,3 +432,21 @@ async def leave_room(user_uuid: LeaveChallengeRoomModel, roomID: int):
 async def broadcast(roomID: int):
     success = await ChallengesService.broadcast(roomID, json.dumps({"message": "test"}))
     return success
+
+@router.get("/getAllRooms")
+async def getAllRooms():
+    rooms = ChallengesService.getAllRooms()
+    json = {
+        "rooms": []
+    }
+    for room in rooms:
+        json["rooms"].append({
+            "roomID": room.getRoomID(),
+            "challengeID": room.getChallengeID(),
+            "occupants": [],
+            "maxTime": room.getMaxTime(),
+            "limitUser": room.getLimitUser()
+        })
+        for occupant in room.getOccupants():
+            json["rooms"][room.getRoomID()]["occupants"].append(occupant.getUserUUID())
+    return json

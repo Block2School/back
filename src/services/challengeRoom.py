@@ -26,6 +26,15 @@ class ChallengeRoom():
     def getExitFlag(self) -> bool:
         return self._exitFlag
     
+    def getChallengeID(self) -> int:
+        return self._challengeID
+    
+    def getLimitUser(self) -> int:
+        return self._limitUser
+    
+    def getMaxTime(self) -> int:
+        return self._maxTime
+    
     async def joinRoom(self, ws: WebSocket, user: ChallengeUser) -> None:
         self._occupants.append(user)
         self.active_connections.append(ws)
