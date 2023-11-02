@@ -400,13 +400,13 @@ def createRoom(challengeID: int, roomID: int):
     return success
 
 @router.post("/deleteRoom/{roomID}")
-def delete_room(roomID: int):
-    success = ChallengesService.delete_room(roomID)
+async def delete_room(roomID: int):
+    success = await ChallengesService.delete_room(roomID)
     return success
 
-@router.websocket("/joinRoom/{roomID}")
-async def join_room(ws: WebSocket, roomID: int):
-    success = await ChallengesService.join_room(roomID, ws)
+@router.websocket("/joinRoom/{roomID}/{userUUID}")
+async def join_room(ws: WebSocket, roomID: int, userUUID: str):
+    success = await ChallengesService.join_room(roomID, ws, userUUID)
     room = ChallengesService.get_room(roomID)
     if success:
         await ws.accept()
@@ -414,12 +414,12 @@ async def join_room(ws: WebSocket, roomID: int):
             try:
                 await ws.receive_text()
             except:
-                continue
+                break
     return success
 
-@router.post("/leaveRoom/{roomID}")
-async def leave_room(user_uuid: LeaveChallengeRoomModel, roomID: int):
-    uuid = user_uuid.user_uuid
+@router.post("/leaveRoom/{roomID}/{user_uuid}")
+async def leave_room(user_uuid: str, roomID: int):
+    uuid = user_uuid
     users = ChallengesService.get_room(roomID).getOccupants()
     ws = None
     for i in range(len(users)):
@@ -443,10 +443,8 @@ async def getAllRooms():
         json["rooms"].append({
             "roomID": room.getRoomID(),
             "challengeID": room.getChallengeID(),
-            "occupants": [],
+            "occupants": [occupant.getUserUUID() for occupant in room.getOccupants()],
             "maxTime": room.getMaxTime(),
             "limitUser": room.getLimitUser()
         })
-        for occupant in room.getOccupants():
-            json["rooms"][room.getRoomID()]["occupants"].append(occupant.getUserUUID())
     return json

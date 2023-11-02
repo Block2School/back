@@ -188,30 +188,37 @@ class ChallengesService():
         if room is None:
             room = ChallengeRoom(challenge_id, room_id)
             ChallengesService.challengeRooms.append(room)
-            room.startRoom()
+            # room.startRoom()
             return True
         return False
 
     @staticmethod
-    def delete_room(room_id: int) -> bool:
+    async def delete_room(room_id: int) -> bool:
         room: ChallengeRoom = ChallengesService.get_room(room_id)
         if len(room.getOccupants()) == 0:
-            room.deleteRoom()
+            # room.deleteRoom()
+            ChallengesService.challengeRooms.remove(room)
+            return True
+        else :
+            for i in room.getOccupants():
+                await ChallengesService.leave_room(room_id, i.getUserUUID(), i.getWs())
+            print("user in room => ", room.getOccupants)
             return True
         return False
 
     @staticmethod
-    async def join_room(room_id: int, ws: WebSocket) -> bool:
+    async def join_room(room_id: int, ws: WebSocket, userUUID: str) -> bool:
         join = True
         room: ChallengeRoom = ChallengesService.get_room(room_id)
         if room is not None:
-            user = ChallengeUser("test", ws)
+            user = ChallengeUser(userUUID, ws)
             for i in ChallengesService.challengeRooms:
                 for j in i._occupants:
                     if j == None or j._userUUID == user._userUUID:
                         join = False
             if join == True:
                 await room.joinRoom(ws, user)
+                # await room.broadcast()
                 return True
         return False
 
