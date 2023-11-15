@@ -137,6 +137,7 @@ async def complete_tutorial(r: Request, tutorial: SubmitTutorialModel, credentia
                 "code": tutorial.source_code,
                 "language": tutorial.language,
                 "input": tuto['inputs'],
+                "id": tutorial.tutorial_id,
             }
             data = json.dumps(data)
             print(data)
