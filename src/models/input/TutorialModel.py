@@ -9,3 +9,7 @@ class TutorialModel(BaseModel):
     shouldBeCheck: bool = None
     input: str = None
     points: int = 0
+    default_language: str = None
+    image: str = None
+    short_description: str = None
+    estimated_time: str = None

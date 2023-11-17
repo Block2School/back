@@ -1,11 +1,12 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, Request
 from models.input.SubmitTutorialModel import SubmitTutorialModel
 from models.response.CategoryResponseListModel import CategoryResponseListModel
 from models.response.CompleteTutorialResponseModel import CompleteTutorialResponseModel
 from models.response.ErrorResponseModel import ErrorResponseModel
 from models.response.ScoreboardTutorialIDListModel import ScoreboardTutorialIDListModel
-from models.response.TutorialResponseListModel import TutorialResponseListModel
-from models.response.TutorialResponseModel import TutorialResponseModel
+from models.response.TutorialResponseListModel import TutorialResponseListModel, TutorialResponseListModelV2
+from models.response.TutorialResponseModel import TutorialResponseModel, TutorialResponseModelV2
 from models.response.ScoreboardTutorialMeListModel import ScoreboardTutorialMeListModel
 from models.response.SuccessByIDModel import SuccessByIDModel
 from models.response.SuccessMeModel import SuccessMeModel
@@ -22,10 +23,21 @@ from services.utils.JWTChecker import JWTChecker
 get_all_tutorials_response = {
     200: {'model': TutorialResponseListModel}
 }
+
+get_all_tutorials_responseV2 = {
+    200: {'model': TutorialResponseListModelV2}
+}
+
 get_tutorial_response = {
     200: {'model': TutorialResponseModel},
     400: {'model': ErrorResponseModel}
 }
+
+get_tutorial_responseV2 = {
+    200: {'model': TutorialResponseModelV2},
+    400: {'model': ErrorResponseModel}
+}
+
 get_all_tutorials_by_category_response = {
     200: {'model': TutorialResponseListModel}
 }
@@ -62,6 +74,40 @@ async def get_all_tutorials(r: Request):
     Log.route_log(r, "tutorial routes", "open_route")
     tutorial_list = TutorialService.get_all_tutorials()
     return JSONResponse({'data': tutorial_list})
+
+@router.get('/v2/auth/all', tags=['tutorial'], responses=get_all_tutorials_responseV2)
+async def get_all_tutorialsv2(r: Request, token: str = Depends(JWTChecker())):
+    Log.route_log(r, "tutorial routes v2", "open_route")
+    jwt = JWT.decodeJWT(token)
+    print(jwt)
+    tutorial_list = TutorialService.get_all_tutorialsV2(jwt["uuid"])
+    return JSONResponse({'data': tutorial_list})
+
+@router.get('/v2/all', tags=['tutorial'], responses=get_all_tutorials_responseV2)
+async def get_all_tutorialsv2(r: Request):
+    Log.route_log(r, "tutorial routes v2", "open_route")
+    tutorial_list = TutorialService.get_all_tutorialsV2("")
+    return JSONResponse({'data': tutorial_list})
+
+@router.get('/v2/{id}', tags=['tutorial'], responses=get_tutorial_responseV2)
+async def get_tutorialv2(r: Request, id: int):
+    Log.route_log(r, "tutorial routes v2", "open_route")
+    tutorial = TutorialService.get_tutorialV2(id, "")
+    if tutorial == None:
+        return JSONResponse({'error': 'Tutorial not found'}, status_code=400)
+    else:
+        return JSONResponse(tutorial)
+
+@router.get('/v2/auth/{id}', tags=['tutorial'], responses=get_tutorial_responseV2)
+async def get_tutorialv2(r: Request, id: int, token: str = Depends(JWTChecker())):
+    Log.route_log(r, "tutorial routes v2", "open_route")
+    jwt = JWT.decodeJWT(token)
+    print(jwt)
+    tutorial = TutorialService.get_tutorialV2(id, jwt["uuid"])
+    if tutorial == None:
+        return JSONResponse({'error': 'Tutorial not found'}, status_code=400)
+    else:
+        return JSONResponse(tutorial)
 
 @router.get('/{id}', tags=['tutorial'], responses=get_tutorial_response)
 async def get_tutorial(r: Request, id: int):
