@@ -41,6 +41,7 @@ class TutorialService():
                 , 'default_language': tutorial['default_language'], 'image': tutorial['image'], 'short_description': tutorial['short_description'], 'estimated_time': tutorial['estimated_time'], 'is_completed': False})
         else:
             tutorialDb.close()
+            completedTutorialDB.close()
             return []
 
         if completed != None and len(completed) > 0:
@@ -50,6 +51,7 @@ class TutorialService():
                         tutorial_list[i]['is_completed'] = True
 
         tutorialDb.close()
+        completedTutorialDB.close()
         return tutorial_list
 
     @staticmethod
@@ -81,6 +83,7 @@ class TutorialService():
             , 'startCode': data['start_code'], 'shouldBeCheck': data['should_be_check'], 'enabled': data['enabled'], 'points': data['points'], 'inputs': data['input']
             , 'default_language': data['default_language'], 'image': data['image'], 'short_description': data['short_description'], 'estimated_time': data['estimated_time'], 'is_completed': False}
         tutorialDb.close()
+        completedTutorialDB.close()
         return None
 
     @staticmethod

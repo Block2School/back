@@ -68,3 +68,17 @@ class CompletedTutorials():
             self.__log_error(e, "get_user_last_10_completed_tutorials")
             return None
         return result
+
+    def get_user_n_completed_tutorials(self, uuid: str, n: int) -> list:
+        prepare = "SELECT `completed_tutorials`.`tutorial_id`, `tutorials`.`title` FROM `completed_tutorials` JOIN `tutorials` ON `completed_tutorials`.`tutorial_id` = `tutorials`.`id` WHERE `user_id` = %s ORDER BY `completed_at` DESC LIMIT %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (uuid, n))
+                result = cursor.fetchall()
+        except Exception as e:
+            self.__log_error(e, "get_user_last_n_completed_tutorials")
+            return None
+        return result
+
+    def close(self) -> None:
+        self.db.close()
