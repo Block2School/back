@@ -420,7 +420,6 @@ async def join_room(ws: WebSocket, roomID: int, userUUID: str):
             "type": "room info",
             "message": {
                 "roomID": room.getRoomID(),
-                "challengeID": room.getChallengeID(),
                 "occupants": [occupant.getUserUUID() for occupant in room.getOccupants()],
                 "remainingTime": room.getRemainingTime(),
                 "limitUser": room.getLimitUser()
@@ -458,7 +457,6 @@ async def getAllRooms():
     for room in rooms:
         json["rooms"].append({
             "roomID": room.getRoomID(),
-            "challengeID": room.getChallengeID(),
             "occupants": [occupant.getUserUUID() for occupant in room.getOccupants()],
             "maxTime": room.getMaxTime(),
             "limitUser": room.getLimitUser()
