@@ -183,11 +183,12 @@ class ChallengesService():
         return None
 
     @staticmethod
-    def create_room(challenge_id: int, room_id: int) -> bool:
+    def create_room(room_id: int, userID: str) -> bool:
         room: ChallengeRoom = ChallengesService.get_room(room_id)
         if room is None:
-            room = ChallengeRoom(challenge_id, room_id)
+            room = ChallengeRoom(room_id)
             ChallengesService.challengeRooms.append(room)
+            room.setMaster(userID)
             # room.startRoom()
             return True
         return False
@@ -195,14 +196,16 @@ class ChallengesService():
     @staticmethod
     async def delete_room(room_id: int) -> bool:
         room: ChallengeRoom = ChallengesService.get_room(room_id)
-        if len(room.getOccupants()) == 0:
-            # room.deleteRoom()
+        if room is None:
+            return False
+        users = room.getOccupants()
+        if users is None:
             ChallengesService.challengeRooms.remove(room)
             return True
         else :
-            for i in room.getOccupants():
+            for i in users:
                 await ChallengesService.leave_room(room_id, i.getUserUUID(), i.getWs())
-            print("user in room => ", room.getOccupants)
+            ChallengesService.challengeRooms.remove(room)
             return True
         return False
 

@@ -394,9 +394,9 @@ async def submit_challenge(
             }
         )
 
-@router.post("/createRoom/{challengeID}/{roomID}")
-def createRoom(challengeID: int, roomID: int):
-    success = ChallengesService.create_room(challengeID, roomID)
+@router.post("/createRoom/{roomID}/{userID}")
+def createRoom(roomID: int, userID: str):
+    success = ChallengesService.create_room(roomID, userID)
     return success
 
 @router.post("/deleteRoom/{roomID}")
@@ -435,7 +435,12 @@ async def join_room(ws: WebSocket, roomID: int, userUUID: str):
 @router.post("/leaveRoom/{roomID}/{user_uuid}")
 async def leave_room(user_uuid: str, roomID: int):
     uuid = user_uuid
-    users = ChallengesService.get_room(roomID).getOccupants()
+    room = ChallengesService.get_room(roomID)
+    if room is None:
+        return False
+    users = room.getOccupants()
+    if users is None:
+        return False
     ws = None
     for i in range(len(users)):
         if users[i].getUserUUID() == uuid:
@@ -461,4 +466,17 @@ async def getAllRooms():
             "maxTime": room.getMaxTime(),
             "limitUser": room.getLimitUser()
         })
+    return json
+
+@router.get("/getRoomById/{roomID}")
+async def getRoomById(roomID: int):
+    room = ChallengesService.get_room(roomID)
+    if room == None:
+        return {}
+    json = {
+        "master": room.getMaster(),
+        "occupants": [occupant.getUserUUID() for occupant in room.getOccupants()],
+        "maxTime": room.getMaxTime(),
+        "limitUser": room.getLimitUser()
+    }
     return json
