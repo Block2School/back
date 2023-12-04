@@ -218,7 +218,6 @@ class ChallengesService():
                         join = False
             if join == True:
                 await room.joinRoom(ws, user)
-                # await room.broadcast()
                 return True
         return False
 

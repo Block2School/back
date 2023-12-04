@@ -409,7 +409,23 @@ async def join_room(ws: WebSocket, roomID: int, userUUID: str):
     success = await ChallengesService.join_room(roomID, ws, userUUID)
     room = ChallengesService.get_room(roomID)
     if success:
+        await room.broadcast(
+            json.dumps({
+                "type": "new user joined",
+                "message": userUUID,
+            })
+        )
         await ws.accept()
+        await ws.send_text(json.dumps({
+            "type": "room info",
+            "message": {
+                "roomID": room.getRoomID(),
+                "challengeID": room.getChallengeID(),
+                "occupants": [occupant.getUserUUID() for occupant in room.getOccupants()],
+                "remainingTime": room.getRemainingTime(),
+                "limitUser": room.getLimitUser()
+            }
+        }))
         while len(room.getOccupants()) > 0:
             try:
                 await ws.receive_text()

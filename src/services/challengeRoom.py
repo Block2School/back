@@ -1,21 +1,24 @@
 import time
 from fastapi import WebSocket
+from starlette.websockets import WebSocketState
 from typing import List
 from services.challengeUser import ChallengeUser
 import threading
 import asyncio
+import time
 
 class ChallengeRoom():
-    def __init__(self, challengeID: int, roomID: int, maxTime: int = 30) -> None:
-        self._challengeID: int = challengeID
+    def __init__(self,roomID: int, maxTime: int = 30) -> None:
         self._occupants: List[ChallengeUser] = []
         self.active_connections: List[WebSocket] = []
         self._maxTime: int = maxTime
-        self._startTime: int = 0
         self._limitUser: int = 2
-        # self._listener: threading.Thread = threading.Thread(target=self._listenWrapper)
         self._roomID: int = roomID
         self._exitFlag: bool = False
+        self._remainingTime: int = maxTime
+        self._thread: threading.Thread = threading.Thread(target=self.startTimer)
+        self._thread.start()
+        self._master: str = ""
 
     def getOccupants(self) -> List[ChallengeUser]:
         return self._occupants
@@ -26,14 +29,25 @@ class ChallengeRoom():
     def getExitFlag(self) -> bool:
         return self._exitFlag
     
-    def getChallengeID(self) -> int:
-        return self._challengeID
-    
     def getLimitUser(self) -> int:
         return self._limitUser
     
+    def getRemainingTime(self) -> int:
+        return self._remainingTime
+    
     def getMaxTime(self) -> int:
         return self._maxTime
+    
+    def getMaster(self) -> str:
+        return self._master
+    
+    def setMaster(self, master: str) -> None:
+        self._master = master
+    
+    def startTimer(self) -> None:
+        while self._remainingTime >= 0:
+            time.sleep(1)
+            self._remainingTime = self._remainingTime - 1
     
     async def joinRoom(self, ws: WebSocket, user: ChallengeUser) -> None:
         self._occupants.append(user)
@@ -45,23 +59,9 @@ class ChallengeRoom():
         self.active_connections.remove(ws)
 
     async def broadcast(self, message: str) -> None:
-        for conn in self.active_connections:
-            await conn.send_text(message)
-
-    # def startRoom(self) -> None:
-        # self._listener.start()
-
-    # def deleteRoom(self) -> None:
-        # self._exitFlag = True
-        # self._listener.join()
+        for idx, conn in enumerate(self.active_connections):
+            if conn.client_state == WebSocketState.CONNECTED:
+                await conn.send_text(message)
 
     def _isServerFull(self) -> bool:
         return len(self._occupants) == self._limitUser
-
-    # def _listenWrapper(self) -> None:
-        # asyncio.run(self._listen())
-
-    # async def _listen(self) -> None:
-        # while self._exitFlag == False:
-            # DO THINGS if we need
-            # continue
