@@ -112,7 +112,6 @@ def test_article_get_all():
 #   user.encrypted_wallet = "admin"
 #   user = user.json()
 #   admin = await login(user)
-#   print(admin.JSON())
 #   url = str("/article/delete/?dependencies=" + admin)
 #   response = client.post(url,
 #     json={

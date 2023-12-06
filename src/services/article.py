@@ -10,6 +10,9 @@ import base64
 class ArticleService():
     @staticmethod
     def get_all_articles() -> list:
+        """
+        Récupérer la liste de tous les articles
+        """
         articlesDb: Articles = Database.get_table("articles")
         articles = articlesDb.fetchall()
         for i in range(0, len(articles)):
@@ -20,6 +23,9 @@ class ArticleService():
 
     @staticmethod
     def get_article(id: int) -> dict:
+        """
+        Récupérer un article par son ID
+        """
         articlesDb: Articles = Database.get_table("articles")
         article = articlesDb.fetch(id)
         article['publicationDate'] = datetime.timestamp(article['publicationDate'])
@@ -29,6 +35,9 @@ class ArticleService():
 
     @staticmethod
     def create_article(title: str, markdown_url: str, author: str, short_description: str) -> bool:
+        """
+        Créer un article
+        """
         articlesDb: Articles = Database.get_table("articles")
         success = articlesDb.insert(title, markdown_url, short_description, author)
         articlesDb.close()
@@ -36,6 +45,9 @@ class ArticleService():
 
     @staticmethod
     def update_article(id: int, title: str, markdown_url: str, short_description: str) -> bool:
+        """
+        Modifier un article
+        """
         articlesDb: Articles = Database.get_table("articles")
         result = articlesDb.update(id, title, markdown_url, short_description)
         articlesDb.close()
@@ -43,6 +55,9 @@ class ArticleService():
 
     @staticmethod
     def delete_article(id: int) -> bool:
+        """
+        Supprimer un article
+        """
         articlesDb: Articles = Database.get_table("articles")
         result = articlesDb.remove(id)
         articlesDb.close()
@@ -50,6 +65,9 @@ class ArticleService():
 
     @staticmethod
     def create_markdown(filename: str, content: str) -> Dict[bool, str]:
+        """
+        Créer un markdown sur github
+        """
         headers = {
             "Authorization": f"Bearer {os.getenv('GITHUB_API_TOKEN')}",
             "Content-Type": "application/json"
@@ -61,7 +79,6 @@ class ArticleService():
         try:
             r = requests.put(f'https://api.github.com/repos/Block2School/Blog/contents/{filename}.md', data=json.dumps(data), headers=headers)
             r = r.json()
-            print(f'Github response: {r}')
             return {'success': True, 'url': r['content']['download_url']}
         except Exception as e:
             print(f'error: {e}')
@@ -69,6 +86,9 @@ class ArticleService():
 
     @staticmethod
     def get_markdown_list() -> Dict[bool, list]:
+        """
+        Récupérer la liste des markdowns depuis github
+        """
         headers = {
             "Authorization": f"Bearer {os.getenv('GITHUB_API_TOKEN')}",
             "Content-Type": "application/json"

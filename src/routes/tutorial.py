@@ -58,64 +58,91 @@ get_success_me_response = {
 router = APIRouter(prefix='/tuto')
 
 @router.get('/all', tags=['tutorial'], responses=get_all_tutorials_response)
-async def get_all_tutorials(r: Request):
+async def get_all_tutorials(r: Request) -> JSONResponse:
+    """
+    Récupérer tous les tutoriaux
+    """
     Log.route_log(r, "tutorial routes", "open_route")
     tutorial_list = TutorialService.get_all_tutorials()
-    return JSONResponse({'data': tutorial_list})
+    return JSONResponse({'data': tutorial_list}, status_code=200)
 
 @router.get('/{id}', tags=['tutorial'], responses=get_tutorial_response)
-async def get_tutorial(r: Request, id: int):
+async def get_tutorial(r: Request, id: int) -> JSONResponse:
+    """
+    Récupérer un tutoriel par son ID
+    """
     Log.route_log(r, "tutorial routes", "open_route")
     tutorial = TutorialService.get_tutorial(id)
     if tutorial == None:
         return JSONResponse({'error': 'Tutorial not found'}, status_code=400)
     else:
-        return JSONResponse(tutorial)
+        return JSONResponse(tutorial, status_code=200)
 
 @router.get('/category/all', tags=['tutorial'], responses=get_category_list_response)
-async def get_all_categories(r: Request):
+async def get_all_categories(r: Request) -> JSONResponse:
+    """
+    Récupérer toutes les catégories
+    """
     Log.route_log(r, "tutorial routes", "open_route")
     categories = TutorialService.get_all_categories()
-    return JSONResponse({'data': categories})
+    return JSONResponse({'data': categories}, status_code=200)
 
 @router.get('/category/{category}', tags=['tutorial'], responses=get_all_tutorials_by_category_response)
-async def get_all_tutorials_by_category(r: Request, category: str):
+async def get_all_tutorials_by_category(r: Request, category: str) -> JSONResponse:
+    """
+    Récupérer tous les tutoriaux par catégorie
+    """
     Log.route_log(r, "tutorial routes", "open_route")
     tutorial_list = TutorialService.get_all_tutorials_by_category(category)
-    return JSONResponse({'data': tutorial_list})
+    return JSONResponse({'data': tutorial_list}, status_code=200)
 
 @router.get('/scoreboard/id/{id}', tags=['tutorial'], responses=get_scoreboard_tutorial_response)
-async def get_scoreboard_tutorial(r: Request, id: int):
+async def get_scoreboard_tutorial(r: Request, id: int) -> JSONResponse:
+    """
+    Récupérer le scoreboard du tutoriel par son ID
+    """
     Log.route_log(r, "tutorial routes", "open_route")
     scoreboard_tutorial = TutorialService.get_scoreboard_tutorial_id(id)
-    return JSONResponse({'data': scoreboard_tutorial})
+    return JSONResponse({'data': scoreboard_tutorial}, status_code=200)
 
 @router.get('/success/id/{id}', tags=['tutorial'], responses=get_success_by_id)
-async def get_success_percentage_tutorial(r: Request, id: int):
+async def get_success_percentage_tutorial(r: Request, id: int) -> JSONResponse:
+    """
+    Récupérer le pourcentage de complétion du tutoriel par son ID
+    """
     Log.route_log(r, "tutorial routes", "open_route")
     percentage = TutorialService.get_percentage_tutorial_id(id)
 
-    return JSONResponse({'percentage': percentage})
+    return JSONResponse({'percentage': percentage}, status_code=200)
 
 @router.get('/scoreboard/me', tags=['tutorial'], dependencies=[Depends(JWTChecker())], responses=get_scoreboard_me_tutorial_response)
-async def get_user_all_score(r: Request, credentials: str = Depends(JWTChecker())):
+async def get_user_all_score(r: Request, credentials: str = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupérer tous les score de l'utilisateur connecté
+    """
     jwt = JWT.decodeJWT(credentials)
     Log.route_log(r, "tutorial routes", jwt["uuid"])
     scoreboard = TutorialService.get_user_scoreboard(jwt['uuid'])
 
-    return JSONResponse({'data': scoreboard})
+    return JSONResponse({'data': scoreboard}, status_code=200)
 
 @router.get('/success/me', tags=['tutorial'], dependencies=[Depends(JWTChecker())], responses=get_success_me_response)
-async def get_user_success_tutorials(r: Request, credentials: str = Depends(JWTChecker())):
+async def get_user_success_tutorials(r: Request, credentials: str = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupérer le nombre de tutoriaux total complétés de l'utilisateur
+    """
     jwt = JWT.decodeJWT(credentials)
     Log.route_log(r, "tutorial routes", jwt["uuid"])
     success = TutorialService.get_user_success(jwt['uuid'])
     nb_tutorials = TutorialService.get_total_number_tutorials()
 
-    return JSONResponse({'data': success, 'total_completion': (len(success) / nb_tutorials) * 100})
+    return JSONResponse({'data': success, 'total_completion': (len(success) / nb_tutorials) * 100}, status_code=200)
 
 @router.post('/complete', tags=['tutorial'], dependencies=[Depends(JWTChecker())], responses=submit_tutorial_responses)
-async def complete_tutorial(r: Request, tutorial: SubmitTutorialModel, credentials: str = Depends(JWTChecker())):
+async def complete_tutorial(r: Request, tutorial: SubmitTutorialModel, credentials: str = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Compléter un tutoriel
+    """
     userTutorialScoreDb: UserTutorialScore = Database.get_table("user_tutorial_score")
     jwt = JWT.decodeJWT(credentials)
     Log.route_log(r, "tutorial routes", jwt["uuid"])
@@ -125,14 +152,10 @@ async def complete_tutorial(r: Request, tutorial: SubmitTutorialModel, credentia
     if (tutorial.language not in available_language):
         return JSONResponse({'error': 'Unsupported language'}, status_code=400)
 
-    print(tutorial.source_code + " || " + tutorial.language)
     if tutorial.source_code != None:
         tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
-        print('exec => ', tutorial.exec)
-        print('tuto.inputs => "', tuto['inputs'], '"')
         
         if (tutorial.exec == True):
-            print(os.getenv('CODE_EXEC_URL') + '/execute')
             data = {
                 "code": tutorial.source_code,
                 "language": tutorial.language,
@@ -140,7 +163,6 @@ async def complete_tutorial(r: Request, tutorial: SubmitTutorialModel, credentia
                 "id": tutorial.tutorial_id,
             }
             data = json.dumps(data)
-            print(data)
             # {'code': "const helloWorld = () => {\n    console.log('hello world');\n};", 'language': 'js'}
             r = requests.post(os.getenv('CODE_EXEC_URL') + '/execute', data=data,
                 headers={
@@ -150,49 +172,31 @@ async def complete_tutorial(r: Request, tutorial: SubmitTutorialModel, credentia
             r.raise_for_status()
             if r.status_code == 200:
                 r = r.json()
-                print('r => ', r['output'])
-            print("ID => " + str(tutorial.tutorial_id))
             # tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
             # tuto['answer'] += '\n'
-            # print("answer == " + tuto["answer"] + " || output == " + r["output"] + " || tutorialid == " + str(tutorial.tutorial_id))
-            print("answer == '" + tuto["answer"] + "' || output == '" + r["output"] + "'")
             if tuto['answer'] == r['output']:
                 check = True
             # check = False
         else:
             check = False
             tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
-        # print(((check == True or tuto['answer'] == tutorial.source_code)))
         if (tuto != None and (check == True or tuto['answer'] == tutorial.source_code)):
             result = TutorialService.validate_tutorial(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, tutorial.lines)
-            print("result => ", result)
             # FETCH si None insert otherwise update
             fetch = userTutorialScoreDb.fetch(jwt['uuid'], tutorial.tutorial_id, tutorial.language)
             lang_diff = userTutorialScoreDb.fetch_all_score_of_user_by_tutorial_id(jwt['uuid'], tutorial.tutorial_id)
             langlist = []
-            print(lang_diff)
             for i in range(len(lang_diff)):
                 langlist.append(lang_diff[i]['language'])
-                print(lang_diff[i]['language'])
-            print(langlist)
             if (fetch == None): # ou tuto pas validé dans le language ?
-                print("check")
-                newScore = userTutorialScoreDb.insert(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, tutorial.lines)
-                print(newScore)
+                userTutorialScoreDb.insert(jwt['uuid'], tutorial.tutorial_id, tutorial.language, tutorial.characters, tutorial.lines)
             else:
                 if (tutorial.characters < fetch['characters'] and tutorial.lines < fetch['lines']):
-                    print("both")
-                    print("lang : " + tutorial.language)
-                    print("Complete ")
-                    print("Characters" + str(tutorial.characters) + " || " + str(fetch['characters']))
-                    print("Lines" + str(tutorial.lines) + " || " + str(fetch['lines']))
-                    updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, 100, tutorial.language, tutorial.characters, tutorial.lines)
+                    userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, 100, tutorial.language, tutorial.characters, tutorial.lines)
                 elif (tutorial.characters < fetch['characters'] and tutorial.lines >= fetch['lines']):
-                    print("characters") 
-                    updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, 100, tutorial.language, tutorial.characters, -1)
+                    userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, 100, tutorial.language, tutorial.characters, -1)
                 elif (tutorial.characters >= fetch['characters'] and tutorial.lines < fetch['lines']):
-                    print("lines")
-                    updateScore = userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, 100, tutorial.language, -1, tutorial.lines)
+                    userTutorialScoreDb.update(jwt['uuid'], tutorial.tutorial_id, 100, tutorial.language, -1, tutorial.lines)
             userTutorialScoreDb.close()
             return JSONResponse({'is_correct': True, 'total_completions': result, 'error': None, "received": r['output']})
         else:

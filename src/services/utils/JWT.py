@@ -6,6 +6,9 @@ import os
 class JWT():
   @staticmethod
   def signJWT(uuid: str) -> Dict[str, str]:
+    """
+    Créer un JWT à partir de l'UUID de l'utilisateur
+    """
     payload = {
       "uuid": uuid,
       "expires": time() + 7200
@@ -16,6 +19,9 @@ class JWT():
 
   @staticmethod
   def decodeJWT(token: str) -> dict:
+    """
+    Vérifier le JWT reçu pour obtenir l'UUID de l'utilisateur et vérifier que le token n'est pas expiré.
+    """
     try:
       decoded_token = jwt.decode(token, os.getenv('JWT_SECRET'), algorithms=os.getenv('JWT_ALGORITHM'))
       if decoded_token.get('expires') >= time():

@@ -12,6 +12,9 @@ prod = "production," if os.getenv("MODE") == "production" else "local,"
 class Log():
     @staticmethod
     def login_log(req: Request, wallet: str, failed: bool = True, banned: bool = False):
+        """
+        Créer un log de connexion si un utilisateur se connecte ou essaye de se connecter à un compte.
+        """
         extradict = {
             "wallet": wallet,
             "tags": f"{prod}back,login",
@@ -26,6 +29,9 @@ class Log():
 
     @staticmethod
     def register_log(req: Request, wallet: str):
+        """
+        Créer un log pour l'inscription d'un utilisateur
+        """
         extradict = {
             "wallet": wallet,
             "tags": f"{prod}back,login",
@@ -35,6 +41,9 @@ class Log():
 
     @staticmethod
     def error_log(tag: str, near: str, function: str, exception: str = None, is_critical: bool = False):
+        """
+        Créer un log d'erreur si un problème survient sur le serveur.
+        """
         extradict = {
             "tags": f"{prod}back,error,{tag}",
             "function": function,
@@ -47,6 +56,9 @@ class Log():
 
     @staticmethod
     def route_log(request: Request, tag: str, uuid: str):
+        """
+        Créer un log d'accès à une route sur le serveur.
+        """
         extradict = {
             "tags": f"{prod}back,routing,{tag}",
             "uuid": uuid if uuid != "open_route" else None,
@@ -61,6 +73,9 @@ class Log():
 
     @staticmethod
     def jwt_log(request: Request, uuid: str = None, admin_checker: bool = False):
+        """
+        Créer un log en cas de tentative d'accès à une route protégée.
+        """
         extradict = {
             "tags": f"{prod}back,login",
             "uuid": uuid,

@@ -1,19 +1,16 @@
-from fastapi import APIRouter, Depends
-from services.utils.JWT import JWT
-from services.utils.JWTChecker import JWTChecker
+from fastapi import APIRouter, Request
 from starlette.responses import JSONResponse
 from services.faq import FaqService
-from models.response.ProfileResponseModel import ProfileResponseModel
-from models.input.ProfileModel import ProfileModel
-from models.response.AddDiscordAuthenticatorResponseModel import AddDiscordAuthenticatorResponseModel
-from models.input.AddDiscordAuthenticatorModel import AddDiscordAuthenticatorModel
-from models.input.NeedWordlistModel import NeedWordListModel
-from models.response.SuccessResponseModel import SuccessResponseModel
 from models.response.FaqListResponseModel import FaqListResponseModel
+from services.utils.Log import Log
 
 router = APIRouter(prefix='/faq')
 
 @router.get('/all', tags=['faq'], responses={200: {"model": FaqListResponseModel}})
-async def get_all_faq():
+async def get_all_faq(r: Request) -> JSONResponse:
+    """
+    Récupération de la FAQ
+    """
+    Log.route_log(r, "FAQ", "open_route")
     response = FaqService.get_all_faq()
-    return JSONResponse(response)
+    return JSONResponse(response, status_code=200)
