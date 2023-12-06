@@ -24,10 +24,7 @@ class UserTutorialScore():
         return
 
     def update(self, uuid: str, tutorial_id: int, total_completions:int, language: str, characters: int = -1, lines: int = -1) -> dict:
-        print("enter")
-        print("char => " + str(characters) + " || lines => " + str(lines))
         if characters != -1 and lines != -1:
-            print(uuid, tutorial_id, language)
             prepare = "UPDATE `user_tutorial_score` SET `total_completions` = %s, `language` = %s, `characters` = %s, `lines` = %s WHERE `uuid` = %s AND `tutorial_id` = %s"
             try:
                 with self.db.cursor() as cursor:
@@ -38,7 +35,6 @@ class UserTutorialScore():
                 return None
             return {'uuid': uuid, 'tutorial_id': tutorial_id, "total_completions": total_completions, 'language': language, 'characters': characters, 'lines': lines}
         elif characters != -1:
-            print("char")
             prepare = "UPDATE `user_tutorial_score` SET `total_completions` = %s,`characters` = %s WHERE `uuid` = %s AND `tutorial_id` = %s"
             try:
                 with self.db.cursor() as cursor:
@@ -49,7 +45,6 @@ class UserTutorialScore():
                 return None
             return {'uuid': uuid, 'tutorial_id': tutorial_id, "total_completions": total_completions, 'language': language, 'characters': characters}
         elif lines != -1:
-            print("line")
             prepare = "UPDATE `user_tutorial_score` SET `total_completions` = %s, `lines` = %s WHERE `uuid` = %s AND `tutorial_id` = %s"
             try:
                 with self.db.cursor() as cursor:

@@ -11,6 +11,9 @@ import pyotp
 class LoginService():
     @staticmethod
     def check_account(encrypted_wallet: str) -> list:
+        """
+        Vérifier si le compte existe sur le serveur
+        """
         accountDb: AccountDatabase = Database.get_table("account")
         wallet_hash = WalletHash.wallet_hash(encrypted_wallet)
         result = accountDb.login(wallet_hash)
@@ -22,6 +25,9 @@ class LoginService():
 
     @staticmethod
     def register(wallet_hash: str, wallet: str) -> str:
+        """
+        Inscription du compte sur le serveur
+        """
         accountDb: AccountDatabase = Database.get_table("account")
         accountDetailDb: AccountDetails = Database.get_table("account_details")
         user_uuid = uuid.uuid4()
@@ -37,6 +43,9 @@ class LoginService():
 
     @staticmethod
     def login(user_uuid: str, token: str = None) -> str:
+        """
+        Connexion de l'utilisateur sur le serveur
+        """
         accountDb: AccountDatabase = Database.get_table("account")
         if token == None:
             jwt = JWT.signJWT(user_uuid)
@@ -55,7 +64,6 @@ class LoginService():
                     return None
             else:
                 try:
-                    print(account['qr_secret'])
                     totp = pyotp.TOTP(account['qr_secret'])
                     if totp.verify(token):
                         jwt = JWT.signJWT(user_uuid)
@@ -70,11 +78,17 @@ class LoginService():
 
     @staticmethod
     def create_refresh_token(access_token: str) -> str:
+        """
+        Créer un refresh token pour le token JWT
+        """
         refresh_token = RefreshToken.signRefreshToken(access_token)
         return refresh_token
 
     @staticmethod
     def is_banned(user_uuid: str) -> dict:
+        """
+        Vérifie si l'utilisateur est banni ou non de la plateforme
+        """
         accountDb: AccountDatabase = Database.get_table("account")
         accountPunishmentDb: AccountPunishment = Database.get_table("account_punishment")
         account = accountDb.fetch(user_uuid)
@@ -112,6 +126,9 @@ class LoginService():
 
     @staticmethod
     def refresh_token(refresh_token: str) -> dict:
+        """
+        Créer un nouveau token JWT à partir du refresh token
+        """
         user = RefreshToken.decodeRefreshToken(refresh_token)
         if user != None:
             jwt = JWT.signJWT(user['uuid'])

@@ -23,7 +23,6 @@ async def test_is_admin():
       admin = await login(user)
       access_token = json.loads(admin.body.decode('utf-8')).get("access_token")
     except Exception as err:
-      print("exept")
       Exception(err)
 
     # Envoyer une requête PATCH à la route /profile avec le jeton d'accès et les données du profil
@@ -50,7 +49,6 @@ async def test_get_all_user():
       admin = await login(user)
       access_token = json.loads(admin.body.decode('utf-8')).get("access_token")
     except Exception as err:
-      print("exept")
       Exception(err)
 
     # Envoyer une requête PATCH à la route /profile avec le jeton d'accès et les données du profil

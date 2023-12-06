@@ -1,4 +1,3 @@
-from urllib import response
 from datetime import datetime
 from database.Database import Database
 from database.AccountDetails import AccountDetails
@@ -10,6 +9,9 @@ import pyotp
 class UserService():
     @staticmethod
     def get_profile(uuid: str) -> dict:
+        """
+        Récupérer le profil d'un utilisateur
+        """
         accountDetailDb: AccountDetails = Database.get_table("account_details")
         accountDb: AccountDatabase = Database.get_table("account")
         response = accountDetailDb.fetch(uuid)
@@ -31,6 +33,9 @@ class UserService():
 
     @staticmethod
     def update_profile(uuid: str, username: str, email: str, description: str, twitter: str, youtube: str, birthdate: int, private: str) -> bool:
+        """
+        Modifier le profil d'un utilisateur
+        """
         accountDetailDb: AccountDetails = Database.get_table("account_details")
         profile = accountDetailDb.fetch(uuid)
         if username != None:
@@ -45,7 +50,6 @@ class UserService():
             profile['youtube'] = youtube
         if birthdate != None:
             profile['birthdate'] = datetime.fromtimestamp(birthdate)
-            print(birthdate)
         if private != None:
             if private == "public" or private == "private" or private == "friends":
                 profile['private'] = private
@@ -55,6 +59,9 @@ class UserService():
 
     @staticmethod
     def activate_authenticator(uuid: str) -> str:
+        """
+        Activer la double authentification
+        """
         accountDb: AccountDatabase = Database.get_table("account")
         account = accountDb.fetch(uuid)
         if account['authenticator_revoke_list'] == None:
@@ -68,6 +75,9 @@ class UserService():
 
     @staticmethod
     def get_user_privacy(uuid: str, name: str) -> str:
+        """
+        Récupérer le profil d'un utilisateur (en vérifiant si l'utilisateur est autorisé)
+        """
         accountDb: AccountDetails = Database.get_table("account_details")
         privacy = accountDb.fetch_privacy(name)
         if privacy != None:
@@ -94,6 +104,9 @@ class UserService():
 
     @staticmethod
     def add_totp(uuid: str, wordlist: str) -> str:
+        """
+        Ajouter la double authentification TOTP
+        """
         accountDb: AccountDatabase = Database.get_table("account")
         accountDetailsDb: AccountDetails = Database.get_table("account_details")
         account = accountDb.fetch(uuid)
@@ -116,6 +129,9 @@ class UserService():
 
     @staticmethod
     def remove_totp(uuid: str, wordlist: str) -> bool:
+        """
+        Supprimer la double authentification TOTP
+        """
         accountDb: AccountDatabase = Database.get_table("account")
         account = accountDb.fetch(uuid)
         if account['qr_secret'] == None:
@@ -128,10 +144,13 @@ class UserService():
 
     @staticmethod
     def add_discord_tag(uuid: str, discord_tag: str, wordlist: str = None) -> bool:
+        """
+        @deprecated
+
+        Ajouter un tag discord pour l'utilisateur pour la double authentification discord
+        """
         accountDb: AccountDatabase = Database.get_table("account")
         account = accountDb.fetch(uuid)
-        print(account['authenticator_revoke_list'])
-        print(wordlist)
         if account['discord_tag'] == None and account['qr_secret'] == None:
             if account['authenticator_revoke_list'] != None: # Need to have the wordlist to create the authenticator
                 if wordlist != None:
@@ -155,6 +174,11 @@ class UserService():
 
     @staticmethod
     def remove_discord_tag(uuid: str, wordlist: str) -> bool:
+        """
+        @deprecated
+
+        Supprimer le tag discord d'un utilisateur utilisé pour la double authentification
+        """
         accountDb: AccountDatabase = Database.get_table("account")
         account = accountDb.fetch(uuid)
         if account['discord_tag'] != None:
@@ -171,6 +195,9 @@ class UserService():
 
     @staticmethod
     def add_friend(uuid: str, uuid_friend: str) -> str:
+        """
+        Ajouter un ami
+        """
         friendsDb: Friends = Database.get_table("friends")
         if uuid == uuid_friend:
             friendsDb.close()
@@ -198,6 +225,9 @@ class UserService():
 
     @staticmethod
     def remove_friend(uuid: str, uuid_friend: str) -> bool:
+        """
+        Supprimer un ami
+        """
         friendsDb: Friends = Database.get_table("friends")
         if uuid == uuid_friend:
             friendsDb.close()
@@ -215,6 +245,9 @@ class UserService():
 
     @staticmethod
     def get_friend_list(uuid: str) -> list:
+        """
+        Récupérer la liste d'amis de l'utilisateur
+        """
         friendsDb: Friends = Database.get_table("friends")
         detailsDb: AccountDetails = Database.get_table("account_details")
         friends = friendsDb.fetchall(uuid)
@@ -227,6 +260,9 @@ class UserService():
 
     @staticmethod
     def search_user(user: str, page: int, offset: int) -> dict:
+        """
+        Rechercher un utilisateur par son nom.
+        """
         accountDb: AccountDetails = Database.get_table("account_details")
         if page < 1 or offset < 1:
             return None

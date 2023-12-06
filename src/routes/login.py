@@ -23,7 +23,10 @@ refresh_responses = {
 }
 
 @router.post("/login", tags=['user'], responses=login_responses)
-async def login(req: Request, login_model: LoginModel):
+async def login(req: Request, login_model: LoginModel) -> JSONResponse:
+    """
+    Connexion au serveur
+    """
     Log.route_log(req, "login routes", "open_route")
     if login_model.wallet_address != None and login_model.encrypted_wallet != None:
         response = LoginService.check_account(login_model.encrypted_wallet)
@@ -44,14 +47,14 @@ async def login(req: Request, login_model: LoginModel):
                 access_token = LoginService.login(response[1])
                 refresh_token = LoginService.create_refresh_token(access_token)
                 Log.login_log(req, login_model.wallet_address, False)
-                return JSONResponse({"access_token": access_token, "token_type": 'Bearer', "refresh_token": refresh_token})
+                return JSONResponse({"access_token": access_token, "token_type": 'Bearer', "refresh_token": refresh_token}, status_code=200)
             else:
                 if login_model.token != None:
                     access_token = LoginService.login(response[1], login_model.token)
                     if access_token != None:
                         refresh_token = LoginService.create_refresh_token(access_token)
                         Log.login_log(req, login_model.wallet_address, False)
-                        return JSONResponse({"access_token": access_token, "token_type": 'Bearer', 'refresh_token': refresh_token})
+                        return JSONResponse({"access_token": access_token, "token_type": 'Bearer', 'refresh_token': refresh_token}, status_code=200)
                     else:
                         Log.login_log(req, login_model.wallet_address)
                         return JSONResponse({"error": "Bad token"}, status_code=401)
@@ -62,12 +65,15 @@ async def login(req: Request, login_model: LoginModel):
         return JSONResponse({"error": "Invalid body"}, status_code=400)
 
 @router.post('/refresh_token', tags=['user'], responses=refresh_responses)
-async def refresh_token(r: Request, refresh_model: RefreshTokenModel):
+async def refresh_token(r: Request, refresh_model: RefreshTokenModel) -> JSONResponse:
+    """
+    Récupération du nouveau token JWT
+    """
     Log.route_log(r, "login routes", "open_route")
     if refresh_model.refresh_token != None:
         tokens = LoginService.refresh_token(refresh_model.refresh_token)
         if tokens != None:
-            return JSONResponse({"access_token": tokens['access_token'], "token_type": "Bearer", "refresh_token": tokens['refresh_token']})
+            return JSONResponse({"access_token": tokens['access_token'], "token_type": "Bearer", "refresh_token": tokens['refresh_token']}, status_code=200)
         else:
             return JSONResponse({"error": "Invalid or expired refresh token"}, status_code=400)
     else:
