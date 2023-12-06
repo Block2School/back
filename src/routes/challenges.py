@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Form, Request, WebSocket
+
 from fastapi.responses import JSONResponse
 
 import requests, os, json, time
@@ -64,44 +65,58 @@ router = APIRouter(prefix="/challenges")
 
 
 @router.get("/leaderboard", tags=["challenges"], responses=get_leaderboard_response)
-async def get_leaderboard(r: Request):
+async def get_leaderboard(r: Request) -> JSONResponse:
+    """
+    Récupération du leaderboard
+    """
     Log.route_log(r, "challenges routes", "open_route")
     leaderboard = ChallengesService.get_leaderboard()
-    return leaderboard
+    return JSONResponse(leaderboard, status_code=200)
 
 
 @router.get(
     "/leaderboard/me", tags=["challenges"], responses=get_leaderboard_by_id_response
 )
-async def get_user_leaderboard_rank(r: Request, jwt: JWT = Depends(JWTChecker())):
+async def get_user_leaderboard_rank(r: Request, jwt: JWT = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupération du rang de l'utilisateur dans le leaderboard des challenges
+    """
     Log.route_log(r, "challenges routes", "auth_route")
     _jwt: dict = JWT.decodeJWT(jwt)
 
     leaderboard = ChallengesService.get_user_leaderboard_rank(_jwt["uuid"])
-    return leaderboard
+    return JSONResponse(leaderboard, status_code=200)
 
 @router.get(
     "/leaderboard/top_10_monthly", tags=["challenges"], responses=get_leaderboard_response
 )
-async def get_top_10_monthly(r: Request):
+async def get_top_10_monthly(r: Request) -> JSONResponse:
+    """
+    Récupération du top 10 des utilisateurs du mois dans les challenges
+    """
     Log.route_log(r, "challenges routes", "open_route")
     leaderboard = ChallengesService.get_top_10_monthly()
-    return leaderboard
+    return JSONResponse(leaderboard, status_code=200)
 
 @router.get(
     "/leaderboard/top_monthly", tags=["challenges"], responses=get_leaderboard_response
 )
-async def get_top_monthly(r: Request):
+async def get_top_monthly(r: Request) -> JSONResponse:
+    """
+    Récupération du top utilisateur du mois dans les challenges
+    """
     Log.route_log(r, "challenges routes", "open_route")
     leaderboard = ChallengesService.get_top_monthly()
-    return leaderboard
+    return JSONResponse(leaderboard, status_code=200)
 
 @router.post("/add", tags=["challenges"], responses=create_challenge_response)
 async def create_challenge(
     r: Request, challenge: ChallengeModel, jwt: JWT = Depends(JWTChecker())
-):
+) -> JSONResponse:
+    """
+    Création d'un challenge
+    """
     Log.route_log(r, "challenges routes", "auth_route")
-    print(challenge)
 
     if len(challenge.inputs) != len(challenge.answers):
         return JSONResponse(
@@ -129,18 +144,21 @@ async def create_challenge(
         title=challenge.title,
         language=challenge.language,
     )
-    return success
+    return JSONResponse(success, status_code=200)
 
 
 @router.get(
     "/start_challenge", tags=["challenges"], responses=get_random_challenge_response
 )
-async def get_random_challenge(r: Request):
+async def get_random_challenge(r: Request) -> JSONResponse:
+    """
+    Récupération d'un challenge aléatoire
+    """
     Log.route_log(r, "challenges routes", "open_route")
     challenge = ChallengesService.get_random_challenge()
     challenge["inputs"] = json.loads(challenge["inputs"])
     challenge["answers"] = json.loads(challenge["answers"])
-    return challenge
+    return JSONResponse(challenge, status_code=200)
 
 
 @router.get(
@@ -148,7 +166,10 @@ async def get_random_challenge(r: Request):
     tags=["challenges"],
     responses=get_random_challenge_response_v2,
 )
-async def get_random_challenge_v2(r: Request, jwt: JWT = Depends(JWTChecker())):
+async def get_random_challenge_v2(r: Request, jwt: JWT = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupération d'un challenge
+    """
     Log.route_log(r, "challenges routes", "auth_route")
 
     _jwt: dict = JWT.decodeJWT(jwt)
@@ -159,7 +180,6 @@ async def get_random_challenge_v2(r: Request, jwt: JWT = Depends(JWTChecker())):
     completed = ChallengesService.get_completed_challenge(_jwt["uuid"], challenge["id"])
     if completed != None:
         challenge["already_completed"] = True
-        print(completed)
         challenge["completed_at"] = completed["completed_at"]
     else:
         challenge["already_completed"] = False
@@ -174,7 +194,10 @@ async def get_random_challenge_v2(r: Request, jwt: JWT = Depends(JWTChecker())):
 )
 async def check_completion_status(
     r: Request, challenge_id: int, jwt: JWT = Depends(JWTChecker())
-):
+) -> JSONResponse:
+    """
+    Vérifier la complétion du challenge
+    """
     Log.route_log(r, "challenges routes", "auth_route")
 
     _jwt: dict = JWT.decodeJWT(jwt)
@@ -192,10 +215,10 @@ async def check_completion_status(
                 {
                     "already_completed": True,
                     "completed_at": completed_at,
-                }
+                }, status_code=200
             )
         else:
-            return JSONResponse({"already_completed": False, "completed_at": None})
+            return JSONResponse({"already_completed": False, "completed_at": None}, status_code=200)
 
 
 @router.get(
@@ -203,10 +226,13 @@ async def check_completion_status(
     tags=["challenges"],
     responses=get_random_challenge_response,
 )
-async def get_challenge_inputs(r: Request, id: int):
+async def get_challenge_inputs(r: Request, id: int) -> JSONResponse:
+    """
+    Récupération des inputs du challenge
+    """
     Log.route_log(r, "challenges routes", "open_route")
     challenge = ChallengesService.get_challenge_inputs(id)
-    return challenge
+    return JSONResponse(challenge, status_code=200)
 
 
 @router.post(
@@ -220,7 +246,10 @@ async def test_challenge(
     test_number: int,
     user_submit: ChallengeTestModel,
     jwt: JWT = Depends(JWTChecker()),
-):
+) -> JSONResponse:
+    """
+    Tester un challenge
+    """
     Log.route_log(r, "challenges routes", "auth_route")
     challenge = ChallengesService.get_challenge(challenge_id)
     if challenge == None:
@@ -240,7 +269,6 @@ async def test_challenge(
             "language": user_submit.language,
             "input": input_to_test,
         }
-        print(data)
         data = json.dumps(data)
         res = requests.post(
             url,
@@ -250,9 +278,6 @@ async def test_challenge(
                 "Access-Control-Allow-Origin": "*",
             },
         )
-        print(res)
-        print(res.text)
-        print(res.content)
         res.raise_for_status()
         if res.status_code == 200:
             res = res.json()
@@ -263,7 +288,7 @@ async def test_challenge(
                         "output": res["output"],
                         "expected_output": expected_output,
                         "error_description": res["error"],
-                    }
+                    }, status_code=200
                 )
             else:
                 return JSONResponse(
@@ -272,7 +297,7 @@ async def test_challenge(
                         "output": res["output"],
                         "expected_output": expected_output,
                         "error_description": res["error"],
-                    }
+                    }, status_code=200
                 )
         else:
             return JSONResponse(
@@ -291,10 +316,12 @@ async def submit_challenge(
     challenge_id: int,
     user_submit: ChallengeTestModel,
     jwt: str = Depends(JWTChecker()),
-):
+) -> JSONResponse:
+    """
+    Envoyer un challenge
+    """
     Log.route_log(r, "challenges routes", "auth_route")
     _jwt = JWT.decodeJWT(jwt)
-    print(user_submit)
     challenge = ChallengesService.get_challenge(challenge_id)
     if challenge == None:
         return JSONResponse({"error": "Challenge not found"}, status_code=400)
@@ -332,7 +359,7 @@ async def submit_challenge(
                             "error_description": res["error"],
                             "error_test_index": -1,
                             "isError": True,
-                        }
+                        }, status_code=200
                     )
                 if res["output"] != challenge["answers"][i]:
                     return JSONResponse(
@@ -343,14 +370,13 @@ async def submit_challenge(
                             "error_description": res["error"],
                             "error_test_index": i + 1,
                             "isError": False,
-                        }
+                        }, status_code=200
                     )
             else:
                 return JSONResponse(
                     {"error": "An error occured while testing the challenge"},
                     status_code=400,
                 )
-        print(_jwt["uuid"])
         was_completed = ChallengesService.get_completed_challenge(
             _jwt["uuid"], challenge["id"]
         )
@@ -365,7 +391,7 @@ async def submit_challenge(
                     "error_description": res["error"],
                     "error_test_index": -1,
                     "isError": False,
-                }
+                }, status_code=200
             )
         success = ChallengesService.complete_challenge(_jwt["uuid"], challenge_id)
         if success == False:
@@ -391,7 +417,7 @@ async def submit_challenge(
                 "error_description": res["error"],
                 "error_test_index": -1,
                 "isError": False,
-            }
+            }, status_code=200
         )
 
 @router.post("/createRoom/{roomID}/{userID}")

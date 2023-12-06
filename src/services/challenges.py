@@ -1,7 +1,5 @@
-from datetime import datetime
 import json
 from typing import List
-
 from fastapi import WebSocket
 from database.Account import AccountDatabase
 from database.ChallengesLeaderboard import ChallengesLeaderboard
@@ -16,13 +14,12 @@ class ChallengesService():
     challengeRooms: List[ChallengeRoom] = []
     stop_message: bool = False
 
-    # Leaderboard
     @staticmethod
     def get_leaderboard() -> list:
-        testDB: AccountDatabase = Database.get_table("account")
-        print(testDB)
+        """
+        Récupérer le leaderboard
+        """
         leaderboardDB: ChallengesLeaderboard = Database.get_table("challenges_leaderboard")
-        print(leaderboardDB)
         leaderboard = leaderboardDB.fetch_all_with_usernames()
         leaderboard_list = []
         if len(leaderboard) > 0:
@@ -39,6 +36,9 @@ class ChallengesService():
 
     @staticmethod
     def get_user_leaderboard_rank(user_uuid: str) -> dict:
+        """
+        Récupérer le rang de l'utilisateur sur le leaderboard
+        """
         leaderboardDB: ChallengesLeaderboard = Database.get_table("challenges_leaderboard")
         leaderboard = leaderboardDB.fetch_all_with_usernames()
         leaderboard_list = []
@@ -57,6 +57,9 @@ class ChallengesService():
 
     @staticmethod
     def get_top_10_monthly() -> list:
+        """
+        Récupérer le top 10 des utilisateurs du mois
+        """
         completedDB: ChallengesCompleted = Database.get_table("challenges_completed")
         leaderboard = completedDB.fetch_top_10_monthly()
         leaderboard_list = []
@@ -74,6 +77,9 @@ class ChallengesService():
 
     @staticmethod
     def get_top_monthly() -> list:
+        """
+        Récupérer le top des utilisateurs du mois
+        """
         completedDB: ChallengesCompleted = Database.get_table("challenges_completed")
         leaderboard = completedDB.fetch_top_monthly()
         leaderboard_list = []
@@ -91,6 +97,9 @@ class ChallengesService():
 
     @staticmethod
     def add_points(user_uuid: str, points: int) -> bool:
+        """
+        Ajouter des points à un utilisateur
+        """
         leaderboardDB: ChallengesLeaderboard = Database.get_table("challenges_leaderboard")
         check = leaderboardDB.fetch(user_uuid)
         if check is None:
@@ -104,14 +113,19 @@ class ChallengesService():
 
     @staticmethod
     def override_points(user_uuid: str, points: int) -> bool:
+        """
+        Modifier les points d'un utilisateur
+        """
         leaderboardDB: ChallengesLeaderboard = Database.get_table("challenges_leaderboard")
         result = leaderboardDB.update(user_uuid, points)
         leaderboardDB.close()
         return result
 
-    # Completed
     @staticmethod
     def get_all_completed_challenges_by_user(user_uuid: str) -> list:
+        """
+        Récupérer tous les challenges complétés par un utilisateur
+        """
         completedDB: ChallengesCompleted = Database.get_table("challenges_completed")
         completed = completedDB.fetch_all_by_user(user_uuid)
         completedDB.close()
@@ -119,6 +133,9 @@ class ChallengesService():
 
     @staticmethod
     def get_all_completed_challenges_by_challenge(challenge_id: int) -> list:
+        """
+        Récupérer tous les utilisateurs ayant complété le challenge
+        """
         completedDB: ChallengesCompleted = Database.get_table("challenges_completed")
         completed = completedDB.fetch_all_by_challenge(challenge_id)
         completedDB.close()
@@ -126,6 +143,9 @@ class ChallengesService():
 
     @staticmethod
     def get_completed_challenge(user_uuid: str, challenge_id: int) -> dict:
+        """
+        Regarder si les détails de complétion d'un challenge par un utilisateur
+        """
         completedDB: ChallengesCompleted = Database.get_table("challenges_completed")
         completed = completedDB.fetch(user_uuid, challenge_id)
         completedDB.close()
@@ -133,15 +153,19 @@ class ChallengesService():
 
     @staticmethod
     def complete_challenge(user_uuid: str, challenge_id: int) -> bool:
+        """
+        Vérifier si l'utilisateur a déjà complété un challenge
+        """
         completedDB: ChallengesCompleted = Database.get_table("challenges_completed")
         result = completedDB.insert_if_never_completed(user_uuid, challenge_id)
-        print(result)
         completedDB.close()
         return result
 
-    # Challenges
     @staticmethod
     def get_all_challenges() -> list:
+        """
+        Récupérer tous les challenges
+        """
         challengesDB: Challenges = Database.get_table("challenges")
         challenges = challengesDB.fetch_all()
         challengesDB.close()
@@ -149,6 +173,9 @@ class ChallengesService():
 
     @staticmethod
     def get_challenge(id: int) -> dict:
+        """
+        Récupérer un challenge
+        """
         challengesDB: Challenges = Database.get_table("challenges")
         challenge = challengesDB.fetch(id)
         challengesDB.close()
@@ -156,6 +183,9 @@ class ChallengesService():
 
     @staticmethod
     def get_random_challenge() -> dict:
+        """
+        Récupérer un challenge aléatoire
+        """
         challengesDB: Challenges = Database.get_table("challenges")
         challenge = challengesDB.fetch_random()
         challengesDB.close()
@@ -163,6 +193,9 @@ class ChallengesService():
 
     @staticmethod
     def get_challenge_inputs(id: int) -> list:
+        """
+        Récupérer les entrées d'un challenge
+        """
         challengesDB: Challenges = Database.get_table("challenges")
         challenge = challengesDB.fetch(id)
         challengesDB.close()
@@ -170,6 +203,9 @@ class ChallengesService():
 
     @staticmethod
     def add_challenge(inputs: str, answers: str, markdown_url: str, start_code: str, points: int, title: str = "", language: str = "python") -> bool:
+        """
+        Ajouter un nouveau challenge
+        """
         challengesDB: Challenges = Database.get_table("challenges")
         result = challengesDB.insert(inputs, answers, markdown_url, start_code, points, title, language)
         challengesDB.close()

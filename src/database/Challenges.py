@@ -23,7 +23,6 @@ class Challenges():
         title: str = "",
         language: str = "python"
     ) -> bool:
-        print(inputs)
         prepare = "INSERT INTO `challenges` (`inputs`, `answers`, `markdown_url`, `start_code`, `points`, `title`, `language`) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         try:
             with self.db.cursor() as cursor:

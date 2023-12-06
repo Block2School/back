@@ -7,6 +7,9 @@ from services.utils.Log import Log
 
 class AdminChecker(HTTPBearer):
     def __init__(self, needed_permission: int, auto_error: bool = True):
+        """
+        Vérification du token JWT afin de savoir si l'utilisateur est modérateur ou administrateur sur la plateforme.
+        """
         self.needed_permission = needed_permission
         super(AdminChecker, self).__init__(auto_error=auto_error)
 
@@ -24,6 +27,9 @@ class AdminChecker(HTTPBearer):
             raise HTTPException(status_code=401, detail="Invalid authorization code")
 
     def user_has_permission(self, request: Request, token: str) -> bool:
+        """
+        Vérifie si l'utilisateur a la permission pour accéder à la route
+        """
         accountModerationDb: AccountModeration = Database.get_table("account_moderation")
         payload = JWT.decodeJWT(token)
         user_uuid = payload.get('uuid')
@@ -39,6 +45,9 @@ class AdminChecker(HTTPBearer):
         return False
 
     def jwt_is_correct(self, request: Request, token: str) -> bool:
+        """
+        Vérification du JWT.
+        """
         payload = JWT.decodeJWT(token)
 
         try:

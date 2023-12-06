@@ -1,15 +1,12 @@
-from urllib import response
-from datetime import datetime
 from database.Database import Database
-from database.AccountDetails import AccountDetails
-from database.Account import AccountDatabase
-from services.utils.GenerateAuthenticator import GenerateAuthenticator
 from database.Faq import Faq
-import pyotp
 
 class FaqService():
     @staticmethod
     def get_all_faq() -> list:
+        """
+        Récupérer toute la FAQ
+        """
         faqDb: Faq = Database.get_table("faq")
         response = faqDb.fetchall()
         faqDb.close()
@@ -17,6 +14,9 @@ class FaqService():
     
     @staticmethod
     def add_faq(question: str, answer: str) -> bool:
+        """
+        Ajouter une question et une réponse dans la FAQ
+        """
         faqDb: Faq = Database.get_table("faq")
         response = faqDb.insert(question, answer)
         faqDb.close()
@@ -24,6 +24,9 @@ class FaqService():
     
     @staticmethod
     def remove_faq(id: int) -> bool:
+        """
+        Supprimer une question et une réponse de la FAQ par son ID
+        """
         faqDb: Faq = Database.get_table("faq")
         response = faqDb.remove(id)
         faqDb.close()

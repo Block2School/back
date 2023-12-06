@@ -5,6 +5,9 @@ from services.utils.Log import Log
 
 class JWTChecker(HTTPBearer):
     def __init__(self, auto_error: bool = True):
+        """
+        Vérification que l'utilisateur est bien connecté pour accéder à la route souhaitée.
+        """
         super(JWTChecker, self).__init__(auto_error=auto_error)
 
     async def __call__(self, request: Request):
@@ -19,6 +22,9 @@ class JWTChecker(HTTPBearer):
             raise HTTPException(status_code=401, detail="Invalid authorization code")
 
     def jwt_is_correct(self, request: Request, token: str) -> bool:
+        """
+        Vérification du token JWT
+        """
         payload = JWT.decodeJWT(token)
 
         try:

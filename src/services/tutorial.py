@@ -13,6 +13,9 @@ import base64
 class TutorialService():
     @staticmethod
     def get_all_tutorials() -> list:
+        """
+        Récupérer la liste des tutoriels
+        """
         tutorialDb: Tutorials = Database.get_table("tutorials")
         tutorials = tutorialDb.fetch_all()
         tutorial_list = []
@@ -28,6 +31,9 @@ class TutorialService():
 
     @staticmethod
     def get_tutorial(id: int) -> dict:
+        """
+        Récupérer un tutoriel par son ID
+        """
         tutorialDb: Tutorials = Database.get_table("tutorials")
         tutorial = tutorialDb.fetch(id)
         if tutorial != None:
@@ -39,6 +45,9 @@ class TutorialService():
 
     @staticmethod
     def create_tutorial(title: str, markdownUrl: str, startCode: str, category: str, answer: str, shouldBeCheck: bool, input: str, points: int) -> bool:
+        """
+        Créer un tutoriel
+        """
         tutorialDb: Tutorials = Database.get_table("tutorials")
         result = tutorialDb.insert(title, markdownUrl, category, answer, startCode, shouldBeCheck, input, points)
         tutorialDb.close()
@@ -46,6 +55,9 @@ class TutorialService():
 
     @staticmethod
     def get_all_tutorials_by_category(category: str) -> list:
+        """
+        Récupérer la liste des tutoriels par leur catégorie
+        """
         tutorialDb: Tutorials = Database.get_table("tutorials")
         tutorials = tutorialDb.fetch_by_category(category)
         tutorial_list = []
@@ -60,6 +72,9 @@ class TutorialService():
 
     @staticmethod
     def update_tutorial(id: int, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str, points: int) -> bool:
+        """
+        Modifier un tutoriel
+        """
         tutorialDb: Tutorials = Database.get_table("tutorials")
         result = tutorialDb.update(id, title, markdown_url, category, answer, start_code, should_be_check, input, points)
         tutorialDb.close()
@@ -67,6 +82,11 @@ class TutorialService():
 
     @staticmethod
     def toggle_tutorial(id: int, updated: bool) -> dict:
+        """
+        @deprecated
+
+        Activer ou désactiver un tutoriel
+        """
         tutorialDb: Tutorials = Database.get_table("tutorials")
         result = tutorialDb.update_enabled(id, updated)
         if result:
@@ -77,6 +97,9 @@ class TutorialService():
 
     @staticmethod
     def get_all_categories() -> list:
+        """
+        Récupérer la liste des catégories
+        """
         categoryDb: Category = Database.get_table("category")
         result = categoryDb.fetch_all_categories()
         returning = []
@@ -87,6 +110,9 @@ class TutorialService():
 
     @staticmethod
     def create_category(name: str, description: str, image_url: str) -> bool:
+        """
+        Créer une nouvelle catégorie de tutoriel
+        """
         categoryDb: Category = Database.get_table("category")
         result = categoryDb.create_category(name, description, image_url)
         categoryDb.close()
@@ -94,6 +120,9 @@ class TutorialService():
 
     @staticmethod
     def update_category(name: str, description: str, image_url: str) -> bool:
+        """
+        Modifier une catégorie
+        """
         categoryDb: Category = Database.get_table("category")
         result = categoryDb.update_category(name, description, image_url)
         categoryDb.close()
@@ -101,6 +130,9 @@ class TutorialService():
 
     @staticmethod
     def delete_category(name: str) -> bool:
+        """
+        Supprimer une catégorie
+        """
         categoryDb: Category = Database.get_table("category")
         result = categoryDb.delete_category(name)
         categoryDb.close()
@@ -108,6 +140,9 @@ class TutorialService():
 
     @staticmethod
     def validate_tutorial(uuid: str, tutorial_id: int, language: str, characters: int, lines: int) -> int:
+        """
+        Valider un tutoriel
+        """
         userTutorialScoreDb : UserTutorialScore = Database().get_table("user_tutorial_score")
         total_completions = userTutorialScoreDb.fetch(uuid, tutorial_id, language)
         if total_completions == None:
@@ -137,6 +172,9 @@ class TutorialService():
 
     @staticmethod
     def get_scoreboard_tutorial_id(tutorial_id: int) -> list:
+        """
+        Récupérer le scoreboard d'un tutoriel par son ID
+        """
         userTutorialScoreDb: UserTutorialScore = Database.get_table("user_tutorial_score")
         scoreboard_tutorial_list = userTutorialScoreDb.fetch_all_score_of_tutorial(tutorial_id)
         scoreboard_tutorial_list.sort(key=lambda obj: obj['characters'], reverse=True)
@@ -150,6 +188,9 @@ class TutorialService():
 
     @staticmethod
     def get_percentage_tutorial_id(tutorial_id: int) -> float:
+        """
+        Récupérer le pourcentage de complétion du tutoriel
+        """
         userTutorialScoreDb: UserTutorialScore = Database.get_table("user_tutorial_score")
         accountDb: AccountDatabase = Database.get_table("account")
         total_completions = len(userTutorialScoreDb.fetch_all_score_of_tutorial(tutorial_id))
@@ -160,13 +201,19 @@ class TutorialService():
 
     @staticmethod
     def get_user_scoreboard(uuid: str) -> list:
+        """
+        Récupérer le scoreboard de l'utilisateur
+        """
         userTutorialScoreDb: UserTutorialScore = Database.get_table("user_tutorial_score")
         scores = userTutorialScoreDb.fetch_all_score_of_user(uuid)
         userTutorialScoreDb.close()
-        return scores #call FastAPI fetch scoreboard
+        return scores
 
     @staticmethod
     def get_user_success(uuid: str) -> list:
+        """
+        Récupérer le scoreboard de l'utilisateur
+        """
         userTutorialScoreDb: UserTutorialScore = Database.get_table("user_tutorial_score")
         success = userTutorialScoreDb.fetch_all_score_of_user(uuid)
         userTutorialScoreDb.close()
@@ -174,6 +221,9 @@ class TutorialService():
 
     @staticmethod
     def get_total_number_tutorials() -> int:
+        """
+        Récupérer le nombre total de tutoriels sur le serveur
+        """
         tutorialDb: Tutorials = Database.get_table("tutorials")
         tutorials = tutorialDb.fetch_all()
         tutorialDb.close()
@@ -181,6 +231,9 @@ class TutorialService():
 
     @staticmethod
     def get_markdown_list() -> Dict[bool, list]:
+        """
+        Récupérer la liste des markdowns disponibles sur Github
+        """
         headers = {
             "Authorization": f"Bearer {os.getenv('GITHUB_API_TOKEN')}",
             "Content-Type": "application/json"
@@ -199,6 +252,9 @@ class TutorialService():
 
     @staticmethod
     def create_markdown(filename: str, content: str) -> Dict[bool, str]:
+        """
+        Créer un markdown sur Github
+        """
         headers = {
             "Authorization": f"Bearer {os.getenv('GITHUB_API_TOKEN')}",
             "Content-Type": "application/json"
@@ -210,7 +266,6 @@ class TutorialService():
         try:
             r = requests.put(f'https://api.github.com/repos/Block2School/tutorials/contents/en/{filename}.md', data=json.dumps(data), headers=headers)
             r = r.json()
-            print(f'Github response: {r}')
             return {'success': True, 'url': r['content']['download_url']}
         except Exception as e:
             print(f'error: {e}')

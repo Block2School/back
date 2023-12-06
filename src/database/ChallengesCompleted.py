@@ -90,7 +90,6 @@ class ChallengesCompleted():
                 return result
         except Exception as e:
             self.__log_error(e, "fetch_top_10_monthly")
-            print('BJHKJHKJHK')
             print(e)
             return None
     
@@ -103,7 +102,6 @@ class ChallengesCompleted():
                 return result
         except Exception as e:
             self.__log_error(e, "fetch_top_monthly")
-            print('BJHKJHKJHK')
             print(e)
             return None
 
