@@ -8,7 +8,7 @@ import asyncio
 import time
 
 class ChallengeRoom():
-    def __init__(self,roomID: int, maxTime: int = 30) -> None:
+    def __init__(self,roomID: int, maxTime: int = 240) -> None:
         self._occupants: List[ChallengeUser] = []
         self.active_connections: List[WebSocket] = []
         self._maxTime: int = maxTime
