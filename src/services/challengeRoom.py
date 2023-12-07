@@ -25,30 +25,31 @@ class ChallengeRoom():
 
     def getRoomID(self) -> int:
         return self._roomID
-    
+
     def getExitFlag(self) -> bool:
         return self._exitFlag
-    
+
     def getLimitUser(self) -> int:
         return self._limitUser
-    
+
     def getRemainingTime(self) -> int:
+        print('getRemainingTime: ', self._remainingTime)
         return self._remainingTime
-    
+
     def getMaxTime(self) -> int:
         return self._maxTime
-    
+
     def getMaster(self) -> str:
         return self._master
-    
+
     def setMaster(self, master: str) -> None:
         self._master = master
-    
+
     def startTimer(self) -> None:
         while self._remainingTime >= 0:
             time.sleep(1)
             self._remainingTime = self._remainingTime - 1
-    
+
     async def joinRoom(self, ws: WebSocket, user: ChallengeUser) -> None:
         self._occupants.append(user)
         self.active_connections.append(ws)

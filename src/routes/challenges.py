@@ -17,6 +17,7 @@ from models.response.SubmitChallengeResponseModel import SubmitChallengeResponse
 from models.response.JoinChallengeResponseModel import JoinChallengeResponseModel
 from models.response.LeaveChallengeRoomModel import LeaveChallengeRoomModel
 from services.challenges import ChallengesService
+from services.user import UserService
 from services.utils.JWTChecker import JWTChecker
 from services.utils.Log import Log
 from services.utils.JWT import JWT
@@ -433,12 +434,15 @@ async def delete_room(roomID: int):
 @router.websocket("/joinRoom/{roomID}/{userUUID}")
 async def join_room(ws: WebSocket, roomID: int, userUUID: str):
     success = await ChallengesService.join_room(roomID, ws, userUUID)
+    username = UserService.get_username(userUUID)
+    print('username', username)
+
     room = ChallengesService.get_room(roomID)
     if success:
         await room.broadcast(
             json.dumps({
                 "type": "new user joined",
-                "message": userUUID,
+                "message": {'userId': userUUID, 'username': username},
             })
         )
         await ws.accept()
@@ -446,7 +450,10 @@ async def join_room(ws: WebSocket, roomID: int, userUUID: str):
             "type": "room info",
             "message": {
                 "roomID": room.getRoomID(),
-                "occupants": [occupant.getUserUUID() for occupant in room.getOccupants()],
+                "occupants": [{
+                    'userId': occupant.getUserUUID(),
+                    'username': UserService.get_username(occupant.getUserUUID())
+                } for occupant in room.getOccupants()],
                 "remainingTime": room.getRemainingTime(),
                 "limitUser": room.getLimitUser()
             }
@@ -472,6 +479,20 @@ async def leave_room(user_uuid: str, roomID: int):
         if users[i].getUserUUID() == uuid:
             ws = users[i].getWs()
     success = await ChallengesService.leave_room(roomID, uuid, ws)
+
+    if success:
+        await room.broadcast(
+            json.dumps({
+                "type": "userLeft",
+                "message": {
+                    "occupants": [{
+                        'userId': occupant.getUserUUID(),
+                        'username': UserService.get_username(occupant.getUserUUID())
+                    } for occupant in room.getOccupants()]
+                },
+            })
+        )
+
     return success
 
 @router.post("/broadcast/{roomID}")
@@ -488,7 +509,10 @@ async def getAllRooms():
     for room in rooms:
         json["rooms"].append({
             "roomID": room.getRoomID(),
-            "occupants": [occupant.getUserUUID() for occupant in room.getOccupants()],
+            "occupants": [{
+                'userId': occupant.getUserUUID(),
+                'username': UserService.get_username(occupant.getUserUUID())
+            } for occupant in room.getOccupants()],
             "maxTime": room.getMaxTime(),
             "limitUser": room.getLimitUser()
         })
@@ -501,7 +525,10 @@ async def getRoomById(roomID: int):
         return {}
     json = {
         "master": room.getMaster(),
-        "occupants": [occupant.getUserUUID() for occupant in room.getOccupants()],
+        "occupants": [{
+            'userId': occupant.getUserUUID(),
+            'username': UserService.get_username(occupant.getUserUUID())
+        } for occupant in room.getOccupants()],
         "maxTime": room.getMaxTime(),
         "limitUser": room.getLimitUser()
     }

@@ -277,3 +277,13 @@ class UserService():
         }
         accountDb.close()
         return datas
+
+    @staticmethod
+    def get_username(uuid: str) -> str:
+        """
+        Récupérer le nom d'un utilisateur
+        """
+        accountDb: AccountDetails = Database.get_table("account_details")
+        result = accountDb.get_username(uuid)
+        accountDb.close()
+        return result

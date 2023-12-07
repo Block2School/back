@@ -74,5 +74,17 @@ class AccountDetails():
             self.__log_error(e, "search_user")
             return None
 
+    def get_username(self, uuid: str) -> str:
+        prepare = "SELECT username FROM account_details WHERE uuid = %s LIMIT 1"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (uuid))
+                response = cursor.fetchone()
+            self.db.commit()
+            return response["username"]
+        except Exception as e:
+            self.__log_error(e, "get_username")
+            return None
+
     def close(self):
         self.db.close()
