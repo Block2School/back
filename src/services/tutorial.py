@@ -1,5 +1,6 @@
 from datetime import datetime
 import json
+from database.CompletedTutorials import CompletedTutorials
 from database.Tutorials import Tutorials
 from database.Category import Category
 from database.UserTutorialScore import UserTutorialScore
@@ -22,11 +23,38 @@ class TutorialService():
         if len(tutorials) > 0:
             for tutorial in tutorials:
                 tutorial_list.append({'id': tutorial['id'], 'title': tutorial['title'], 'markdownUrl': tutorial['markdown_url'], 'category': tutorial['category'], 'answer': tutorial['answer'] #if tutorial['should_be_check'] else None
-                , 'startCode': tutorial['start_code'], 'shouldBeCheck': tutorial['should_be_check'], 'enabled': tutorial['enabled'], 'points': tutorial['points']})
+                , 'startCode': tutorial['start_code'], 'shouldBeCheck': tutorial['should_be_check'], 'enabled': tutorial['enabled'], 'points': tutorial['points'], 'inputs': tutorial['input'], 'default_language': tutorial['default_language'], 'image': tutorial['image'], 'short_description': tutorial['short_description'], 'estimated_time': tutorial['estimated_time']})
         else:
             tutorialDb.close()
             return []
         tutorialDb.close()
+        return tutorial_list
+
+    @staticmethod
+    def get_all_tutorialsV2(uuid: str) -> list:
+        tutorialDb: Tutorials = Database.get_table("tutorials")
+        completedTutorialDB: CompletedTutorials = Database.get_table("completed_tutorials")
+        tutorials = tutorialDb.fetch_all()
+        completed = completedTutorialDB.get_user_completed(uuid)
+        tutorial_list = []
+        if len(tutorials) > 0:
+            for tutorial in tutorials:
+                tutorial_list.append({'id': tutorial['id'], 'title': tutorial['title'], 'markdownUrl': tutorial['markdown_url'], 'category': tutorial['category'], 'answer': tutorial['answer'] #if tutorial['should_be_check'] else None
+                , 'startCode': tutorial['start_code'], 'shouldBeCheck': tutorial['should_be_check'], 'enabled': tutorial['enabled'], 'points': tutorial['points'], 'inputs': tutorial['input']
+                , 'default_language': tutorial['default_language'], 'image': tutorial['image'], 'short_description': tutorial['short_description'], 'estimated_time': tutorial['estimated_time'], 'is_completed': False})
+        else:
+            tutorialDb.close()
+            completedTutorialDB.close()
+            return []
+
+        if completed != None and len(completed) > 0:
+            for compl in completed:
+                for i in range(0, len(tutorial_list)):
+                    if compl['tutorial_id'] == tutorial_list[i]['id']:
+                        tutorial_list[i]['is_completed'] = True
+
+        tutorialDb.close()
+        completedTutorialDB.close()
         return tutorial_list
 
     @staticmethod
@@ -39,8 +67,29 @@ class TutorialService():
         if tutorial != None:
             data = tutorial
             return {'id': data['id'], 'title': data['title'], 'markdownUrl': data['markdown_url'], 'category': data['category'], 'answer': data['answer'] #if data['should_be_check'] else None
-            , 'startCode': data['start_code'], 'shouldBeCheck': data['should_be_check'], 'enabled': data['enabled'], 'points': data['points'], 'inputs': data['input']}
+            , 'startCode': data['start_code'], 'shouldBeCheck': data['should_be_check'], 'enabled': data['enabled'], 'points': data['points'], 'inputs': data['input'], 'default_language': data['default_language'], 'image': data['image'], 'short_description': data['short_description'], 'estimated_time': data['estimated_time']}
         tutorialDb.close()
+        return None
+
+    @staticmethod
+    def get_tutorialV2(id: int, uuid: str) -> dict:
+        tutorialDb: Tutorials = Database.get_table("tutorials")
+        completedTutorialDB: CompletedTutorials = Database.get_table("completed_tutorials")
+        tutorial = tutorialDb.fetch(id)
+        if tutorial != None:
+            data = tutorial
+            completed = completedTutorialDB.get_user_completed(uuid)
+            if completed != None and len(completed) > 0:
+                for compl in completed:
+                    if compl['tutorial_id'] == data['id']:
+                        return {'id': data['id'], 'title': data['title'], 'markdownUrl': data['markdown_url'], 'category': data['category'], 'answer': data['answer'] #if data['should_be_check'] else None
+                        , 'startCode': data['start_code'], 'shouldBeCheck': data['should_be_check'], 'enabled': data['enabled'], 'points': data['points'], 'inputs': data['input']
+                        , 'default_language': data['default_language'], 'image': data['image'], 'short_description': data['short_description'], 'estimated_time': data['estimated_time'], 'is_completed': True}
+            return {'id': data['id'], 'title': data['title'], 'markdownUrl': data['markdown_url'], 'category': data['category'], 'answer': data['answer'] #if data['should_be_check'] else None
+            , 'startCode': data['start_code'], 'shouldBeCheck': data['should_be_check'], 'enabled': data['enabled'], 'points': data['points'], 'inputs': data['input']
+            , 'default_language': data['default_language'], 'image': data['image'], 'short_description': data['short_description'], 'estimated_time': data['estimated_time'], 'is_completed': False}
+        tutorialDb.close()
+        completedTutorialDB.close()
         return None
 
     @staticmethod
@@ -145,11 +194,14 @@ class TutorialService():
         """
         userTutorialScoreDb : UserTutorialScore = Database().get_table("user_tutorial_score")
         total_completions = userTutorialScoreDb.fetch(uuid, tutorial_id, language)
+        tutorial_completedDB: CompletedTutorials = Database().get_table("completed_tutorials")
         if total_completions == None:
             total_completions = 1
         else:
             total_completions = total_completions['total_completions']
             total_completions += 1
+
+        tutorial_completedDB.insert(uuid, tutorial_id)
 
         if total_completions == 1:
             accountDb: AccountDatabase = Database().get_table("account")
@@ -228,6 +280,14 @@ class TutorialService():
         tutorials = tutorialDb.fetch_all()
         tutorialDb.close()
         return len(tutorials)
+
+    @staticmethod
+    def get_user_completed_tutorials() -> list:
+        pass
+
+    @staticmethod
+    def get_user_last_10_completed_tutorials() -> list:
+        pass
 
     @staticmethod
     def get_markdown_list() -> Dict[bool, list]:

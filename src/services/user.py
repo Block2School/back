@@ -1,4 +1,5 @@
 from datetime import datetime
+from database.CompletedTutorials import CompletedTutorials
 from database.Database import Database
 from database.AccountDetails import AccountDetails
 from database.Account import AccountDatabase
@@ -28,6 +29,31 @@ class UserService():
             "birthdate": datetime.timestamp(response['birthdate']) if response['birthdate'] != None else None,
             "privacy": response['private'],
             "points": user['points'],
+            "uuid": uuid
+        }
+
+    @staticmethod
+    def get_profileV2(uuid: str, n: int) -> dict:
+        accountDetailDb: AccountDetails = Database.get_table("account_details")
+        accountDb: AccountDatabase = Database.get_table("account")
+        completed_tutorialsDb: CompletedTutorials = Database.get_table("completed_tutorials")
+        response = accountDetailDb.fetch(uuid)
+        completed = completed_tutorialsDb.get_user_n_completed_tutorials(uuid, n)
+        accountDetailDb.close()
+        completed_tutorialsDb.close()
+        user = accountDb.fetch(uuid)
+        accountDb.close()
+        return {
+            "wallet": response['wallet_address'],
+            "username": response['username'],
+            "email": response['email'],
+            "description": response['description'],
+            "twitter": response['twitter'],
+            "youtube": response['youtube'],
+            "birthdate": datetime.timestamp(response['birthdate']) if response['birthdate'] != None else None,
+            "privacy": response['private'],
+            "points": user['points'],
+            "last_completed_tutorials": completed,
             "uuid": uuid
         }
 

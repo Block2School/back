@@ -3,7 +3,7 @@ from services.utils.JWT import JWT
 from services.utils.JWTChecker import JWTChecker
 from starlette.responses import JSONResponse
 from services.user import UserService
-from models.response.ProfileResponseModel import ProfileResponseModel
+from models.response.ProfileResponseModel import ProfileResponseModel, ProfileResponseModelV2
 from models.input.ProfileModel import ProfileModel
 from models.input.NeedWordlistModel import NeedWordListModel
 from models.response.SuccessResponseModel import SuccessResponseModel
@@ -25,6 +25,13 @@ async def get_profile(r: Request, credentials: str = Depends(JWTChecker())) -> J
     Log.route_log(r, "user routes", jwt["uuid"])
     profile = UserService.get_profile(jwt['uuid'])
     return JSONResponse(profile, status_code=200)
+
+@router.get('/v2/profile', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": ProfileResponseModelV2}})
+async def get_profileV2(r: Request, n: int,credentials: str = Depends(JWTChecker())):
+    jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "user routes v2", jwt["uuid"])
+    profile = UserService.get_profileV2(jwt["uuid"], n)
+    return JSONResponse(profile)
 
 @router.patch('/profile', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": ProfileModel}})
 async def update_profile(r: Request, profile_model: ProfileModel, credentials: str = Depends(JWTChecker())) -> JSONResponse:

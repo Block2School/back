@@ -36,3 +36,33 @@ class JWTChecker(HTTPBearer):
         except:
             Log.jwt_log(request)
             return False
+
+
+# class JWTCheckerV2(HTTPBearer):
+#     def __init__(self, auto_error: bool = True):
+#         super(JWTCheckerV2, self).__init__(auto_error=auto_error)
+
+#     async def __call__(self, request: Request):
+#         credentials: HTTPAuthorizationCredentials = await super(JWTCheckerV2, self).__call__(request)
+#         if credentials:
+#             if credentials.scheme != "Bearer":
+#                 return None
+#             if not self.jwt_is_correct(request, credentials.credentials):
+#                 return None
+#             return credentials.credentials
+#         else:
+#             return None
+
+#     def jwt_is_correct(self, request: Request, token: str) -> bool:
+#         payload = JWT.decodeJWT(token)
+
+#         try:
+#             if payload != None:
+#                 return True
+#             else:
+#                 Log.jwt_log(request)
+#                 return False
+#         except:
+#             Log.jwt_log(request)
+#             return False
+
