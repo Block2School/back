@@ -314,3 +314,39 @@ async def get_tuto_available_markdown(r: Request, credentials: str = Depends(Adm
     if result and result['success'] == True:
         return JSONResponse({'success': 'Markdown list', 'markdown_list': result['markdowns']}, status_code=200)
     return JSONResponse({'error': 'Could not get the markdown list'}, status_code=400)
+
+@router.post('/path/add', tags=['admin'], dependencies=[Depends(AdminChecker(2))], responses=create_markdown_responses)
+async def add_path(r: Request, name: str, credentials: str = Depends(AdminChecker(2))) -> JSONResponse:
+    """
+    Ajouter un chemin
+    """
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
+    result = TutorialService.create_path(name)
+
+    if result == True:
+        return JSONResponse({'success': 'Path created', 'path': name}, status_code=200)
+    return JSONResponse({'error': 'Could not create the path'}, status_code=400)
+
+@router.patch('/path/update', tags=['admin'], dependencies=[Depends(AdminChecker(2))])
+async def update_path(r: Request, id: int, new_name: str, credentials: str = Depends(AdminChecker(2))) -> JSONResponse:
+    """
+    Modifier un chemin
+    """
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
+    result = TutorialService.update_path(new_name, id)
+
+    if result:
+        return JSONResponse({'success': 'Path updated', 'path': result['path']}, status_code=200)
+    return JSONResponse({'error': 'Could not update the path'}, status_code=400)
+
+@router.delete('/path/delete', tags=['admin'], dependencies=[Depends(AdminChecker(2))])
+async def delete_path(r: Request, id: int, credentials: str = Depends(AdminChecker(2))) -> JSONResponse:
+    """
+    Supprimer un chemin
+    """
+    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
+    result = TutorialService.delete_path(id)
+
+    if result == True:
+        return JSONResponse({'success': 'Path deleted'}, status_code=200)
+    return JSONResponse({'error': 'Could not delete the path'}, status_code=400)
