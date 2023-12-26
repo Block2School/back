@@ -144,9 +144,9 @@ async def set_mod(r: Request, mod_model: ModModel, credentials: str = Depends(Ad
         else:
             return JSONResponse({"error": "Cannot change mod role of this user"}, status_code=400)
 
-@router.post('/tuto/create', dependencies=[Depends(AdminChecker(2))], tags=['admin'], responses=create_tutorial_responses)
-async def create_tutorial(r: Request, tutorial_model: TutorialModel, credentials: str = Depends(AdminChecker(2))):
-    Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
+@router.post('/tuto/create', responses=create_tutorial_responses)
+async def create_tutorial(r: Request, tutorial_model: TutorialModel,):
+    # Log.route_log(r, "moderation routes", JWT.decodeJWT(credentials)["uuid"])
     if tutorial_model.answer == None:
         return JSONResponse({'error': 'Unknown answer'}, status_code=400)
     elif tutorial_model.category == None:
