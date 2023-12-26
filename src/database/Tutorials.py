@@ -89,5 +89,16 @@ class Tutorials():
             return False
         return True
 
+    def fetch_by_path(self, path: str) -> list:
+        prepare = "SELECT * FROM `tutorials` WHERE `path` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (path))
+                result = cursor.fetchall()
+        except Exception as e:
+            self.__log_error(e, "fetch_by_path")
+            return None
+        return result
+
     def close(self):
         self.db.close()

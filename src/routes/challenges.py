@@ -178,6 +178,17 @@ async def get_random_challenge_v2(r: Request, jwt: JWT = Depends(JWTChecker())) 
         challenge["completed_at"] = None
     return challenge
 
+@router.get('/stats', tags=["challenges"], dependencies=[Depends(JWTChecker())])
+async def get_stats(r: Request, jwt: JWT = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupération des statistiques des challenges
+    """
+    Log.route_log(r, "challenges routes", "auth_route")
+    _jwt: dict = JWT.decodeJWT(jwt)
+
+    nb_of_challenges_done = ChallengesService.get_nb_of_challenges_done_by_user(_jwt["uuid"])
+
+    return JSONResponse({"nb_of_challenges_done": nb_of_challenges_done}, status_code=200)
 
 @router.get(
     "/is_already_completed/{id}",

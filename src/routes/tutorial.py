@@ -79,7 +79,7 @@ async def get_all_tutorials(r: Request) -> JSONResponse:
     tutorial_list = TutorialService.get_all_tutorials()
     return JSONResponse({'data': tutorial_list}, status_code=200)
 
-@router.get('/v2/auth/all', tags=['tutorial'], responses=get_all_tutorials_responseV2)
+@router.get('/v2/auth/all', tags=['tutorial'], responses=get_all_tutorials_responseV2, dependencies=[Depends(JWTChecker())])
 async def get_all_tutorialsv2(r: Request, token: str = Depends(JWTChecker())):
     Log.route_log(r, "tutorial routes v2", "open_route")
     jwt = JWT.decodeJWT(token)
@@ -102,7 +102,7 @@ async def get_tutorialv2(r: Request, id: int):
     else:
         return JSONResponse(tutorial)
 
-@router.get('/v2/auth/{id}', tags=['tutorial'], responses=get_tutorial_responseV2)
+@router.get('/v2/auth/{id}', tags=['tutorial'], responses=get_tutorial_responseV2, dependencies=[Depends(JWTChecker())])
 async def get_tutorialv2(r: Request, id: int, token: str = Depends(JWTChecker())):
     Log.route_log(r, "tutorial routes v2", "open_route")
     jwt = JWT.decodeJWT(token)
@@ -155,6 +155,62 @@ async def get_all_tutorials_by_category(r: Request, category: str) -> JSONRespon
     """
     Log.route_log(r, "tutorial routes", "open_route")
     tutorial_list = TutorialService.get_all_tutorials_by_category(category)
+    return JSONResponse({'data': tutorial_list}, status_code=200)
+
+@router.get('/category/{category}/v2', tags=['tutorial'], responses=get_all_tutorials_by_category_response)
+async def get_all_tutorials_by_category2(r: Request, category: str) -> JSONResponse:
+    """
+    Récupérer tous les tutoriaux par catégorie
+    """
+    Log.route_log(r, "tutorial routes", "open_route")
+    tutorial_list = TutorialService.get_all_tutorials_by_categoryV2(category)
+    return JSONResponse({'data': tutorial_list}, status_code=200)
+
+@router.get('/category/{category}/auth', tags=['tutorial'], responses=get_all_tutorials_by_category_response, dependencies=[Depends(JWTChecker())])
+async def get_all_tutorials_by_category3(r: Request, category: str, credentials: str = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupérer tous les tutoriaux par catégorie
+    """
+    jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "tutorial routes", jwt["uuid"])
+    tutorial_list = TutorialService.get_all_tutorials_by_categoryV2_auth(category, jwt["uuid"])
+    return JSONResponse({'data': tutorial_list}, status_code=200)
+
+@router.get('/paths/all', tags=['tutorial'])
+async def get_all_paths(r: Request) -> JSONResponse:
+    """
+    Récupérer tous les chemins
+    """
+    Log.route_log(r, "tutorial routes", "open_route")
+    paths = TutorialService.get_paths()
+    return JSONResponse({'data': paths}, status_code=200)
+
+@router.get('/paths/{id}', tags=['tutorial'])
+async def get_path(r: Request, id: int) -> JSONResponse:
+    """
+    Récupérer un chemin par son ID
+    """
+    Log.route_log(r, "tutorial routes", "open_route")
+    path = TutorialService.get_path(id)
+    return JSONResponse({'data': path}, status_code=200)
+
+@router.get('/paths/{path}/tutorials', tags=['tutorial'])
+async def get_tutorials_by_path(r: Request, path: str) -> JSONResponse:
+    """
+    Récupérer tous les tutoriaux par chemin
+    """
+    Log.route_log(r, "tutorial routes", "open_route")
+    tutorial_list = TutorialService.get_all_tutorials_by_path(path)
+    return JSONResponse({'data': tutorial_list}, status_code=200)
+
+@router.get('/paths/{path}/tutorials/auth', tags=['tutorial'], dependencies=[Depends(JWTChecker())])
+async def get_tutorials_by_path2(r: Request, path: str, credentials: str = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupérer tous les tutoriaux par chemin
+    """
+    jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "tutorial routes", jwt["uuid"])
+    tutorial_list = TutorialService.get_all_tutorials_by_path_auth(path, jwt["uuid"])
     return JSONResponse({'data': tutorial_list}, status_code=200)
 
 @router.get('/scoreboard/id/{id}', tags=['tutorial'], responses=get_scoreboard_tutorial_response)
@@ -215,7 +271,7 @@ async def complete_tutorial(r: Request, tutorial: SubmitTutorialModel, credentia
 
     if tutorial.source_code != None:
         tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
-        
+
         if (tutorial.exec == True):
             data = {
                 "code": tutorial.source_code,
