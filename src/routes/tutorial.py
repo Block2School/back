@@ -125,7 +125,21 @@ async def get_last_completed(r: Request, credentials: str = Depends(JWTChecker()
     if len(completed_tutorial_list) >= 1:
         return JSONResponse(completed_tutorial_list[0])
     else:
-        return Response(status_code=400) 
+        return Response(status_code=400)
+
+@router.get("/total_tutorials_completion", tags=["tutorial"], dependencies=[Depends(JWTChecker())])
+async def get_total_tutorials_completion(r: Request, credentials: str = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupérer le nombre total de tutoriaux complétés
+    """
+    jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "Total tutorials completion", jwt['uuid'])
+    completedTutorialsDb: CompletedTutorials = Database.get_table("completed_tutorials")
+    total = completedTutorialsDb.get_number_completed_tutorials(jwt['uuid'])
+    if total:
+        return JSONResponse({"total": total})
+    else:
+        return Response(status_code=400)
 
 @router.get('/{id}', tags=['tutorial'], responses=get_tutorial_response)
 async def get_tutorial(r: Request, id: int) -> JSONResponse:
