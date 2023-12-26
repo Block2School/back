@@ -12,11 +12,11 @@ class Tutorials():
             message = str(e.args[0])
         Log.error_log("tutorials table", function, function, message)
 
-    def insert(self, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str, points: int, default_language: str, image: str, short_description: str, estimated_time: str) -> bool:
-        prepare = "INSERT INTO `tutorials` (`title`, `markdown_url`, `category`, `answer`, `start_code`, `should_be_check`, `input`, `points`, `default_language`, `image`, `short_description`, `estimated_time`) VALUES (%s, %s, %s, %s, %s, %r, %s, %s, %s, %s, %s, %s)"
+    def insert(self, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str, points: int, default_language: str, image: str, short_description: str, estimated_time: str, path: str) -> bool:
+        prepare = "INSERT INTO `tutorials` (`title`, `markdown_url`, `category`, `answer`, `start_code`, `should_be_check`, `input`, `points`, `default_language`, `image`, `short_description`, `estimated_time`, `path`) VALUES (%s, %s, %s, %s, %s, %r, %s, %s, %s, %s, %s, %s, %s)"
         try:
             with self.db.cursor() as cursor:
-                cursor.execute(prepare, (title, markdown_url, category, answer, start_code, should_be_check, input, points))
+                cursor.execute(prepare, (title, markdown_url, category, answer, start_code, should_be_check, input, points, default_language, image, short_description, estimated_time, path))
             self.db.commit()
         except Exception as e:
             self.__log_error(e, "insert")

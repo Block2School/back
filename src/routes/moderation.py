@@ -183,7 +183,7 @@ async def create_tutorial(r: Request, tutorial_model: TutorialModel, credentials
         return JSONResponse({"error": 'Unknown input'}, status_code=400)
     elif tutorial_model.points == None:
         return JSONResponse({"error": 'Unknown points'}, status_code=400)
-    result = TutorialService.create_tutorial(tutorial_model.title, tutorial_model.markdownUrl, tutorial_model.startCode, tutorial_model.category, tutorial_model.answer, tutorial_model.shouldBeCheck, tutorial_model.input, tutorial_model.points)
+    result = TutorialService.create_tutorial(tutorial_model.title, tutorial_model.markdownUrl, tutorial_model.startCode, tutorial_model.category, tutorial_model.answer, tutorial_model.shouldBeCheck, tutorial_model.input, tutorial_model.points, tutorial_model.default_language, tutorial_model.image, tutorial_model.short_description, tutorial_model.estimated_time)
     if result:
         return JSONResponse({"success": "Tutorial created !"}, status_code=200)
     else:

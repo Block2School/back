@@ -185,30 +185,14 @@ class TutorialService:
         return None
 
     @staticmethod
-    def create_tutorial(
-        title: str,
-        markdownUrl: str,
-        startCode: str,
-        category: str,
-        answer: str,
-        shouldBeCheck: bool,
-        input: str,
-        points: int,
-    ) -> bool:
+    def create_tutorial(title: str, markdownUrl: str, startCode: str, category: str, answer: str, shouldBeCheck: bool, input: str, points: int, default_language: str, image: str, short_description: str, estimated_time: str, path: str = "js") -> bool:
+
         """
         Créer un tutoriel
         """
         tutorialDb: Tutorials = Database.get_table("tutorials")
-        result = tutorialDb.insert(
-            title,
-            markdownUrl,
-            category,
-            answer,
-            startCode,
-            shouldBeCheck,
-            input,
-            points,
-        )
+        result = tutorialDb.insert(title, markdownUrl, category, answer, startCode, shouldBeCheck, input, points, default_language, image, short_description, estimated_time, path)
+
         tutorialDb.close()
         return result
 

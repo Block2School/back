@@ -12,8 +12,9 @@ from models.response.SuccessByIDModel import SuccessByIDModel
 from models.response.SuccessMeModel import SuccessMeModel
 from database.Database import Database
 from database.UserTutorialScore import UserTutorialScore
+from database.CompletedTutorials import CompletedTutorials
 from services.tutorial import TutorialService
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, Response
 from services.utils.JWT import JWT
 import requests, os, json
 from services.utils.Log import Log
@@ -111,6 +112,20 @@ async def get_tutorialv2(r: Request, id: int, token: str = Depends(JWTChecker())
         return JSONResponse({'error': 'Tutorial not found'}, status_code=400)
     else:
         return JSONResponse(tutorial)
+
+@router.get("/last_completed", tags=["tutorial"], dependencies=[Depends(JWTChecker())])
+async def get_last_completed(r: Request, credentials: str = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupérer le dernier tutoriel complété par un utilisateur
+    """
+    jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "Last completed", jwt["uuid"])
+    completedTutorialsDb: CompletedTutorials = Database.get_table("completed_tutorials")
+    completed_tutorial_list = completedTutorialsDb.get_user_n_completed_tutorials(jwt['uuid'], 1)
+    if len(completed_tutorial_list) >= 1:
+        return JSONResponse(completed_tutorial_list[0])
+    else:
+        return Response(status_code=400) 
 
 @router.get('/{id}', tags=['tutorial'], responses=get_tutorial_response)
 async def get_tutorial(r: Request, id: int) -> JSONResponse:
