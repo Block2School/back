@@ -187,6 +187,30 @@ async def get_random_challenge_v2(r: Request, jwt: JWT = Depends(JWTChecker())) 
         challenge["completed_at"] = None
     return challenge
 
+@router.get(
+    "/start_challenge_with_friends/{challenge_id}",
+    tags=["challenges"],
+    responses=get_random_challenge_response_v2,
+)
+async def get_challenge_with_friends(r: Request, challenge_id: int,jwt: JWT = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupération d'un challenge
+    """
+    Log.route_log(r, "challenges routes", "auth_route")
+
+    _jwt: dict = JWT.decodeJWT(jwt)
+
+    challenge = ChallengesService.get_challenge(challenge_id)
+    challenge["inputs"] = json.loads(challenge["inputs"])
+    challenge["answers"] = json.loads(challenge["answers"])
+    completed = ChallengesService.get_completed_challenge(_jwt["uuid"], challenge["id"])
+    if completed != None:
+        challenge["already_completed"] = True
+        challenge["completed_at"] = completed["completed_at"]
+    else:
+        challenge["already_completed"] = False
+        challenge["completed_at"] = None
+    return challenge
 
 @router.get(
     "/is_already_completed/{id}",
@@ -438,6 +462,7 @@ async def join_room(ws: WebSocket, roomID: int, userUUID: str):
     print('username', username)
 
     room = ChallengesService.get_room(roomID)
+    print('ROOM === ', room.getChallengeId())
     if success:
         await room.broadcast(
             json.dumps({
@@ -455,7 +480,8 @@ async def join_room(ws: WebSocket, roomID: int, userUUID: str):
                     'username': UserService.get_username(occupant.getUserUUID())
                 } for occupant in room.getOccupants()],
                 "remainingTime": room.getRemainingTime(),
-                "limitUser": room.getLimitUser()
+                "limitUser": room.getLimitUser(),
+                "challengeId": room.getChallengeId(),
             }
         }))
         while len(room.getOccupants()) > 0:
@@ -514,7 +540,8 @@ async def getAllRooms():
                 'username': UserService.get_username(occupant.getUserUUID())
             } for occupant in room.getOccupants()],
             "maxTime": room.getMaxTime(),
-            "limitUser": room.getLimitUser()
+            "limitUser": room.getLimitUser(),
+            "challengeId": room.getChallengeId(),
         })
     return json
 
@@ -530,6 +557,7 @@ async def getRoomById(roomID: int):
             'username': UserService.get_username(occupant.getUserUUID())
         } for occupant in room.getOccupants()],
         "maxTime": room.getMaxTime(),
-        "limitUser": room.getLimitUser()
+        "limitUser": room.getLimitUser(),
+        "challengeId": room.getChallengeId(),
     }
     return json

@@ -2,13 +2,16 @@ import time
 from fastapi import WebSocket
 from starlette.websockets import WebSocketState
 from typing import List
+from database.Challenges import Challenges
+from database.Database import Database
 from services.challengeUser import ChallengeUser
 import threading
 import asyncio
 import time
 
 class ChallengeRoom():
-    def __init__(self,roomID: int, maxTime: int = 240) -> None:
+    def __init__(self,roomID: int, maxTime: int = 30) -> None: # Changer en 240
+        challengeDB: Challenges = Database.get_table("challenges")
         self._occupants: List[ChallengeUser] = []
         self.active_connections: List[WebSocket] = []
         self._maxTime: int = maxTime
@@ -19,6 +22,7 @@ class ChallengeRoom():
         self._thread: threading.Thread = threading.Thread(target=self.startTimer)
         self._thread.start()
         self._master: str = ""
+        self._challengeId: int = challengeDB.fetch_random_id()
 
     def getOccupants(self) -> List[ChallengeUser]:
         return self._occupants
@@ -41,6 +45,10 @@ class ChallengeRoom():
 
     def getMaster(self) -> str:
         return self._master
+
+    def getChallengeId(self) -> int:
+        print('getChallengeId: ', self._challengeId)
+        return self._challengeId
 
     def setMaster(self, master: str) -> None:
         self._master = master
