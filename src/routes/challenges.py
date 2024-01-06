@@ -455,6 +455,92 @@ async def delete_room(roomID: int):
     success = await ChallengesService.delete_room(roomID)
     return success
 
+@router.get("/multi/results/{roomID}", tags=["challenges"])
+def get_room_results(roomID: int, jwt: str = Depends(JWTChecker())):
+    _jwt = JWT.decodeJWT(jwt)
+    _room = ChallengesService.get_room(roomID)
+
+    if _room == None:
+        return JSONResponse({"error": "Room not found"}, status_code=400)
+
+    results = _room.getResults()
+    return JSONResponse(results, status_code=200)
+
+@router.post("/multi/user_submit/{roomID}", tags=["challenges"])
+async def multiplayer_user_submit(r: Request, roomID: int, user_submit: ChallengeTestModel, jwt: str = Depends(JWTChecker())):
+    _jwt = JWT.decodeJWT(jwt)
+    _room = ChallengesService.get_room(roomID)
+
+    if _room == None:
+        return JSONResponse({"error": "Room not found"}, status_code=400)
+
+    challenge = ChallengesService.get_challenge(_room.getChallengeId())
+    if challenge == None:
+        return JSONResponse({"error": "Challenge not found"}, status_code=400)
+
+    challenge["inputs"] = json.loads(challenge["inputs"])
+    challenge["answers"] = json.loads(challenge["answers"])
+
+    user_results = {
+        "chars": len(user_submit.code),
+        "passed_tests": 0,
+        "total_tests": len(challenge["inputs"]),
+        "username": UserService.get_username(_jwt["uuid"]),
+        "user_id": _jwt["uuid"],
+        "time_spent": int(time.time()) - _room.getStartingTime() - _room.getMaxTime(),
+    }
+
+    url = os.getenv("CODE_EXEC_URL") + "/execute"
+
+    for i in range(len(challenge["inputs"])):
+        data = {
+            "code": user_submit.code,
+            "language": user_submit.language,
+            "input": challenge["inputs"][i],
+        }
+        data = json.dumps(data)
+        res = requests.post(
+            url,
+            data=data,
+            headers={
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+            },
+        )
+        res.raise_for_status()
+        if res.status_code != 200:
+            return JSONResponse(
+                {"error": "An error occured while testing the challenge"},
+                status_code=400,
+            )
+        res = res.json()
+        if res["output"] == challenge["answers"][i] and res["error"] == "":
+            print("TEST PASSED")
+            user_results["passed_tests"] += 1
+
+    print('user_results = ', user_results)
+
+    _room.updateResults(
+        user_id=user_results["user_id"],
+        username=user_results["username"],
+        total_tests=user_results["total_tests"],
+        passed_tests=user_results["passed_tests"],
+        code=user_submit.code,
+        chars=user_results["chars"],
+        time_spent=user_results["time_spent"],
+    )
+
+    # broadcast to all users in the room "user_submited"
+    # send _room.getResults()
+    await _room.broadcast(
+        json.dumps({
+            "type": "user_submited",
+            "message": _room.getResults(),
+        })
+    )
+
+    return JSONResponse({ "success": True }, status_code=200)
+
 @router.websocket("/joinRoom/{roomID}/{userUUID}")
 async def join_room(ws: WebSocket, roomID: int, userUUID: str):
     success = await ChallengesService.join_room(roomID, ws, userUUID)
