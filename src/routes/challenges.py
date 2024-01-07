@@ -452,6 +452,7 @@ def createRoom(roomID: int, userID: str):
 
 @router.post("/deleteRoom/{roomID}")
 async def delete_room(roomID: int):
+    print('USER IS DELETING ROOM ROOM')
     success = await ChallengesService.delete_room(roomID)
     return success
 
@@ -543,20 +544,26 @@ async def multiplayer_user_submit(r: Request, roomID: int, user_submit: Challeng
 
 @router.websocket("/joinRoom/{roomID}/{userUUID}")
 async def join_room(ws: WebSocket, roomID: int, userUUID: str):
-    success = await ChallengesService.join_room(roomID, ws, userUUID)
     username = UserService.get_username(userUUID)
     print('username', username)
+    print('calling ChallengesService.join_room')
+    success = await ChallengesService.join_room(roomID, ws, userUUID)
+    print('ChallengesService.join_room[success]: ', success)
 
     room = ChallengesService.get_room(roomID)
     print('ROOM === ', room.getChallengeId())
+    print('success ==== ', success)
     if success:
+        print('BROADCASTING')
         await room.broadcast(
             json.dumps({
                 "type": "new user joined",
                 "message": {'userId': userUUID, 'username': username},
             })
         )
+        print("ACCEPTING WS")
         await ws.accept()
+        print('SENDING TEXT')
         await ws.send_text(json.dumps({
             "type": "room info",
             "message": {
@@ -579,6 +586,7 @@ async def join_room(ws: WebSocket, roomID: int, userUUID: str):
 
 @router.post("/leaveRoom/{roomID}/{user_uuid}")
 async def leave_room(user_uuid: str, roomID: int):
+    print('USER IS LEAVING ROOM')
     uuid = user_uuid
     room = ChallengesService.get_room(roomID)
     if room is None:

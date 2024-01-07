@@ -29,6 +29,9 @@ class ChallengeRoom:
         self._challengeId: int = challengeDB.fetch_random_id()
         self._startingTime: int = int(time.time())
 
+    # def __str__(self) -> str:
+        # lambda self: f"ChallengeRoom(roomID={self._roomID}, occupants={self._occupants}, maxTime={self._maxTime}, limitUser={self._limitUser}, exitFlag={self._exitFlag}, remainingTime={self._remainingTime}, master={self._master}, challengeId={self._challengeId})"
+
     def getStartingTime(self) -> int:
         return self._startingTime
 
