@@ -64,6 +64,14 @@ class ChallengeRoom:
     def getResults(self) -> List[dict]:
         return self._occupants_results
 
+    def removeUser(self, user: ChallengeUser) -> None:
+        self._occupants.remove(user)
+        # delete row in self._occupants_results where user_id = user.getUserUUID()
+        for idx, result in enumerate(self._occupants_results):
+            if result["user_id"] == user.getUserUUID():
+                self._occupants_results.pop(idx)
+                break
+
     def setMaster(self, master: str) -> None:
         self._master = master
 

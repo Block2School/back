@@ -643,7 +643,7 @@ async def getAllRooms():
 async def getRoomById(roomID: int):
     room = ChallengesService.get_room(roomID)
     if room == None:
-        return {}
+        return JSONResponse({}, status_code=404)
     json = {
         "master": room.getMaster(),
         "occupants": [{
@@ -654,4 +654,4 @@ async def getRoomById(roomID: int):
         "limitUser": room.getLimitUser(),
         "challengeId": room.getChallengeId(),
     }
-    return json
+    return JSONResponse(json, status_code=200)

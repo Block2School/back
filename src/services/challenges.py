@@ -310,7 +310,8 @@ class ChallengesService():
         for i in ChallengesService.challengeRooms:
             for j in i._occupants:
                 if j.getUserUUID() == user_uuid:
-                    i._occupants.remove(j)
+                    # i._occupants.remove(j)
+                    i.removeUser(j)
                     break
         ChallengesService.cleanRooms(room_id)
         return
