@@ -3,6 +3,7 @@ from database.CompletedTutorials import CompletedTutorials
 from database.Database import Database
 from database.AccountDetails import AccountDetails
 from database.Account import AccountDatabase
+from database.Tutorials import Tutorials
 from services.utils.GenerateAuthenticator import GenerateAuthenticator
 from database.Friends import Friends
 import pyotp
@@ -35,10 +36,13 @@ class UserService():
     @staticmethod
     def get_profileV2(uuid: str, n: int) -> dict:
         accountDetailDb: AccountDetails = Database.get_table("account_details")
+        tutorialDB: Tutorials = Database.get_table("tutorials")
         accountDb: AccountDatabase = Database.get_table("account")
         completed_tutorialsDb: CompletedTutorials = Database.get_table("completed_tutorials")
         response = accountDetailDb.fetch(uuid)
         completed = completed_tutorialsDb.get_user_n_completed_tutorials(uuid, n)
+        nb_completed_tutorials = completed_tutorialsDb.get_number_completed_tutorials(uuid)
+        total_nb_tutorials = tutorialDB.get_total_nb_of_tutorials()
         accountDetailDb.close()
         completed_tutorialsDb.close()
         user = accountDb.fetch(uuid)
@@ -54,7 +58,9 @@ class UserService():
             "privacy": response['private'],
             "points": user['points'],
             "last_completed_tutorials": completed,
-            "uuid": uuid
+            "uuid": uuid,
+            "nb_completed_tutorials": nb_completed_tutorials,
+            "total_nb_tutorials": total_nb_tutorials,
         }
 
     @staticmethod
