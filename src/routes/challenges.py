@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Form, Request, WebSocket
+
 from fastapi.responses import JSONResponse
 
-import requests, os, json
+import requests, os, json, time
 from models.input.ChallengeModel import ChallengeModel
 from models.input.ChallengeTestModel import ChallengeTestModel
 from models.response.ChallengeResponseModel import (
@@ -13,7 +14,10 @@ from models.response.ErrorResponseModel import ErrorResponseModel
 from models.response.LeaderboardByIDResponseModel import LeaderboardByIDResponseModel
 from models.response.LeaderboardResoonseModel import LeaderboardResponseModel
 from models.response.SubmitChallengeResponseModel import SubmitChallengeResponseModel
+from models.response.JoinChallengeResponseModel import JoinChallengeResponseModel
+from models.response.LeaveChallengeRoomModel import LeaveChallengeRoomModel
 from services.challenges import ChallengesService
+from services.user import UserService
 from services.utils.JWTChecker import JWTChecker
 from services.utils.Log import Log
 from services.utils.JWT import JWT
@@ -50,6 +54,11 @@ test_challenge_response = {
 
 create_challenge_response = {
     200: {"model": ChallengeResponseModel},
+    400: {"model": ErrorResponseModel},
+}
+
+join_challenge_response = {
+    200: {"model": JoinChallengeResponseModel},
     400: {"model": ErrorResponseModel},
 }
 
@@ -167,6 +176,31 @@ async def get_random_challenge_v2(r: Request, jwt: JWT = Depends(JWTChecker())) 
     _jwt: dict = JWT.decodeJWT(jwt)
 
     challenge = ChallengesService.get_random_challenge()
+    challenge["inputs"] = json.loads(challenge["inputs"])
+    challenge["answers"] = json.loads(challenge["answers"])
+    completed = ChallengesService.get_completed_challenge(_jwt["uuid"], challenge["id"])
+    if completed != None:
+        challenge["already_completed"] = True
+        challenge["completed_at"] = completed["completed_at"]
+    else:
+        challenge["already_completed"] = False
+        challenge["completed_at"] = None
+    return challenge
+
+@router.get(
+    "/start_challenge_with_friends/{challenge_id}",
+    tags=["challenges"],
+    responses=get_random_challenge_response_v2,
+)
+async def get_challenge_with_friends(r: Request, challenge_id: int,jwt: JWT = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupération d'un challenge
+    """
+    Log.route_log(r, "challenges routes", "auth_route")
+
+    _jwt: dict = JWT.decodeJWT(jwt)
+
+    challenge = ChallengesService.get_challenge(challenge_id)
     challenge["inputs"] = json.loads(challenge["inputs"])
     challenge["answers"] = json.loads(challenge["answers"])
     completed = ChallengesService.get_completed_challenge(_jwt["uuid"], challenge["id"])
@@ -422,3 +456,214 @@ async def submit_challenge(
                 "isError": False,
             }, status_code=200
         )
+
+@router.post("/createRoom/{roomID}/{userID}")
+def createRoom(roomID: int, userID: str):
+    success = ChallengesService.create_room(roomID, userID)
+    return success
+
+@router.post("/deleteRoom/{roomID}")
+async def delete_room(roomID: int):
+    print('USER IS DELETING ROOM ROOM')
+    success = await ChallengesService.delete_room(roomID)
+    return success
+
+@router.get("/multi/results/{roomID}", tags=["challenges"])
+def get_room_results(roomID: int, jwt: str = Depends(JWTChecker())):
+    _jwt = JWT.decodeJWT(jwt)
+    _room = ChallengesService.get_room(roomID)
+
+    if _room == None:
+        return JSONResponse({"error": "Room not found"}, status_code=400)
+
+    results = _room.getResults()
+    return JSONResponse(results, status_code=200)
+
+@router.post("/multi/user_submit/{roomID}", tags=["challenges"])
+async def multiplayer_user_submit(r: Request, roomID: int, user_submit: ChallengeTestModel, jwt: str = Depends(JWTChecker())):
+    _jwt = JWT.decodeJWT(jwt)
+    _room = ChallengesService.get_room(roomID)
+
+    if _room == None:
+        return JSONResponse({"error": "Room not found"}, status_code=400)
+
+    challenge = ChallengesService.get_challenge(_room.getChallengeId())
+    if challenge == None:
+        return JSONResponse({"error": "Challenge not found"}, status_code=400)
+
+    challenge["inputs"] = json.loads(challenge["inputs"])
+    challenge["answers"] = json.loads(challenge["answers"])
+
+    user_results = {
+        "chars": len(user_submit.code),
+        "passed_tests": 0,
+        "total_tests": len(challenge["inputs"]),
+        "username": UserService.get_username(_jwt["uuid"]),
+        "user_id": _jwt["uuid"],
+        "time_spent": int(time.time()) - _room.getStartingTime() - _room.getMaxTime(),
+    }
+
+    url = os.getenv("CODE_EXEC_URL") + "/execute"
+
+    for i in range(len(challenge["inputs"])):
+        data = {
+            "code": user_submit.code,
+            "language": user_submit.language,
+            "input": challenge["inputs"][i],
+        }
+        data = json.dumps(data)
+        res = requests.post(
+            url,
+            data=data,
+            headers={
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+            },
+        )
+        res.raise_for_status()
+        if res.status_code != 200:
+            return JSONResponse(
+                {"error": "An error occured while testing the challenge"},
+                status_code=400,
+            )
+        res = res.json()
+        if res["output"] == challenge["answers"][i] and res["error"] == "":
+            print("TEST PASSED")
+            user_results["passed_tests"] += 1
+
+    print('user_results = ', user_results)
+
+    _room.updateResults(
+        user_id=user_results["user_id"],
+        username=user_results["username"],
+        total_tests=user_results["total_tests"],
+        passed_tests=user_results["passed_tests"],
+        code=user_submit.code,
+        chars=user_results["chars"],
+        time_spent=user_results["time_spent"],
+    )
+
+    # broadcast to all users in the room "user_submited"
+    # send _room.getResults()
+    await _room.broadcast(
+        json.dumps({
+            "type": "user_submited",
+            "message": _room.getResults(),
+        })
+    )
+
+    return JSONResponse({ "success": True }, status_code=200)
+
+@router.websocket("/joinRoom/{roomID}/{userUUID}")
+async def join_room(ws: WebSocket, roomID: int, userUUID: str):
+    username = UserService.get_username(userUUID)
+    print('username', username)
+    print('calling ChallengesService.join_room')
+    success = await ChallengesService.join_room(roomID, ws, userUUID)
+    print('ChallengesService.join_room[success]: ', success)
+
+    room = ChallengesService.get_room(roomID)
+    print('ROOM === ', room.getChallengeId())
+    print('success ==== ', success)
+    if success:
+        print('BROADCASTING')
+        await room.broadcast(
+            json.dumps({
+                "type": "new user joined",
+                "message": {'userId': userUUID, 'username': username},
+            })
+        )
+        print("ACCEPTING WS")
+        await ws.accept()
+        print('SENDING TEXT')
+        await ws.send_text(json.dumps({
+            "type": "room info",
+            "message": {
+                "roomID": room.getRoomID(),
+                "occupants": [{
+                    'userId': occupant.getUserUUID(),
+                    'username': UserService.get_username(occupant.getUserUUID())
+                } for occupant in room.getOccupants()],
+                "remainingTime": room.getRemainingTime(),
+                "limitUser": room.getLimitUser(),
+                "challengeId": room.getChallengeId(),
+            }
+        }))
+        while len(room.getOccupants()) > 0:
+            try:
+                await ws.receive_text()
+            except:
+                break
+    return success
+
+@router.post("/leaveRoom/{roomID}/{user_uuid}")
+async def leave_room(user_uuid: str, roomID: int):
+    print('USER IS LEAVING ROOM')
+    uuid = user_uuid
+    room = ChallengesService.get_room(roomID)
+    if room is None:
+        return False
+    users = room.getOccupants()
+    if users is None:
+        return False
+    ws = None
+    for i in range(len(users)):
+        if users[i].getUserUUID() == uuid:
+            ws = users[i].getWs()
+    success = await ChallengesService.leave_room(roomID, uuid, ws)
+
+    if success:
+        await room.broadcast(
+            json.dumps({
+                "type": "userLeft",
+                "message": {
+                    "occupants": [{
+                        'userId': occupant.getUserUUID(),
+                        'username': UserService.get_username(occupant.getUserUUID())
+                    } for occupant in room.getOccupants()]
+                },
+            })
+        )
+
+    return success
+
+@router.post("/broadcast/{roomID}")
+async def broadcast(roomID: int):
+    success = await ChallengesService.broadcast(roomID, json.dumps({"message": "test"}))
+    return success
+
+@router.get("/getAllRooms")
+async def getAllRooms():
+    rooms = ChallengesService.getAllRooms()
+    json = {
+        "rooms": []
+    }
+    for room in rooms:
+        json["rooms"].append({
+            "roomID": room.getRoomID(),
+            "occupants": [{
+                'userId': occupant.getUserUUID(),
+                'username': UserService.get_username(occupant.getUserUUID())
+            } for occupant in room.getOccupants()],
+            "maxTime": room.getMaxTime(),
+            "limitUser": room.getLimitUser(),
+            "challengeId": room.getChallengeId(),
+        })
+    return json
+
+@router.get("/getRoomById/{roomID}")
+async def getRoomById(roomID: int):
+    room = ChallengesService.get_room(roomID)
+    if room == None:
+        return JSONResponse({}, status_code=404)
+    json = {
+        "master": room.getMaster(),
+        "occupants": [{
+            'userId': occupant.getUserUUID(),
+            'username': UserService.get_username(occupant.getUserUUID())
+        } for occupant in room.getOccupants()],
+        "maxTime": room.getMaxTime(),
+        "limitUser": room.getLimitUser(),
+        "challengeId": room.getChallengeId(),
+    }
+    return JSONResponse(json, status_code=200)

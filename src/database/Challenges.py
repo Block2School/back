@@ -67,5 +67,16 @@ class Challenges():
             self.__log_error(e, "fetch_random")
             return None
 
+    def fetch_random_id(self) -> int:
+        prepare = "SELECT `id` FROM `challenges` ORDER BY RAND() LIMIT 1"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare)
+                result = cursor.fetchone()
+                return result["id"]
+        except Exception as e:
+            self.__log_error(e, "fetch_random_id")
+            return None
+
     def close(self) -> None:
         self.db.close()

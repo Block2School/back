@@ -1,10 +1,18 @@
 import json
+from typing import List
+from fastapi import WebSocket
+from database.Account import AccountDatabase
 from database.ChallengesLeaderboard import ChallengesLeaderboard
 from database.ChallengesCompleted import ChallengesCompleted
 from database.Challenges import Challenges
 from database.Database import Database
+from _thread import *
 
+from services.challengeRoom import ChallengeRoom
+from services.challengeUser import ChallengeUser
 class ChallengesService():
+    challengeRooms: List[ChallengeRoom] = []
+    stop_message: bool = False
 
     @staticmethod
     def get_leaderboard() -> list:
@@ -202,6 +210,111 @@ class ChallengesService():
         result = challengesDB.insert(inputs, answers, markdown_url, start_code, points, title, language)
         challengesDB.close()
         return result
+    
+    @staticmethod
+    def get_room(id: int) -> ChallengeRoom:
+        for room in ChallengesService.challengeRooms:
+            if room.getRoomID() == id:
+                return room
+        return None
+
+    @staticmethod
+    def create_room(room_id: int, userID: str) -> bool:
+        print('create_room: ', room_id)
+        ChallengesService.deletePreviousConnections(userID)
+        room: ChallengeRoom = ChallengesService.get_room(room_id)
+        if room is None:
+            room = ChallengeRoom(room_id)
+            ChallengesService.challengeRooms.append(room)
+            room.setMaster(userID)
+            # room.startRoom()
+            return True
+        return False
+
+    @staticmethod
+    async def delete_room(room_id: int) -> bool:
+        print('delete_room: ', room_id)
+        room: ChallengeRoom = ChallengesService.get_room(room_id)
+        if room is None:
+            return False
+        users = room.getOccupants()
+        await room.broadcast(json.dumps({
+            "type": "room_deleted",
+            "message": "Room deleted"
+        }))
+        if users is None:
+            ChallengesService.challengeRooms.remove(room)
+            return True
+        else :
+            for i in users:
+                await ChallengesService.leave_room(room_id, i.getUserUUID(), i.getWs())
+            ChallengesService.challengeRooms.remove(room)
+            return True
+        return False
+
+    @staticmethod
+    async def join_room(room_id: int, ws: WebSocket, userUUID: str) -> bool:
+        ChallengesService.deletePreviousConnections(userUUID, room_id)
+        join = True
+        room: ChallengeRoom = ChallengesService.get_room(room_id)
+        print('join_room: ', room)
+        if room is not None:
+            user = ChallengeUser(userUUID, ws)
+            print(f'join_room: user: {user.getUserUUID()} {user.getWs()}')
+            for i in ChallengesService.challengeRooms:
+                print('join_room: i._occupants.length: ', len(i._occupants))
+                for j in i._occupants:
+                    print(f'join_room: j: "{j}", ws: "{j.getWs()}", uuid: "{j.getUserUUID()}"')
+                    print(f'join_room: j: "{j}", ws: "{user.getWs().application_state}", uuid: "{user.getUserUUID()}"')
+                    if j == None or j._userUUID == user._userUUID:
+                        join = False
+            if join == True:
+                await room.joinRoom(ws, user)
+                return True
+        return False
+
+    @staticmethod
+    async def leave_room(room_id: int, user_id: str, ws:WebSocket) -> bool:
+        print('leave_room: ', room_id, user_id)
+        room: ChallengeRoom = ChallengesService.get_room(room_id)
+        for j in room._occupants:
+            if j.getUserUUID() == user_id:
+                await room.leaveRoom(ws, j)
+                return True
+        return False
+
+    @staticmethod
+    async def broadcast(room_id: int, message: str) -> bool:
+        room: ChallengeRoom = ChallengesService.get_room(room_id)
+        if room is not None:
+            await room.broadcast(message)
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def getAllRooms() -> List[ChallengeRoom]:
+        return ChallengesService.challengeRooms
+
+    @staticmethod
+    def cleanRooms(room_id: int = None) -> None:
+        for i in ChallengesService.challengeRooms:
+            if len(i._occupants) == 0 and i.getRoomID() != room_id:
+                for j in i.active_connections:
+                    j.close()
+                ChallengesService.challengeRooms.remove(i)
+        return
+
+    @staticmethod
+    def deletePreviousConnections(user_uuid: str, room_id: int = None) -> None:
+        for i in ChallengesService.challengeRooms:
+            for j in i._occupants:
+                if j.getUserUUID() == user_uuid:
+                    # i._occupants.remove(j)
+                    i.removeUser(j)
+                    break
+        ChallengesService.cleanRooms(room_id)
+        return
 
     @staticmethod
     def get_nb_of_challenges_done_by_user(user_uuid: str) -> int:
