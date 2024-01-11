@@ -229,7 +229,7 @@ class UserService():
             friendsDb.close()
             return None
         friend = friendsDb.fetch(uuid, uuid_friend)
-        if friend != None:
+        if friend != None and (friend["status"] == "pending" or friend["status"] == "friend"):
             friendsDb.close()
             return None
         already_pending_other = friendsDb.fetch(uuid_friend, uuid)
@@ -237,7 +237,7 @@ class UserService():
             if friendsDb.update(uuid_friend, uuid, "friend") == None:
                 friendsDb.close()
                 return None
-            if friendsDb.insert(uuid, uuid_friend, "friend") == False:
+            if friendsDb.update(uuid, uuid_friend, "friend") == False:
                 friendsDb.close()
                 return None
             friendsDb.close()
@@ -260,13 +260,14 @@ class UserService():
             friendsDb.close()
             return False
         friend = friendsDb.fetch(uuid, uuid_friend)
-        if friend != None:
+        if friend != None and friend["status"] == "pending":
             friendsDb.remove(uuid, uuid_friend)
-            other_user = friendsDb.fetch(uuid_friend, uuid)
-            if other_user["status"] == 'asking':
-                friendsDb.remove(uuid_friend, uuid)
-            else:
-                friendsDb.update(uuid_friend, uuid, "pending")
+            friendsDb.remove(uuid_friend, uuid)
+            friendsDb.close()
+            return True
+        elif friend != None and friend["status"] == "friend":
+            friendsDb.update(uuid, uuid_friend, "asking")
+            friendsDb.update(uuid_friend, uuid, "pending")
             friendsDb.close()
             return True
         else:

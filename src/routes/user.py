@@ -137,7 +137,7 @@ async def add_friend(r: Request, friend: FriendsModel, credentials: str = Depend
         elif result == "friend":
             return JSONResponse({"success": "Now friends with"}, status_code=200)
         else:
-            return JSONResponse({"error": "You are already friend with or pending invite"}, status_code=201)
+            return JSONResponse({"error": "You are already friend with or pending invite"}, status_code=400)
     else:
         return JSONResponse({"error": "You must provid a friend uuid"}, status_code=400)
 
