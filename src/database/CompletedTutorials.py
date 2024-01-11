@@ -80,5 +80,16 @@ class CompletedTutorials():
             return None
         return result
 
+    def get_number_completed_tutorials(self, uuid: str) -> int:
+        prepare = "SELECT COUNT(*) AS total FROM `completed_tutorials` WHERE user_id = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (uuid))
+                result = cursor.fetchall()
+        except Exception as e:
+            self.__log_error(e, "get_number_completed_tutorials")
+            return None
+        return result[0].get("total")
+
     def close(self) -> None:
         self.db.close()

@@ -20,3 +20,5 @@ class ProfileResponseModelV2(BaseModel):
     youtube: str
     birthdate: int
     last_completed_tutorials: list[LastCompletedTutorialModel]
+    nb_completed_tutorials: int
+    total_nb_tutorials: int

@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter, Depends, Request
 from services.utils.JWT import JWT
 from services.utils.JWTChecker import JWTChecker
@@ -41,8 +42,9 @@ async def update_profile(r: Request, profile_model: ProfileModel, credentials: s
     jwt = JWT.decodeJWT(credentials)
     Log.route_log(r, "user routes", jwt["uuid"])
     is_updated = UserService.update_profile(jwt['uuid'], profile_model.username, profile_model.email, profile_model.description, profile_model.twitter, profile_model.youtube, profile_model.birthdate, profile_model.privacy)
+
     if is_updated:
-        return JSONResponse(profile_model, status_code=200)
+        return profile_model
     else:
         return JSONResponse({'error': "Can't update your profile"}, status_code=400)
 
