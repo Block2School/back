@@ -11,11 +11,13 @@ from database.Category import Category
 from database.Challenges import Challenges
 from database.ChallengesCompleted import ChallengesCompleted
 from database.ChallengesLeaderboard import ChallengesLeaderboard
+from database.CompletedTutorials import CompletedTutorials
 from database.Faq import Faq
 from database.Friends import Friends
 from database.Tutorials import Tutorials
 from database.UserAccess import UserAccess
 from database.UserTutorialScore import UserTutorialScore
+from database.Paths import Paths
 
 load_dotenv()
 
@@ -33,7 +35,9 @@ tables = {
     "user_tutorial_score": UserTutorialScore,
     "challenges_leaderboard": ChallengesLeaderboard,
     "challenges_completed": ChallengesCompleted,
-    "challenges": Challenges
+    "challenges": Challenges,
+    "completed_tutorials": CompletedTutorials,
+    "path": Paths
 }
 
 class Database():

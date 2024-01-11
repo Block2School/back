@@ -1,18 +1,20 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, Request
 from models.input.SubmitTutorialModel import SubmitTutorialModel
 from models.response.CategoryResponseListModel import CategoryResponseListModel
 from models.response.CompleteTutorialResponseModel import CompleteTutorialResponseModel
 from models.response.ErrorResponseModel import ErrorResponseModel
 from models.response.ScoreboardTutorialIDListModel import ScoreboardTutorialIDListModel
-from models.response.TutorialResponseListModel import TutorialResponseListModel
-from models.response.TutorialResponseModel import TutorialResponseModel
+from models.response.TutorialResponseListModel import TutorialResponseListModel, TutorialResponseListModelV2
+from models.response.TutorialResponseModel import TutorialResponseModel, TutorialResponseModelV2
 from models.response.ScoreboardTutorialMeListModel import ScoreboardTutorialMeListModel
 from models.response.SuccessByIDModel import SuccessByIDModel
 from models.response.SuccessMeModel import SuccessMeModel
 from database.Database import Database
 from database.UserTutorialScore import UserTutorialScore
+from database.CompletedTutorials import CompletedTutorials
 from services.tutorial import TutorialService
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, Response
 from services.utils.JWT import JWT
 import requests, os, json
 from services.utils.Log import Log
@@ -22,10 +24,21 @@ from services.utils.JWTChecker import JWTChecker
 get_all_tutorials_response = {
     200: {'model': TutorialResponseListModel}
 }
+
+get_all_tutorials_responseV2 = {
+    200: {'model': TutorialResponseListModelV2}
+}
+
 get_tutorial_response = {
     200: {'model': TutorialResponseModel},
     400: {'model': ErrorResponseModel}
 }
+
+get_tutorial_responseV2 = {
+    200: {'model': TutorialResponseModelV2},
+    400: {'model': ErrorResponseModel}
+}
+
 get_all_tutorials_by_category_response = {
     200: {'model': TutorialResponseListModel}
 }
@@ -66,6 +79,68 @@ async def get_all_tutorials(r: Request) -> JSONResponse:
     tutorial_list = TutorialService.get_all_tutorials()
     return JSONResponse({'data': tutorial_list}, status_code=200)
 
+@router.get('/v2/auth/all', tags=['tutorial'], responses=get_all_tutorials_responseV2, dependencies=[Depends(JWTChecker())])
+async def get_all_tutorialsv2(r: Request, token: str = Depends(JWTChecker())):
+    Log.route_log(r, "tutorial routes v2", "open_route")
+    jwt = JWT.decodeJWT(token)
+    print(jwt)
+    tutorial_list = TutorialService.get_all_tutorialsV2(jwt["uuid"])
+    return JSONResponse({'data': tutorial_list})
+
+@router.get('/v2/all', tags=['tutorial'], responses=get_all_tutorials_responseV2)
+async def get_all_tutorialsv2(r: Request):
+    Log.route_log(r, "tutorial routes v2", "open_route")
+    tutorial_list = TutorialService.get_all_tutorialsV2("")
+    return JSONResponse({'data': tutorial_list})
+
+@router.get('/v2/{id}', tags=['tutorial'], responses=get_tutorial_responseV2)
+async def get_tutorialv2(r: Request, id: int):
+    Log.route_log(r, "tutorial routes v2", "open_route")
+    tutorial = TutorialService.get_tutorialV2(id, "")
+    if tutorial == None:
+        return JSONResponse({'error': 'Tutorial not found'}, status_code=400)
+    else:
+        return JSONResponse(tutorial)
+
+@router.get('/v2/auth/{id}', tags=['tutorial'], responses=get_tutorial_responseV2, dependencies=[Depends(JWTChecker())])
+async def get_tutorialv2(r: Request, id: int, token: str = Depends(JWTChecker())):
+    Log.route_log(r, "tutorial routes v2", "open_route")
+    jwt = JWT.decodeJWT(token)
+    print(jwt)
+    tutorial = TutorialService.get_tutorialV2(id, jwt["uuid"])
+    if tutorial == None:
+        return JSONResponse({'error': 'Tutorial not found'}, status_code=400)
+    else:
+        return JSONResponse(tutorial)
+
+@router.get("/last_completed", tags=["tutorial"], dependencies=[Depends(JWTChecker())])
+async def get_last_completed(r: Request, credentials: str = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupérer le dernier tutoriel complété par un utilisateur
+    """
+    jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "Last completed", jwt["uuid"])
+    completedTutorialsDb: CompletedTutorials = Database.get_table("completed_tutorials")
+    completed_tutorial_list = completedTutorialsDb.get_user_n_completed_tutorials(jwt['uuid'], 1)
+    if len(completed_tutorial_list) >= 1:
+        return JSONResponse(completed_tutorial_list[0])
+    else:
+        return Response(status_code=400)
+
+@router.get("/total_tutorials_completion", tags=["tutorial"], dependencies=[Depends(JWTChecker())])
+async def get_total_tutorials_completion(r: Request, credentials: str = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupérer le nombre total de tutoriaux complétés
+    """
+    jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "Total tutorials completion", jwt['uuid'])
+    completedTutorialsDb: CompletedTutorials = Database.get_table("completed_tutorials")
+    total = completedTutorialsDb.get_number_completed_tutorials(jwt['uuid'])
+    if total:
+        return JSONResponse({"total": total})
+    else:
+        return Response(status_code=400)
+
 @router.get('/{id}', tags=['tutorial'], responses=get_tutorial_response)
 async def get_tutorial(r: Request, id: int) -> JSONResponse:
     """
@@ -94,6 +169,62 @@ async def get_all_tutorials_by_category(r: Request, category: str) -> JSONRespon
     """
     Log.route_log(r, "tutorial routes", "open_route")
     tutorial_list = TutorialService.get_all_tutorials_by_category(category)
+    return JSONResponse({'data': tutorial_list}, status_code=200)
+
+@router.get('/category/{category}/v2', tags=['tutorial'], responses=get_all_tutorials_by_category_response)
+async def get_all_tutorials_by_category2(r: Request, category: str) -> JSONResponse:
+    """
+    Récupérer tous les tutoriaux par catégorie
+    """
+    Log.route_log(r, "tutorial routes", "open_route")
+    tutorial_list = TutorialService.get_all_tutorials_by_categoryV2(category)
+    return JSONResponse({'data': tutorial_list}, status_code=200)
+
+@router.get('/category/{category}/auth', tags=['tutorial'], responses=get_all_tutorials_by_category_response, dependencies=[Depends(JWTChecker())])
+async def get_all_tutorials_by_category3(r: Request, category: str, credentials: str = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupérer tous les tutoriaux par catégorie
+    """
+    jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "tutorial routes", jwt["uuid"])
+    tutorial_list = TutorialService.get_all_tutorials_by_categoryV2_auth(category, jwt["uuid"])
+    return JSONResponse({'data': tutorial_list}, status_code=200)
+
+@router.get('/paths/all', tags=['tutorial'])
+async def get_all_paths(r: Request) -> JSONResponse:
+    """
+    Récupérer tous les chemins
+    """
+    Log.route_log(r, "tutorial routes", "open_route")
+    paths = TutorialService.get_paths()
+    return JSONResponse({'data': paths}, status_code=200)
+
+@router.get('/paths/{id}', tags=['tutorial'])
+async def get_path(r: Request, id: int) -> JSONResponse:
+    """
+    Récupérer un chemin par son ID
+    """
+    Log.route_log(r, "tutorial routes", "open_route")
+    path = TutorialService.get_path(id)
+    return JSONResponse({'data': path}, status_code=200)
+
+@router.get('/paths/{path}/tutorials', tags=['tutorial'])
+async def get_tutorials_by_path(r: Request, path: str) -> JSONResponse:
+    """
+    Récupérer tous les tutoriaux par chemin
+    """
+    Log.route_log(r, "tutorial routes", "open_route")
+    tutorial_list = TutorialService.get_all_tutorials_by_path(path)
+    return JSONResponse({'data': tutorial_list}, status_code=200)
+
+@router.get('/paths/{path}/tutorials/auth', tags=['tutorial'], dependencies=[Depends(JWTChecker())])
+async def get_tutorials_by_path2(r: Request, path: str, credentials: str = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Récupérer tous les tutoriaux par chemin
+    """
+    jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "tutorial routes", jwt["uuid"])
+    tutorial_list = TutorialService.get_all_tutorials_by_path_auth(path, jwt["uuid"])
     return JSONResponse({'data': tutorial_list}, status_code=200)
 
 @router.get('/scoreboard/id/{id}', tags=['tutorial'], responses=get_scoreboard_tutorial_response)
@@ -154,7 +285,7 @@ async def complete_tutorial(r: Request, tutorial: SubmitTutorialModel, credentia
 
     if tutorial.source_code != None:
         tuto = TutorialService.get_tutorial(tutorial.tutorial_id)
-        
+
         if (tutorial.exec == True):
             data = {
                 "code": tutorial.source_code,

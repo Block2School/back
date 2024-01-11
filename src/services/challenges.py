@@ -315,3 +315,13 @@ class ChallengesService():
                     break
         ChallengesService.cleanRooms(room_id)
         return
+
+    @staticmethod
+    def get_nb_of_challenges_done_by_user(user_uuid: str) -> int:
+        """
+        Récupérer le nombre de challenges complétés par un utilisateur
+        """
+        completedDB: ChallengesCompleted = Database.get_table("challenges_completed")
+        completed = completedDB.fetch_all_by_user(user_uuid)
+        completedDB.close()
+        return len(completed)

@@ -1,0 +1,2 @@
+ALTER TABLE `tutorials`
+ADD (`path` VARCHAR(255) NOT NULL);

@@ -12,11 +12,11 @@ class Tutorials():
             message = str(e.args[0])
         Log.error_log("tutorials table", function, function, message)
 
-    def insert(self, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str, points: int) -> bool:
-        prepare = "INSERT INTO `tutorials` (`title`, `markdown_url`, `category`, `answer`, `start_code`, `should_be_check`, `input`, `points`) VALUES (%s, %s, %s, %s, %s, %r, %s, %s)"
+    def insert(self, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str, points: int, default_language: str, image: str, short_description: str, estimated_time: str, path: str) -> bool:
+        prepare = "INSERT INTO `tutorials` (`title`, `markdown_url`, `category`, `answer`, `start_code`, `should_be_check`, `input`, `points`, `default_language`, `image`, `short_description`, `estimated_time`, `path`) VALUES (%s, %s, %s, %s, %s, %r, %s, %s, %s, %s, %s, %s, %s)"
         try:
             with self.db.cursor() as cursor:
-                cursor.execute(prepare, (title, markdown_url, category, answer, start_code, should_be_check, input, points))
+                cursor.execute(prepare, (title, markdown_url, category, answer, start_code, should_be_check, input, points, default_language, image, short_description, estimated_time, path))
             self.db.commit()
         except Exception as e:
             self.__log_error(e, "insert")
@@ -56,8 +56,8 @@ class Tutorials():
             return None
         return result
 
-    def update(self, id: int, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str, points: int) -> dict:
-        prepare = "UPDATE `tutorials` SET `title` = %s, `markdown_url` = %s, `category` = %s, `answer` = %s, `start_code` = %s, `should_be_check` = %r, `input` = %s, `points` = %s WHERE `id` = %s"
+    def update(self, id: int, title: str, markdown_url: str, category: str, answer: str, start_code: str, should_be_check: bool, input: str, points: int, default_language: str, image: str, short_description: str, estimated_time: str) -> dict:
+        prepare = "UPDATE `tutorials` SET `title` = %s, `markdown_url` = %s, `category` = %s, `answer` = %s, `start_code` = %s, `should_be_check` = %r, `input` = %s, `points` = %s, `default_language` = %s, `image` = %s, `short_description` = %s, `estimated_time` = %s WHERE `id` = %s"
         try:
             with self.db.cursor() as cursor:
                 cursor.execute(prepare, (title, markdown_url, category, answer, start_code, should_be_check, input, points, id))
@@ -88,6 +88,28 @@ class Tutorials():
             self.__log_error(e, "remove")
             return False
         return True
+
+    def fetch_by_path(self, path: str) -> list:
+        prepare = "SELECT * FROM `tutorials` WHERE `path` = %s"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare, (path))
+                result = cursor.fetchall()
+        except Exception as e:
+            self.__log_error(e, "fetch_by_path")
+            return None
+        return result
+
+    def get_total_nb_of_tutorials(self) -> int:
+        prepare = "SELECT COUNT(*) AS total FROM `tutorials`"
+        try:
+            with self.db.cursor() as cursor:
+                cursor.execute(prepare)
+                result = cursor.fetchone()
+        except Exception as e:
+            self.__log_error(e, "get_total_nb_of_tutorials")
+            return None
+        return result["total"]
 
     def close(self):
         self.db.close()
