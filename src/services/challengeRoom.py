@@ -13,7 +13,7 @@ from services.user import UserService
 
 
 class ChallengeRoom:
-    def __init__(self, roomID: int, maxTime: int = 30) -> None:  # Changer en 240
+    def __init__(self, roomID: int, maxTime: int = 120) -> None:  # Changer en 240
         challengeDB: Challenges = Database.get_table("challenges")
         self._occupants: List[ChallengeUser] = []
         self._occupants_results: List[dict] = []
