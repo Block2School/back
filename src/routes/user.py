@@ -61,6 +61,18 @@ async def get_user_profile(r: Request, username: str, credentials: str = Depends
     else:
         return JSONResponse({"error": "You're not allowed to see this profile"}, status_code=401)
 
+@router.get("/authenticator", dependencies=[Depends(JWTChecker())], tags=["user"])
+async def has_authenticator(r: Request, credentials: str = Depends(JWTChecker())) -> JSONResponse:
+    """
+    Vérifier si l'utilisateur a un authenticator
+    """
+    jwt = JWT.decodeJWT(credentials)
+    Log.route_log(r, "user routes", jwt["uuid"])
+    response = UserService.has_authenticator(jwt["uuid"])
+    return JSONResponse({
+        "has_authenticator": response
+    }, status_code=200)
+
 @router.post('/authenticator/qrcode', dependencies=[Depends(JWTChecker())], tags=['user'], responses={200: {"model": QrCodeResponseModel}, 400: {"model": ErrorResponseModel}})
 async def add_qrcode_authenticator(r: Request, wordlist_model: WordlistModel, credentials: str = Depends(JWTChecker())) -> JSONResponse:
     """
