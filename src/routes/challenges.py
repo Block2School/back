@@ -97,7 +97,7 @@ async def get_top_10_monthly(r: Request) -> JSONResponse:
     """
     Log.route_log(r, "challenges routes", "open_route")
     leaderboard = ChallengesService.get_top_10_monthly()
-    return JSONResponse(leaderboard, status_code=200)
+    return leaderboard
 
 @router.get(
     "/leaderboard/top_monthly", tags=["challenges"], responses=get_leaderboard_response
