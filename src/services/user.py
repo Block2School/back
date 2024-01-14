@@ -324,3 +324,15 @@ class UserService():
         result = accountDb.get_username(uuid)
         accountDb.close()
         return result
+    
+    @staticmethod
+    def has_authenticator(uuid: str) -> bool:
+        """
+        Vérifier si l'utilisateur a un authenticator
+        """
+        accountDb: AccountDatabase = Database.get_table("account")
+        result = accountDb.fetch(uuid)
+        accountDb.close()
+        if result.get("qr_secret"):
+            return True
+        return False
