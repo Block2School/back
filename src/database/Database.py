@@ -18,6 +18,9 @@ from database.Tutorials import Tutorials
 from database.UserAccess import UserAccess
 from database.UserTutorialScore import UserTutorialScore
 from database.Paths import Paths
+from database.ForumPosts import ForumPosts
+from database.ForumComments import ForumComments
+
 
 load_dotenv()
 
@@ -37,7 +40,9 @@ tables = {
     "challenges_completed": ChallengesCompleted,
     "challenges": Challenges,
     "completed_tutorials": CompletedTutorials,
-    "path": Paths
+    "path": Paths,
+    "ForumPosts": ForumPosts,
+    "ForumComments": ForumComments,
 }
 
 class Database():
