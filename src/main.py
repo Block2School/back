@@ -5,6 +5,7 @@ import routes.moderation as ModerationRoute
 import routes.tutorial as TutorialRoute
 import routes.article as ArticleRoute
 import routes.challenges as ChallengeRoute
+import routes.forum as ForumRoute
 import routes.faq as FaqRoute
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
@@ -73,6 +74,8 @@ app.include_router(TutorialRoute.router)
 app.include_router(ArticleRoute.router)
 app.include_router(FaqRoute.router)
 app.include_router(ChallengeRoute.router)
+app.include_router(ForumRoute.router)
+
 
 if __name__ == '__main__':
     uvicorn.run(app, reload=True)

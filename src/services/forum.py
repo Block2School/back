@@ -84,3 +84,13 @@ class ForumService:
         forumPostDb.close()
         return success
     
+    @staticmethod
+    def create_comment(post_id:int, author_uuid:int, text:str) -> bool:
+        """
+        Créer un article
+        """
+        forumPostDb: ForumComments = Database.get_table("ForumComments")
+        success = forumPostDb.insert(post_id, author_uuid, text)
+        forumPostDb.close()
+        return success
+    

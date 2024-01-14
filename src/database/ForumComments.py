@@ -12,13 +12,13 @@ class ForumComments():
             message = str(e.args[0])
         Log.error_log("forum posts table", function, function, message)
 
-    def insert(self, title: str, author_uuid: int, description: str, points: int, category: str, image:str) -> bool:
-        prepare = "INSERT INTO `forumPosts` (`title`, `author_uuid`, `description`, `points`, `category`, `image`) VALUES (%s, %i, %s, %i, %s, %s)"
-        print("STARTING INSERT FORUM POST")
+    def insert(self, post_id:int, author_uuid:str, text:str) -> bool:
+        prepare = "INSERT INTO `comments` (`post_id`, `author_id`, `text`) VALUES (%i, %s, %s)"
+        print("STARTING INSERT FORUM Comments")
         try:
             with self.db.cursor() as cursor:
                 print("HERE")
-                cursor.execute(prepare, (title, author_uuid, category, description, points, image))
+                cursor.execute(prepare, (post_id, author_uuid, text))
             self.db.commit()
         except Exception as e:
             self.__log_error(e, "insert")

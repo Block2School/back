@@ -2,6 +2,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Request
 from models.input.SubmitTutorialModel import SubmitTutorialModel
 from models.input.ForumPostModel import ForumPostModel
+from models.input.ForumCommentModel import ForumCommentModel
 from models.response.CategoryResponseListModel import CategoryResponseListModel
 from models.response.CompleteTutorialResponseModel import CompleteTutorialResponseModel
 from models.response.ErrorResponseModel import ErrorResponseModel
@@ -13,6 +14,7 @@ from models.response.SuccessByIDModel import SuccessByIDModel
 from models.response.SuccessMeModel import SuccessMeModel
 from models.response.ForumPostResponseModel import ForumPostResponseModel
 from models.response.ForumPostResponseListModel import ForumPostResponseListModel
+from models.response.ForumCommentResponseModel import ForumCommentResponseModel
 from database.Database import Database
 from database.UserTutorialScore import UserTutorialScore
 from database.CompletedTutorials import CompletedTutorials
@@ -67,4 +69,18 @@ async def create_article(r: Request, forumPost: ForumPostModel) -> JSONResponse:
         return JSONResponse({'success': 'Article created !'}, status_code=201)
     else:
         return JSONResponse({'error': "Can't create article"}, status_code=400)
+    
+@router.post('/comment/create', tags=['forum'], responses=get_post_response)
+async def create_comment(r: Request, forumComment: ForumCommentModel) -> JSONResponse:
+    """
+    Création d'un article
+    """
+    Log.route_log(r, "forum routes", "open_route")
+
+    success = ForumService.create_comment(forumComment.post_id, forumComment.author_uuid, forumComment.text)
+    if success:
+        return JSONResponse({'success': 'Comment created !'}, status_code=201)
+    else:
+        return JSONResponse({'error': "Can't create Comment"}, status_code=400)
+
 
