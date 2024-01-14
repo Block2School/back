@@ -259,6 +259,8 @@ class ChallengesService():
         room: ChallengeRoom = ChallengesService.get_room(room_id)
         print('join_room: ', room)
         if room is not None:
+            if room._isServerFull():
+                return False
             user = ChallengeUser(userUUID, ws)
             print(f'join_room: user: {user.getUserUUID()} {user.getWs()}')
             for i in ChallengesService.challengeRooms:

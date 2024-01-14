@@ -19,7 +19,7 @@ class ChallengeRoom:
         self._occupants_results: List[dict] = []
         self.active_connections: List[WebSocket] = []
         self._maxTime: int = maxTime
-        self._limitUser: int = 2
+        self._limitUser: int = 4
         self._roomID: int = roomID
         self._exitFlag: bool = False
         self._remainingTime: int = maxTime
