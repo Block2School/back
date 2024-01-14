@@ -22,6 +22,7 @@ from services.forum import ForumService
 from services.tutorial import TutorialService
 from starlette.responses import JSONResponse, Response
 from services.utils.JWT import JWT
+from services.utils.JWTChecker import JWTChecker
 import requests, os, json
 from services.utils.Log import Log
 from services.utils.AdminChecker import AdminChecker
@@ -58,26 +59,30 @@ async def get_all_comments_post(r: Request, post_id: int) -> JSONResponse:
     return JSONResponse({'data': comments}, status_code=200)
 
 @router.post('/create', tags=['forum'], responses=get_post_response)
-async def create_article(r: Request, forumPost: ForumPostModel) -> JSONResponse:
+async def create_article(r: Request, forumPost: ForumPostModel, jwt = Depends(JWTChecker())) -> JSONResponse:
     """
     Création d'un article
     """
     Log.route_log(r, "article routes", "open_route")
 
-    success = ForumService.create_post(forumPost.title, forumPost.author_uuid, forumPost.description, forumPost.points, forumPost.category, forumPost.image)
+    _jwt = JWT.decodeJWT(jwt)
+
+    success = ForumService.create_post(forumPost.title, _jwt["uuid"], forumPost.description, 0, forumPost.category, "")
     if success:
         return JSONResponse({'success': 'Article created !'}, status_code=201)
     else:
         return JSONResponse({'error': "Can't create article"}, status_code=400)
     
 @router.post('/comment/create', tags=['forum'], responses=get_post_response)
-async def create_comment(r: Request, forumComment: ForumCommentModel) -> JSONResponse:
+async def create_comment(r: Request, forumComment: ForumCommentModel, jwt = Depends(JWTChecker())) -> JSONResponse:
     """
     Création d'un article
     """
     Log.route_log(r, "forum routes", "open_route")
 
-    success = ForumService.create_comment(forumComment.post_id, forumComment.author_uuid, forumComment.text)
+    _jwt = JWT.decodeJWT(jwt)
+
+    success = ForumService.create_comment(forumComment.post_id, _jwt["uuid"], forumComment.text)
     if success:
         return JSONResponse({'success': 'Comment created !'}, status_code=201)
     else:

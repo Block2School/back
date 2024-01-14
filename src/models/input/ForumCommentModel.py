@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 class ForumCommentModel(BaseModel):
     post_id: int
-    author_uuid: str
+    # author_uuid: str
     text: str = None
 
 

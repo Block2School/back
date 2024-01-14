@@ -2,11 +2,11 @@ from pydantic import BaseModel
 
 class ForumPostModel(BaseModel):
     title: str = None
-    author_uuid: int
+    # author_uuid: int
     description: str = None
     category: str = None
-    image: str = None
-    points: int = None
+    # image: str = None
+    # points: int = None
 
 # CREATE TABLE IF NOT EXISTS `forumPosts` (
 #     `id` INT NOT NULL AUTO_INCREMENT,

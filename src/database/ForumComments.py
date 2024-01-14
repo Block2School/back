@@ -12,8 +12,8 @@ class ForumComments():
             message = str(e.args[0])
         Log.error_log("forum posts table", function, function, message)
 
-    def insert(self, post_id:int, author_uuid:str, text:str) -> bool:
-        prepare = "INSERT INTO `comments` (`post_id`, `author_id`, `text`) VALUES (%i, %s, %s)"
+    def insert(self, post_id:str, author_uuid:str, text:str) -> bool:
+        prepare = "INSERT INTO `comments` (`post_id`, `author_uuid`, `text`) VALUES (%s, %s, %s)"
         print("STARTING INSERT FORUM Comments")
         try:
             with self.db.cursor() as cursor:
@@ -22,6 +22,7 @@ class ForumComments():
             self.db.commit()
         except Exception as e:
             self.__log_error(e, "insert")
+            print("ERROR", e)
             return False
         return True
 

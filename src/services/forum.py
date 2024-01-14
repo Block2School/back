@@ -71,7 +71,6 @@ class ForumService:
             return []
         forumPostDb.close()
         return comments_list
-        
 
     @staticmethod
     def create_post(title: str, author_uuid: int, description: str, points: int, category: str, image:str) -> bool:
@@ -83,7 +82,7 @@ class ForumService:
         print(success)
         forumPostDb.close()
         return success
-    
+
     @staticmethod
     def create_comment(post_id:int, author_uuid:int, text:str) -> bool:
         """
