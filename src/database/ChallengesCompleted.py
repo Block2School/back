@@ -82,7 +82,7 @@ class ChallengesCompleted():
             return None
 
     def fetch_top_10_monthly(self) -> list:
-        prepare = "SELECT account_details.username, SUM(challenges.points) AS points, challenges_completed.user_uuid FROM challenges_completed INNER JOIN challenges ON challenges.id = challenges_completed.challenge_id INNER JOIN account_details ON account_details.uuid = challenges_completed.user_uuid WHERE challenges_completed.completed_at >= DATE_FORMAT(CURDATE(), '%Y-%m-01') GROUP BY challenges_completed.user_uuid ORDER BY points DESC LIMIT 10;"
+        prepare = "SELECT account_details.wallet_address, account_details.username, SUM(challenges.points) AS points, challenges_completed.user_uuid FROM challenges_completed INNER JOIN challenges ON challenges.id = challenges_completed.challenge_id INNER JOIN account_details ON account_details.uuid = challenges_completed.user_uuid WHERE challenges_completed.completed_at >= DATE_FORMAT(CURDATE(), '%Y-%m-01') GROUP BY challenges_completed.user_uuid ORDER BY points DESC LIMIT 10;"
         try:
             with self.db.cursor() as cursor:
                 cursor.execute(prepare)

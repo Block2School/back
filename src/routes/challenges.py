@@ -12,7 +12,7 @@ from models.response.ChallengeResponseModel import (
 )
 from models.response.ErrorResponseModel import ErrorResponseModel
 from models.response.LeaderboardByIDResponseModel import LeaderboardByIDResponseModel
-from models.response.LeaderboardResoonseModel import LeaderboardResponseModel
+from models.response.LeaderboardResoonseModel import LeaderboardResponseModel, LeaderboardResponseModel2
 from models.response.SubmitChallengeResponseModel import SubmitChallengeResponseModel
 from models.response.JoinChallengeResponseModel import JoinChallengeResponseModel
 from models.response.LeaveChallengeRoomModel import LeaveChallengeRoomModel
@@ -24,6 +24,7 @@ from services.utils.JWT import JWT
 
 # LEADERBOARD CHALLENGE -->
 get_leaderboard_response = {200: {"model": LeaderboardResponseModel}}
+get_leaderboard_response2 = {200: {"model": LeaderboardResponseModel2}}
 
 get_leaderboard_by_id_response = {
     200: {"model": LeaderboardByIDResponseModel},
@@ -89,7 +90,7 @@ async def get_user_leaderboard_rank(r: Request, jwt: JWT = Depends(JWTChecker())
     return JSONResponse(leaderboard, status_code=200)
 
 @router.get(
-    "/leaderboard/top_10_monthly", tags=["challenges"], responses=get_leaderboard_response
+    "/leaderboard/top_10_monthly", tags=["challenges"], responses=get_leaderboard_response2
 )
 async def get_top_10_monthly(r: Request) -> JSONResponse:
     """

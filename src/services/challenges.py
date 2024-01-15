@@ -65,7 +65,7 @@ class ChallengesService():
         leaderboard_list = []
         if len(leaderboard) > 0:
             for user in leaderboard:
-                leaderboard_list.append({'username': user['username'], 'points': user['points'], 'user_uuid': user['user_uuid']})
+                leaderboard_list.append({'username': user['username'], 'points': user['points'], 'user_uuid': user['user_uuid'], 'wallet_address': user['wallet_address']})
             leaderboard_list.sort(key=lambda x: x['points'], reverse=True)
             for i in range(0, len(leaderboard_list)):
                 leaderboard_list[i]['rank'] = i + 1
